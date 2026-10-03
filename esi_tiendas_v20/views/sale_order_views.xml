@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_esi_store" model="ir.ui.view">
+        <field name="name">sale.order.esi.store.v20</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="esi_store_id" options="{'no_create': True}" readonly="state in ('sale','cancel')"/>
+            </field>
+            <xpath expr="//group[@name='sale_info']" position="inside">
+                <button name="action_esi_apply_store_analytic" type="object" string="Aplicar analítica de tienda"
+                        class="btn-link" invisible="not esi_store_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

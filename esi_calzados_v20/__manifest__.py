@@ -1,0 +1,17 @@
+{'name': 'ESI - Calzados MRP v20',
+ 'version': '20.0.2.0.0',
+ 'author': 'ESI',
+ 'maintainer': 'ESI',
+ 'license': 'LGPL-3',
+ 'category': 'Manufacturing',
+ 'summary': 'Grupos de producción, responsable, analítica y destajos sin '
+            'alterar valoración de Odoo',
+ 'depends': ['mrp', 'sale_stock', 'purchase_stock', 'analytic', 'mail'],
+ 'data': ['security/ir.access.csv',
+          'data/sequence.xml',
+          'views/mrp_production_views.xml',
+          'views/production_group_views.xml',
+          'views/destajo_views.xml',
+          'security/company.xml'],
+ 'application': True,
+ 'installable': True}

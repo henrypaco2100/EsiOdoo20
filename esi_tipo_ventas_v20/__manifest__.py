@@ -1,0 +1,15 @@
+{'name': 'ESI - Tipo de Ventas v20',
+ 'version': '20.0.2.0.0',
+ 'author': 'ESI',
+ 'maintainer': 'ESI',
+ 'license': 'LGPL-3',
+ 'category': 'Sales',
+ 'summary': 'Clasificación comercial de ventas sin forzar almacén, rutas ni '
+            'validaciones',
+ 'depends': ['sale_management'],
+ 'data': ['security/ir.access.csv',
+          'views/esi_sale_type_views.xml',
+          'views/sale_order_views.xml',
+          'security/company.xml'],
+ 'installable': True,
+ 'application': False}

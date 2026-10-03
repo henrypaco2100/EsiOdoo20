@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_report,esi.purchase.report,model_esi_purchase_report,purchase.group_purchase_user,crud,

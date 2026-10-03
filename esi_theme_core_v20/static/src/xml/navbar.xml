@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="esi_theme_core_v20.NavBarAppsMenu"
+       t-inherit="web.NavBar.AppsMenu"
+       t-inherit-mode="extension">
+        <xpath expr="//div[@class='o_navbar_apps_menu']" position="replace">
+            <div t-if="!isScopedApp" class="o_navbar_apps_menu esi_app_launcher">
+                <Dropdown>
+                    <button class="esi_start_button" data-hotkey="h" title="Aplicaciones ESI">
+                        <img class="esi_start_mark"
+                             src="/esi_theme_core_v20/static/src/img/favicon.png"
+                             alt="ESI"/>
+                        <span class="d-none d-lg-inline">ESI</span>
+                    </button>
+                    <t t-set-slot="content">
+                        <div class="esi_launcher_panel">
+                            <div class="esi_launcher_header">
+                                <div class="esi_launcher_title">
+                                    <img src="/esi_theme_core_v20/static/src/img/esi_logo.png" alt="ESI"/>
+                                    <span>Aplicaciones</span>
+                                </div>
+                                <div class="esi_launcher_hint">Inicio rápido · Alt + H</div>
+                            </div>
+                            <div class="esi_launcher_grid">
+                                <DropdownItem
+                                    t-foreach="apps"
+                                    t-as="app"
+                                    t-key="app.id"
+                                    class="{ 'esi_launcher_app': true, focus: menuService.getCurrentApp() === app }"
+                                    onSelected="() => this.onNavBarDropdownItemSelection(app)"
+                                    attrs="{ href: getMenuItemHref(app), 'data-menu-xmlid': app.xmlid, 'data-section': app.id }">
+                                    <div class="esi_launcher_app_content">
+                                        <img t-if="app.webIconData"
+                                             class="esi_launcher_app_icon"
+                                             t-att-src="app.webIconData"
+                                             t-att-alt="app.name"/>
+                                        <div t-else="" class="esi_launcher_app_fallback">
+                                            <span t-esc="app.name ? app.name.substring(0, 1) : 'E'"/>
+                                        </div>
+                                        <span class="esi_launcher_app_name" t-esc="app.name"/>
+                                    </div>
+                                </DropdownItem>
+                            </div>
+                        </div>
+                    </t>
+                </Dropdown>
+            </div>
+        </xpath>
+    </t>
+</templates>

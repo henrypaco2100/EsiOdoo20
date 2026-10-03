@@ -1,0 +1,12 @@
+{'name': 'ESI - Theme Core v20',
+ 'version': '20.0.2.0.0',
+ 'author': 'ESI',
+ 'maintainer': 'ESI',
+ 'license': 'LGPL-3',
+ 'category': 'Themes/Backend',
+ 'depends': ['web'],
+ 'data': ['views/webclient_templates.xml'],
+ 'assets': {'web.assets_backend': ['esi_theme_core_v20/static/src/css/backend.css'],
+            'web.assets_frontend': ['esi_theme_core_v20/static/src/css/frontend.css']},
+ 'installable': True,
+ 'application': False}

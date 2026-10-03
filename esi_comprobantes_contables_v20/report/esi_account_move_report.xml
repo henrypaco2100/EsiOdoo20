@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_esi_account_move" model="report.paperformat">
+        <field name="name">ESI Comprobante Contable</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+    </record>
+
+    <record id="action_report_esi_account_move" model="ir.actions.report">
+        <field name="name">Comprobante Contable ESI</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">esi_comprobantes_contables_v20.report_esi_account_move</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_esi_account_move"/>
+        <field name="print_report_name">'Comprobante - %s' % (object.name or 'Borrador')</field>
+    </record>
+
+    <template id="report_esi_account_move">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h3 class="text-center">COMPROBANTE CONTABLE</h3>
+                        <table class="table table-sm table-borderless mb-2">
+                            <tr>
+                                <td><strong>Número:</strong> <span t-field="o.name"/></td>
+                                <td><strong>Fecha:</strong> <span t-field="o.date"/></td>
+                                <td><strong>Diario:</strong> <span t-field="o.journal_id"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><strong>Referencia:</strong> <span t-field="o.ref"/></td>
+                                <td><strong>Estado:</strong> <span t-field="o.state"/></td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm table-bordered" style="font-size: 11px;">
+                            <thead>
+                                <tr>
+                                    <th>Cuenta</th><th>Descripción</th><th>Partner</th><th>Analítica</th>
+                                    <th class="text-end">Debe</th><th class="text-end">Haber</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.account_id.code"/></td>
+                                        <td><span t-field="line.name"/></td>
+                                        <td><span t-field="line.partner_id"/></td>
+                                        <td><span t-esc="line.esi_analytic_names or ''"/></td>
+                                        <td class="text-end"><span t-field="line.debit" t-options="{'widget':'monetary','display_currency':o.company_currency_id}"/></td>
+                                        <td class="text-end"><span t-field="line.credit" t-options="{'widget':'monetary','display_currency':o.company_currency_id}"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4" class="text-end">Totales</th>
+                                    <th class="text-end"><span t-esc="sum(o.line_ids.mapped('debit'))" t-options="{'widget':'monetary','display_currency':o.company_currency_id}"/></th>
+                                    <th class="text-end"><span t-esc="sum(o.line_ids.mapped('credit'))" t-options="{'widget':'monetary','display_currency':o.company_currency_id}"/></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="mt-4" style="font-size:10px;">Generado con ESI sobre la contabilidad nativa de Odoo 20.</div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

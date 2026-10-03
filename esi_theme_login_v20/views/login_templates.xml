@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="esi_login_layout" inherit_id="web.login_layout" name="ESI Login Layout v20">
+        <xpath expr="//t[@t-call='web.frontend_layout']" position="attributes">
+            <attribute name="body_classname.f">bg-100 esi_login_body</attribute>
+        </xpath>
+        <xpath expr="//div[@class='container py-5']" position="before">
+            <section class="esi_login_brand" aria-label="ESI ERP">
+                <div class="esi_login_brand_inner">
+                    <img class="esi_login_brand_logo" src="/esi_theme_core_v20/static/src/img/esi_logo_white.png" alt="ESI"/>
+                    <div class="esi_login_badge">ESI ERP · Odoo 20</div>
+                    <h1>Gestión inteligente, clara y conectada.</h1>
+                    <p>Una interfaz empresarial preparada para automatización e inteligencia artificial, respetando el núcleo de Odoo 20.</p>
+                    <div class="esi_login_features">
+                        <span><i class="fa fa-check-circle"/> Procesos integrados</span>
+                        <span><i class="fa fa-check-circle"/> Multi-almacén nativo</span>
+                        <span><i class="fa fa-check-circle"/> Preparado para IA</span>
+                    </div>
+                    <div class="esi_login_orbit esi_login_orbit_one"/><div class="esi_login_orbit esi_login_orbit_two"/>
+                </div>
+            </section>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'o_database_list')]" position="before">
+            <div class="esi_login_mobile_brand d-lg-none"><img src="/esi_theme_core_v20/static/src/img/esi_logo.png" alt="ESI"/><span>ERP 20</span></div>
+        </xpath>
+        <xpath expr="//div[contains(@class, 'text-center') and contains(@class, 'small') and contains(@class, 'mt-4')]" position="inside">
+            <div class="esi_login_signature mt-2">Implementado por ESI · Especialistas en Sistemas Integrados</div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,237 @@
+/* ========================================================================== 
+   ESI THEME CORE V19 - V2
+   ESI correccion: CSS puro, sin web._assets_primary_variables ni SCSS.
+   Objetivo: convivir con Odoo 20 Community y con themes de terceros.
+   ========================================================================== */
+:root {
+    --esi-navy: #072955;
+    --esi-navy-2: #0b3d78;
+    --esi-navy-3: #11509a;
+    --esi-green: #009846;
+    --esi-green-2: #18b458;
+    --esi-green-soft: #eaf7ef;
+    --esi-blue-soft: #edf4fb;
+    --esi-bg: #f4f7fb;
+    --esi-surface: #ffffff;
+    --esi-border: #dfe7f0;
+    --esi-border-strong: #ccd8e6;
+    --esi-text: #172033;
+    --esi-muted: #6a778b;
+    --esi-shadow-sm: 0 2px 10px rgba(7, 41, 85, 0.07);
+    --esi-shadow-md: 0 14px 38px rgba(7, 41, 85, 0.14);
+}
+
+body.o_web_client {
+    background: var(--esi-bg);
+    color: var(--esi-text);
+    font-family: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+}
+
+/* Navbar */
+body.o_web_client .o_main_navbar {
+    --NavBar-entry-color: rgba(255,255,255,.94);
+    --NavBar-entry-color--hover: #fff;
+    --NavBar-entry-color--active: #fff;
+    --NavBar-brand-color: #fff;
+    --NavBar-entry-backgroundColor--hover: rgba(255,255,255,.11);
+    --NavBar-entry-backgroundColor--focus: rgba(255,255,255,.14);
+    --NavBar-entry-backgroundColor--active: rgba(0,152,70,.34);
+    --o-navbar-badge-bg: #009846;
+    border-bottom: 0 !important;
+    background: linear-gradient(105deg, #072955 0%, #0a3973 72%, #08714f 145%) !important;
+    box-shadow: 0 2px 14px rgba(7,41,85,.18);
+}
+body.o_web_client .o_main_navbar .o_menu_brand,
+body.o_web_client .o_main_navbar .o_nav_entry,
+body.o_web_client .o_main_navbar button,
+body.o_web_client .o_main_navbar .dropdown-toggle {
+    color: #fff;
+}
+body.o_web_client .o_main_navbar .o_menu_brand { font-weight: 650; }
+body.o_web_client .o_main_navbar .dropdown-menu { color: var(--esi-text); }
+body.o_web_client .o_navbar_apps_menu > .dropdown > button,
+body.o_web_client .o_navbar_apps_menu > button {
+    min-width: 48px;
+    background: rgba(255,255,255,.06) !important;
+}
+body.o_web_client .o_navbar_apps_menu > .dropdown > button:hover,
+body.o_web_client .o_navbar_apps_menu > button:hover {
+    background: rgba(255,255,255,.14) !important;
+}
+
+/* Menu nativo de aplicaciones Odoo 20 */
+body.o_web_client .o_navbar_apps_menu .dropdown-menu:not(.mk_app_menu) {
+    min-width: 270px;
+    padding: 8px;
+    border: 1px solid var(--esi-border);
+    border-radius: 14px;
+    box-shadow: var(--esi-shadow-md);
+}
+body.o_web_client .o_navbar_apps_menu .dropdown-menu:not(.mk_app_menu) .o_app {
+    border-radius: 9px;
+    padding: 10px 12px;
+    font-weight: 600;
+}
+body.o_web_client .o_navbar_apps_menu .dropdown-menu:not(.mk_app_menu) .o_app:hover,
+body.o_web_client .o_navbar_apps_menu .dropdown-menu:not(.mk_app_menu) .o_app.focus {
+    color: var(--esi-navy);
+    background: var(--esi-green-soft);
+}
+
+/* Mobile app sidebar nativo */
+body.o_web_client .o_app_menu_sidebar {
+    background: #fff;
+    color: var(--esi-text);
+    box-shadow: 20px 0 45px rgba(7,41,85,.18);
+}
+body.o_web_client .o_app_menu_sidebar .o_sidebar_topbar {
+    background: linear-gradient(100deg, #072955, #0a3973);
+    color: #fff;
+}
+body.o_web_client .o_app_menu_sidebar .btn-primary {
+    background: #009846;
+    border-color: #009846;
+}
+
+/* Control panel, search, breadcrumb */
+body.o_web_client .o_control_panel {
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid var(--esi-border);
+    box-shadow: 0 1px 8px rgba(7,41,85,.04);
+}
+body.o_web_client .o_control_panel .breadcrumb-item.active,
+body.o_web_client .o_control_panel .breadcrumb-item:last-child {
+    color: var(--esi-navy);
+    font-weight: 650;
+}
+body.o_web_client .o_searchview {
+    border-radius: 10px !important;
+    border-color: var(--esi-border-strong) !important;
+    background: #fff;
+}
+body.o_web_client .o_searchview:focus-within {
+    border-color: rgba(0,152,70,.70) !important;
+    box-shadow: 0 0 0 3px rgba(0,152,70,.10);
+}
+
+/* Buttons */
+body.o_web_client .btn { border-radius: 8px; }
+body.o_web_client .btn-primary {
+    color: #fff;
+    border-color: #009846;
+    background: #009846;
+    box-shadow: 0 2px 8px rgba(0,152,70,.16);
+}
+body.o_web_client .btn-primary:hover,
+body.o_web_client .btn-primary:focus {
+    color: #fff;
+    border-color: #007d3a;
+    background: #007d3a;
+}
+body.o_web_client a:not(.btn):not(.dropdown-item) { color: #087c48; }
+body.o_web_client a:not(.btn):not(.dropdown-item):hover { color: #056437; }
+
+/* Inputs */
+body.o_web_client .form-control,
+body.o_web_client .o_input,
+body.o_web_client .o-autocomplete--input {
+    border-radius: 7px;
+}
+body.o_web_client .form-control:focus,
+body.o_web_client .o_input:focus,
+body.o_web_client .o-autocomplete--input:focus {
+    border-color: rgba(0,152,70,.75) !important;
+    box-shadow: 0 0 0 3px rgba(0,152,70,.10) !important;
+}
+
+/* Forms */
+body.o_web_client .o_form_view .o_form_sheet_bg {
+    background: radial-gradient(circle at 95% 0%, rgba(0,152,70,.045), transparent 28%), linear-gradient(180deg,#f8fafc 0%,#f4f7fb 100%);
+}
+body.o_web_client .o_form_view .o_form_sheet {
+    border: 1px solid var(--esi-border);
+    border-radius: 14px;
+    box-shadow: var(--esi-shadow-sm);
+}
+body.o_web_client .o_form_view .o_group_name,
+body.o_web_client .o_form_view .o_horizontal_separator { color: var(--esi-navy); }
+body.o_web_client .o_form_statusbar {
+    background: rgba(255,255,255,.98);
+    border-bottom-color: var(--esi-border) !important;
+}
+
+/* Lists */
+body.o_web_client .o_list_renderer .o_list_table thead,
+body.o_web_client .o_list_view .o_list_table thead { background: #f1f5f9; }
+body.o_web_client .o_list_renderer .o_list_table thead th,
+body.o_web_client .o_list_view .o_list_table thead th {
+    color: #33435a;
+    font-weight: 650;
+    border-bottom-color: #dbe4ee;
+}
+body.o_web_client .o_list_renderer .o_list_table tbody tr:hover,
+body.o_web_client .o_list_view .o_list_table tbody tr:hover { background: #f6fbf8; }
+
+/* Kanban */
+body.o_web_client .o_kanban_renderer { background: var(--esi-bg); }
+body.o_web_client .o_kanban_record {
+    border-color: var(--esi-border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 5px rgba(7,41,85,.05);
+}
+body.o_web_client .o_kanban_record:hover { box-shadow: 0 7px 20px rgba(7,41,85,.10); }
+
+/* Menus, popovers, dialogs */
+body.o_web_client .dropdown-menu,
+body.o_web_client .o-dropdown--menu,
+body.o_web_client .popover {
+    border-color: var(--esi-border);
+    border-radius: 12px;
+    box-shadow: var(--esi-shadow-md);
+}
+body.o_web_client .dropdown-item { border-radius: 7px; }
+body.o_web_client .dropdown-item:hover,
+body.o_web_client .dropdown-item:focus { background: var(--esi-green-soft); }
+body.o_web_client .modal-content {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 22px 70px rgba(7,41,85,.22);
+}
+body.o_web_client .modal-header {
+    background: linear-gradient(180deg,#fff,#f9fbfd);
+    border-bottom-color: var(--esi-border);
+    border-radius: 16px 16px 0 0;
+}
+body.o_web_client .modal-title { color: var(--esi-navy); font-weight: 700; }
+
+/* Settings Odoo 20 + legacy selectors */
+body.o_web_client .o-settings-form-view,
+body.o_web_client .o_base_settings { background: #f7f9fc; }
+body.o_web_client .o_setting_container .settings_tab,
+body.o_web_client .o_base_settings .settings_tab {
+    background: #f5f8fb;
+    border-right-color: var(--esi-border);
+}
+body.o_web_client .o_setting_container .settings_tab .tab.selected,
+body.o_web_client .o_base_settings .settings_tab .tab.selected,
+body.o_web_client .o_setting_container .settings_tab .tab:hover,
+body.o_web_client .o_base_settings .settings_tab .tab:hover {
+    color: var(--esi-navy);
+    background: var(--esi-green-soft);
+}
+
+/* Scrollbar suave solo en escritorio Chromium/WebKit */
+@media (min-width: 992px) {
+    body.o_web_client *::-webkit-scrollbar { width: 10px; height: 10px; }
+    body.o_web_client *::-webkit-scrollbar-thumb { background: #c8d4e2; border: 2px solid transparent; border-radius: 999px; background-clip: padding-box; }
+    body.o_web_client *::-webkit-scrollbar-thumb:hover { background: #9fb1c5; border: 2px solid transparent; background-clip: padding-box; }
+}
+
+@media (max-width: 575.98px) {
+    body.o_web_client .o_form_view .o_form_sheet {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}

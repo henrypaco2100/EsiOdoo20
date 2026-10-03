@@ -1,0 +1,10 @@
+{'name': 'ESI - Theme Mail v20',
+ 'version': '20.0.2.0.0',
+ 'author': 'ESI',
+ 'maintainer': 'ESI',
+ 'license': 'LGPL-3',
+ 'category': 'Themes/Backend',
+ 'depends': ['esi_theme_core_v20', 'mail'],
+ 'assets': {'web.assets_backend': ['esi_theme_mail_v20/static/src/css/mail.css']},
+ 'installable': True,
+ 'application': False}

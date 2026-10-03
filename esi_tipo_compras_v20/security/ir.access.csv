@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_esi_purchase_type_user,esi.purchase.type.user,model_esi_purchase_type,purchase.group_purchase_user,r,
+access_esi_purchase_type_manager,esi.purchase.type.manager,model_esi_purchase_type,purchase.group_purchase_manager,crud,

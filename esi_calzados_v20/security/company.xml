@@ -1,0 +1,20 @@
+<odoo>
+  <record id="rule_esi_production_group_company" model="ir.access">
+    <field name="name">ESI: compañías autorizadas</field>
+    <field name="model_id" ref="model_esi_production_group"/>
+    <field name="domain">[('company_id', 'in', company_ids)]</field>
+    <field name="operation">crud</field>
+  </record>
+  <record id="rule_esi_production_group_line_company" model="ir.access">
+    <field name="name">ESI: compañías autorizadas</field>
+    <field name="model_id" ref="model_esi_production_group_line"/>
+    <field name="domain">[('group_id.company_id', 'in', company_ids)]</field>
+    <field name="operation">crud</field>
+  </record>
+  <record id="rule_esi_destajo_company" model="ir.access">
+    <field name="name">ESI: compañías autorizadas</field>
+    <field name="model_id" ref="model_esi_destajo"/>
+    <field name="domain">[('company_id', 'in', company_ids)]</field>
+    <field name="operation">crud</field>
+  </record>
+</odoo>

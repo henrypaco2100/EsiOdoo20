@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_esi_production_group_user,esi.production.group.user,model_esi_production_group,mrp.group_mrp_user,cru,
+access_esi_production_group_line_user,esi.production.group.line.user,model_esi_production_group_line,mrp.group_mrp_user,crud,
+access_esi_destajo_user,esi.destajo.user,model_esi_destajo,mrp.group_mrp_user,cru,
+access_esi_production_group_manager,esi.production.group.manager,model_esi_production_group,mrp.group_mrp_manager,crud,
+access_esi_destajo_manager,esi.destajo.manager,model_esi_destajo,mrp.group_mrp_manager,crud,

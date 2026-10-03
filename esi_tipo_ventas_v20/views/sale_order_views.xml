@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_esi_sale_type" model="ir.ui.view">
+        <field name="name">sale.order.esi.sale.type.v20</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="esi_sale_type_id" options="{'no_create': True}" readonly="state in ('sale','cancel')"/>
+            </field>
+        </field>
+    </record>
+</odoo>

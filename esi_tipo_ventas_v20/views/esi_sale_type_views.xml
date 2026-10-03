@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esi_sale_type_list" model="ir.ui.view">
+        <field name="name">esi.sale.type.list</field>
+        <field name="model">esi.sale.type</field>
+        <field name="arch" type="xml">
+            <list string="Tipos de Venta" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_esi_sale_type_form" model="ir.ui.view">
+        <field name="name">esi.sale.type.form</field>
+        <field name="model">esi.sale.type</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de Venta ESI">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        Este tipo clasifica la venta. No cambia el almacén, no confirma entregas y no altera rutas/reabastecimiento de Odoo 20.
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_esi_sale_type" model="ir.actions.act_window">
+        <field name="name">Tipo de Ventas ESI</field>
+        <field name="res_model">esi.sale.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_esi_sale_type" name="Tipo de Ventas ESI" parent="sale.menu_sale_config"
+              action="action_esi_sale_type" sequence="35" groups="sales_team.group_sale_manager"/>
+</odoo>

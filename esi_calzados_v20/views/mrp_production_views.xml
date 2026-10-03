@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_esi_v20" model="ir.ui.view">
+        <field name="name">mrp.production.esi.v20</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="esi_responsible_id"/>
+                <field name="esi_group_id" readonly="1"/>
+                <field name="esi_analytic_account_id"/>
+            </field>
+        </field>
+    </record>
+</odoo>

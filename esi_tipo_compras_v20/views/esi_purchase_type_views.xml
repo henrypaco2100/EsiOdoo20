@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esi_purchase_type_list" model="ir.ui.view">
+        <field name="name">esi.purchase.type.list</field>
+        <field name="model">esi.purchase.type</field>
+        <field name="arch" type="xml">
+            <list string="Tipos de Compra" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_esi_purchase_type_form" model="ir.ui.view">
+        <field name="name">esi.purchase.type.form</field>
+        <field name="model">esi.purchase.type</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de Compra ESI">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        Este tipo clasifica la compra. Odoo 20 conserva el control nativo de recepción, rutas y almacenes.
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_esi_purchase_type" model="ir.actions.act_window">
+        <field name="name">Tipo de Compras ESI</field>
+        <field name="res_model">esi.purchase.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_esi_purchase_type" name="Tipo de Compras ESI" parent="purchase.menu_purchase_config"
+              action="action_esi_purchase_type" sequence="25" groups="purchase.group_purchase_manager"/>
+</odoo>

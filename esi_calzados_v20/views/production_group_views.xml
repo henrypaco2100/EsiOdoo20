@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esi_production_group_list" model="ir.ui.view">
+        <field name="name">esi.production.group.list</field>
+        <field name="model">esi.production.group</field>
+        <field name="arch" type="xml">
+            <list string="Grupos de Producción" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="responsible_id"/>
+                <field name="analytic_account_id" optional="hide"/>
+                <field name="production_count"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_esi_production_group_form" model="ir.ui.view">
+        <field name="name">esi.production.group.form</field>
+        <field name="model">esi.production.group</field>
+        <field name="arch" type="xml">
+            <form string="Grupo de Producción ESI">
+                <header>
+                    <button name="action_create_productions" type="object" string="Crear órdenes de producción" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,created,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_productions" type="object" class="oe_stat_button" icon="fa-industry" invisible="production_count == 0">
+                            <field name="production_count" widget="statinfo" string="Órdenes"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <field name="responsible_id"/>
+                        <field name="analytic_account_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="uom_id"/>
+                            <field name="bom_id"/>
+                        </list>
+                    </field>
+                    <field name="note"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_esi_production_group_pivot" model="ir.ui.view">
+        <field name="name">esi.production.group.pivot</field>
+        <field name="model">esi.production.group</field>
+        <field name="arch" type="xml"><pivot string="Análisis de Grupos"><field name="state" type="row"/><field name="responsible_id" type="row"/><field name="production_count" type="measure"/></pivot></field>
+    </record>
+    <record id="view_esi_production_group_graph" model="ir.ui.view">
+        <field name="name">esi.production.group.graph</field>
+        <field name="model">esi.production.group</field>
+        <field name="arch" type="xml"><graph string="Grupos de Producción"><field name="responsible_id"/><field name="production_count" type="measure"/></graph></field>
+    </record>
+    <record id="action_esi_production_group" model="ir.actions.act_window">
+        <field name="name">Grupos de Producción ESI</field>
+        <field name="res_model">esi.production.group</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+    <menuitem id="menu_esi_production_group" name="Grupos de Producción ESI" parent="mrp.menu_mrp_manufacturing" action="action_esi_production_group" sequence="35"/>
+</odoo>

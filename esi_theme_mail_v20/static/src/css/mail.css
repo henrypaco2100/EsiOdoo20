@@ -1,0 +1,24 @@
+/* ESI Theme Mail v19 - V2 */
+body.o_web_client .o-mail-Chatter,
+body.o_web_client .o-mail-Discuss {
+    --esi-mail-border: #dfe7f0;
+    --esi-mail-bg: #f6f8fb;
+}
+body.o_web_client .o-mail-Chatter { border-color: var(--esi-mail-border) !important; background: #fff; }
+body.o_web_client .o-mail-Chatter-topbar { border-bottom: 1px solid var(--esi-mail-border) !important; background: linear-gradient(180deg,#fff,#f8fafc); }
+body.o_web_client .o-mail-Chatter-topbar .btn-primary,
+body.o_web_client .o-mail-Composer .btn-primary { border-color: #009846; background: #009846; }
+body.o_web_client .o-mail-Thread { background: radial-gradient(circle at 100% 0%,rgba(0,152,70,.035),transparent 24%),#fbfcfe; }
+body.o_web_client .o-mail-Message { border-radius: 10px; }
+body.o_web_client .o-mail-Message:hover { background: #f4f8fb; }
+body.o_web_client .o-mail-Composer { border-color: var(--esi-mail-border) !important; background: #fff; }
+body.o_web_client .o-mail-Discuss-content,
+body.o_web_client .o-mail-Discuss-core { background: #f7f9fc; }
+body.o_web_client .o-mail-DiscussSidebar,
+body.o_web_client .o-mail-Discuss-sidebar { border-right: 1px solid var(--esi-mail-border) !important; background: #fff; }
+body.o_web_client .o-mail-DiscussSidebarChannel.o-active,
+body.o_web_client .o-mail-Discuss-sidebar .active { color: #072955 !important; background: #e9f7ef !important; }
+body.o_web_client .o-mail-NotificationItem:hover,
+body.o_web_client .o-mail-DiscussSidebarChannel:hover { background: #f0f7f3 !important; }
+body.o_web_client .o-mail-Composer-input,
+body.o_web_client .o-mail-Composer-inputContainer { border-radius: 10px !important; }

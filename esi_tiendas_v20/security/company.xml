@@ -1,0 +1,8 @@
+<odoo>
+  <record id="rule_esi_store_company" model="ir.access">
+    <field name="name">ESI: compañías autorizadas</field>
+    <field name="model_id" ref="model_esi_store"/>
+    <field name="domain">[('company_id', 'in', company_ids)]</field>
+    <field name="operation">crud</field>
+  </record>
+</odoo>

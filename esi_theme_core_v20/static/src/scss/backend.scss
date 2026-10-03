@@ -1,0 +1,415 @@
+// ============================================================================
+// ESI Theme Core v19
+// Diseño claro, futurista y familiar para usuarios de Windows.
+// Evita convertir el ERP en una interfaz oscura: la superficie de trabajo
+// permanece blanca y luminosa; Navy y Verde se usan como identidad y acentos.
+// ============================================================================
+
+:root {
+    --esi-navy: #072955;
+    --esi-navy-2: #0b3d78;
+    --esi-blue-soft: #eaf2fb;
+    --esi-green: #009846;
+    --esi-green-2: #18b458;
+    --esi-green-soft: #e9f7ef;
+    --esi-white: #ffffff;
+    --esi-bg: #f4f7fb;
+    --esi-bg-2: #eef3f8;
+    --esi-border: #dfe7f0;
+    --esi-border-strong: #cfd9e6;
+    --esi-text: #172033;
+    --esi-muted: #6a778b;
+    --esi-shadow-sm: 0 2px 10px rgba(7, 41, 85, 0.07);
+    --esi-shadow-md: 0 12px 32px rgba(7, 41, 85, 0.12);
+    --esi-radius-sm: 8px;
+    --esi-radius: 12px;
+    --esi-radius-lg: 18px;
+}
+
+body.o_web_client {
+    background: var(--esi-bg);
+    color: var(--esi-text);
+    font-family: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+}
+
+// ---------------------------------------------------------------------------
+// Navbar - identidad ESI sin oscurecer toda la aplicación
+// ---------------------------------------------------------------------------
+.o_main_navbar {
+    --NavBar-entry-color: rgba(255, 255, 255, .92);
+    --NavBar-entry-color--hover: #ffffff;
+    --NavBar-entry-color--active: #ffffff;
+    --NavBar-brand-color: #ffffff;
+    --NavBar-entry-backgroundColor--hover: rgba(255, 255, 255, .10);
+    --NavBar-entry-backgroundColor--focus: rgba(255, 255, 255, .12);
+    --NavBar-entry-backgroundColor--active: rgba(0, 152, 70, .34);
+    --o-navbar-badge-bg: #009846;
+    border: 0 !important;
+    background:
+        linear-gradient(90deg, rgba(255,255,255,.06), transparent 28%),
+        linear-gradient(100deg, var(--esi-navy) 0%, #08366d 72%, #075b49 145%);
+    box-shadow: 0 2px 14px rgba(7, 41, 85, .18);
+}
+
+.o_main_navbar .o_menu_brand,
+.o_main_navbar .o_nav_entry,
+.o_main_navbar button,
+.o_main_navbar .dropdown-toggle {
+    color: #fff;
+}
+
+.o_main_navbar .o_menu_brand {
+    font-weight: 650;
+    letter-spacing: .01em;
+}
+
+.o_main_navbar .dropdown-menu {
+    color: var(--esi-text);
+}
+
+// ---------------------------------------------------------------------------
+// Lanzador de aplicaciones ESI: inspirado en la familiaridad de un Start Menu
+// ---------------------------------------------------------------------------
+.esi_start_button {
+    min-width: 58px;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    padding: 0 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    transition: background-color .16s ease, transform .16s ease;
+}
+
+.esi_start_button:hover,
+.esi_start_button:focus-visible {
+    background: rgba(255,255,255,.12);
+}
+
+.esi_start_button:active {
+    transform: translateY(1px);
+}
+
+.esi_start_mark {
+    width: 27px;
+    height: 27px;
+    object-fit: contain;
+    border-radius: 7px;
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,.14);
+}
+
+.esi_launcher_panel {
+    width: min(680px, calc(100vw - 28px));
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.98);
+    box-shadow: 0 18px 46px rgba(7,41,85,.20);
+    border: 1px solid rgba(7,41,85,.10);
+}
+
+.esi_launcher_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 4px 4px 12px;
+    border-bottom: 1px solid var(--esi-border);
+    margin-bottom: 12px;
+}
+
+.esi_launcher_title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--esi-navy);
+}
+
+.esi_launcher_title img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.esi_launcher_hint {
+    color: var(--esi-muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.esi_launcher_grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    max-height: min(520px, 68vh);
+    overflow: auto;
+    padding: 2px;
+}
+
+.esi_launcher_grid .esi_launcher_app.dropdown-item {
+    min-width: 0;
+    white-space: normal;
+    border-radius: 12px;
+    padding: 12px 8px;
+    color: var(--esi-text);
+    border: 1px solid transparent;
+    background: transparent;
+    text-align: center;
+    transition: background-color .14s ease, border-color .14s ease, transform .14s ease, box-shadow .14s ease;
+}
+
+.esi_launcher_grid .esi_launcher_app.dropdown-item:hover,
+.esi_launcher_grid .esi_launcher_app.dropdown-item:focus,
+.esi_launcher_grid .esi_launcher_app.dropdown-item.focus {
+    color: var(--esi-navy);
+    background: linear-gradient(180deg, #f7fbff, #eef7f2);
+    border-color: #d7e8df;
+    box-shadow: 0 5px 14px rgba(7,41,85,.08);
+    transform: translateY(-1px);
+}
+
+.esi_launcher_app_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 74px;
+}
+
+.esi_launcher_app_icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 10px;
+    filter: drop-shadow(0 3px 5px rgba(7,41,85,.10));
+}
+
+.esi_launcher_app_fallback {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--esi-navy), var(--esi-green));
+    font-weight: 700;
+}
+
+.esi_launcher_app_name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 1.18;
+    font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Área de control / búsquedas
+// ---------------------------------------------------------------------------
+.o_control_panel {
+    background: rgba(255,255,255,.96);
+    border-bottom: 1px solid var(--esi-border);
+    box-shadow: 0 1px 8px rgba(7,41,85,.04);
+}
+
+.o_control_panel .o_breadcrumb .breadcrumb-item.active,
+.o_control_panel .o_breadcrumb .breadcrumb-item:last-child {
+    color: var(--esi-navy);
+    font-weight: 650;
+}
+
+.o_searchview {
+    border-radius: 10px !important;
+    border-color: var(--esi-border-strong) !important;
+    background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.o_searchview:focus-within {
+    border-color: rgba(0,152,70,.65) !important;
+    box-shadow: 0 0 0 3px rgba(0,152,70,.10);
+}
+
+// ---------------------------------------------------------------------------
+// Botones y formularios
+// ---------------------------------------------------------------------------
+.btn {
+    border-radius: 8px;
+}
+
+.btn-primary {
+    box-shadow: 0 2px 8px rgba(0,152,70,.16);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(0,152,70,.20);
+}
+
+.form-control,
+.o_input,
+.o-autocomplete--input {
+    border-radius: 7px;
+}
+
+.form-control:focus,
+.o_input:focus,
+.o-autocomplete--input:focus {
+    border-color: rgba(0,152,70,.75) !important;
+    box-shadow: 0 0 0 3px rgba(0,152,70,.10) !important;
+}
+
+.o_form_view .o_form_sheet_bg {
+    background:
+        radial-gradient(circle at 95% 0%, rgba(0,152,70,.045), transparent 28%),
+        linear-gradient(180deg, #f7f9fc 0%, var(--esi-bg) 100%);
+}
+
+.o_form_view .o_form_sheet {
+    border: 1px solid var(--esi-border);
+    border-radius: 14px;
+    box-shadow: var(--esi-shadow-sm);
+}
+
+.o_form_view .o_group_name,
+.o_form_view .o_horizontal_separator {
+    color: var(--esi-navy);
+}
+
+.o_form_statusbar {
+    border-bottom-color: var(--esi-border) !important;
+    background: rgba(255,255,255,.97);
+}
+
+// ---------------------------------------------------------------------------
+// Listas, kanban y tarjetas
+// ---------------------------------------------------------------------------
+.o_list_view .o_list_table thead,
+.o_list_renderer .o_list_table thead {
+    background: #f1f5f9;
+}
+
+.o_list_view .o_list_table thead th,
+.o_list_renderer .o_list_table thead th {
+    color: #33435a;
+    font-weight: 650;
+    border-bottom-color: #dbe4ee;
+}
+
+.o_list_view .o_list_table tbody tr:hover,
+.o_list_renderer .o_list_table tbody tr:hover {
+    background-color: #f6fbf8;
+}
+
+.o_kanban_renderer {
+    background: var(--esi-bg);
+}
+
+.o_kanban_record {
+    border-radius: 12px !important;
+    border-color: var(--esi-border) !important;
+    box-shadow: 0 1px 5px rgba(7,41,85,.05);
+    transition: box-shadow .14s ease, transform .14s ease;
+}
+
+.o_kanban_record:hover {
+    box-shadow: 0 7px 20px rgba(7,41,85,.10);
+}
+
+// ---------------------------------------------------------------------------
+// Menús, dropdowns, popovers y modales
+// ---------------------------------------------------------------------------
+.dropdown-menu,
+.o-dropdown--menu,
+.popover {
+    border-radius: 12px;
+    border-color: var(--esi-border);
+    box-shadow: var(--esi-shadow-md);
+}
+
+.dropdown-item {
+    border-radius: 7px;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--esi-green-soft);
+}
+
+.modal-content {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 22px 70px rgba(7,41,85,.22);
+}
+
+.modal-header {
+    border-bottom-color: var(--esi-border);
+    background: linear-gradient(180deg, #ffffff, #f9fbfd);
+    border-radius: 16px 16px 0 0;
+}
+
+.modal-title {
+    color: var(--esi-navy);
+    font-weight: 700;
+}
+
+// ---------------------------------------------------------------------------
+// Settings: panel más legible y cercano a una app de escritorio
+// ---------------------------------------------------------------------------
+.o_base_settings .o_setting_container .settings_tab {
+    background: #f5f8fb;
+    border-right-color: var(--esi-border);
+}
+
+.o_base_settings .o_setting_container .settings_tab .tab.selected,
+.o_base_settings .o_setting_container .settings_tab .tab:hover {
+    color: var(--esi-navy);
+    background: var(--esi-green-soft);
+}
+
+.o_base_settings .o_setting_box {
+    border-radius: 10px;
+}
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+@media (max-width: 991.98px) {
+    .esi_launcher_panel {
+        width: min(520px, calc(100vw - 20px));
+    }
+    .esi_launcher_grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .esi_launcher_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .esi_launcher_hint {
+        display: none;
+    }
+    .o_form_view .o_form_sheet {
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+        box-shadow: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .esi_start_button,
+    .esi_launcher_grid .esi_launcher_app.dropdown-item,
+    .o_kanban_record {
+        transition: none !important;
+    }
+}

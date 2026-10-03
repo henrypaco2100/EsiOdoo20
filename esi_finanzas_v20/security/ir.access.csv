@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_report,esi.finance.report,model_esi_finance_report,account.group_account_user,crud,

@@ -1,0 +1,70 @@
+// ESI Theme Mail v19
+// Ajustes visuales no invasivos: no se modifica la lógica de Mail/Discuss.
+
+.o-mail-Chatter,
+.o-mail-Discuss {
+    --esi-mail-border: #dfe7f0;
+    --esi-mail-bg: #f6f8fb;
+}
+
+.o-mail-Chatter {
+    border-color: var(--esi-mail-border) !important;
+    background: #fff;
+}
+
+.o-mail-Chatter-topbar {
+    border-bottom: 1px solid var(--esi-mail-border) !important;
+    background: linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+.o-mail-Chatter-topbar .btn-primary,
+.o-mail-Composer .btn-primary {
+    border-color: #009846;
+    background-color: #009846;
+}
+
+.o-mail-Thread {
+    background:
+        radial-gradient(circle at 100% 0%, rgba(0,152,70,.035), transparent 24%),
+        #fbfcfe;
+}
+
+.o-mail-Message {
+    border-radius: 10px;
+}
+
+.o-mail-Message:hover {
+    background: #f4f8fb;
+}
+
+.o-mail-Composer {
+    border-color: var(--esi-mail-border) !important;
+    background: #fff;
+}
+
+.o-mail-Discuss-content,
+.o-mail-Discuss-core {
+    background: #f7f9fc;
+}
+
+.o-mail-DiscussSidebar,
+.o-mail-Discuss-sidebar {
+    border-right: 1px solid var(--esi-mail-border) !important;
+    background: #ffffff;
+}
+
+.o-mail-DiscussSidebarChannel.o-active,
+.o-mail-Discuss-sidebar .active {
+    color: #072955 !important;
+    background: #e9f7ef !important;
+}
+
+.o-mail-NotificationItem:hover,
+.o-mail-DiscussSidebarChannel:hover {
+    background: #f0f7f3 !important;
+}
+
+.o-mail-Composer-input,
+.o-mail-Composer-inputContainer {
+    border-radius: 10px !important;
+}

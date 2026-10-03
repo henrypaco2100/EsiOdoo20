@@ -1,0 +1,11 @@
+{'name': 'ESI - Theme Login v20',
+ 'version': '20.0.2.0.0',
+ 'author': 'ESI',
+ 'maintainer': 'ESI',
+ 'license': 'LGPL-3',
+ 'category': 'Themes/Frontend',
+ 'depends': ['esi_theme_core_v20', 'auth_signup'],
+ 'data': ['views/login_templates.xml'],
+ 'assets': {'web.assets_frontend': ['esi_theme_login_v20/static/src/css/login.css']},
+ 'installable': True,
+ 'application': False}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="esi_web_layout_branding" inherit_id="web.layout" name="ESI Web Layout Branding v20">
+        <xpath expr="//title" position="replace"><title t-out="title or 'ESI ERP'"/></xpath>
+        <xpath expr="//link[@rel='shortcut icon']" position="attributes">
+            <attribute name="t-att-href">x_icon or '/esi_theme_core_v20/static/src/img/favicon.png'</attribute>
+        </xpath>
+    </template>
+    <template id="esi_webclient_bootstrap_branding" inherit_id="web.webclient_bootstrap" name="ESI Webclient Branding v20">
+        <xpath expr="//meta[@name='theme-color']" position="attributes"><attribute name="content">#072955</attribute></xpath>
+        <xpath expr="//link[@rel='apple-touch-icon']" position="attributes"><attribute name="href">/esi_theme_core_v20/static/src/img/favicon.png</attribute></xpath>
+    </template>
+</odoo>
