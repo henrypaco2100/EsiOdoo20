@@ -1,0 +1,13 @@
+{'application': False,
+ 'assets': {'web.assets_backend': [('remove',
+                                    'esi_theme_core_v20/static/src/css/backend.css'),
+                                   ('remove',
+                                    'esi_theme_mail_v20/static/src/css/mail.css')]},
+ 'author': 'ESI',
+ 'depends': ['muk_web_theme', 'esi_theme_core_v20', 'esi_theme_mail_v20'],
+ 'installable': True,
+ 'license': 'LGPL-3',
+ 'maintainer': 'ESI',
+ 'name': 'ESI - Integración MuK Odoo 20',
+ 'post_init_hook': 'post_init_hook',
+ 'version': '20.0.2.1.0'}
