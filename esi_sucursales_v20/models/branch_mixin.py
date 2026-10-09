@@ -1,6 +1,6 @@
 from copy import deepcopy
 from lxml import etree
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 class BranchMixin(models.AbstractModel):
@@ -12,11 +12,19 @@ class BranchMixin(models.AbstractModel):
 
     @api.depends_context('uid', 'allowed_company_ids')
     def _compute_branch_selector(self):
-        show = len(self.env.user._get_company_ids()) > 1
-        active = self.env.companies
+        allowed = self.env['res.company'].browse(self.env.user._get_company_ids())
+        show = len(allowed) > 1
         for record in self:
             record.esi_show_branch = show
-            record.esi_branch_company_ids = active
+            record.esi_branch_company_ids = allowed
+
+    @api.onchange('company_id')
+    def _onchange_esi_branch_activation(self):
+        if self.company_id and self.company_id not in self.env.companies:
+            return {'warning': {
+                'title': _('Active la sucursal seleccionada'),
+                'message': _('Tiene permiso para esta sucursal, pero no está activada en esta sesión. Actívela en el selector superior de compañías antes de guardar o consultar sus datos.'),
+            }}
 
     @api.model
     def _get_view(self, view_id=None, view_type='form', **options):
@@ -26,11 +34,14 @@ class BranchMixin(models.AbstractModel):
         arch = deepcopy(arch)
         # Never modify nested relational subviews or the cached native architecture.
         nodes = arch.xpath(".//field[@name='company_id' and not(ancestor::field)]")
-        if view_type == 'form':
+        if view_type in ('form', 'list'):
             for name in ('esi_show_branch', 'esi_branch_company_ids'):
                 if not arch.xpath(".//field[@name='%s' and not(ancestor::field)]" % name):
-                    arch.insert(0, etree.Element('field', name=name, invisible='1'))
-            if not nodes:
+                    helper = etree.Element('field', name=name, invisible='1')
+                    if view_type == 'list':
+                        helper.set('column_invisible', 'True')
+                    arch.insert(0, helper)
+            if not nodes and view_type == 'form':
                 targets = arch.xpath('./sheet/group') or arch.xpath('./sheet') or [arch]
                 node = etree.Element('field', name='company_id')
                 targets[0].insert(0, node)
@@ -46,9 +57,6 @@ class BranchMixin(models.AbstractModel):
                 # Visibility depends on this user, not the global multi-company group.
                 if node.get('groups') == 'base.group_multi_company':
                     node.attrib.pop('groups')
-        elif view_type == 'list':
-            for node in nodes:
-                node.set('string', 'Sucursal / Compañía')
         else:
             for node in nodes:
                 node.set('string', 'Sucursal / Compañía')

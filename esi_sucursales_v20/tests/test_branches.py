@@ -63,3 +63,9 @@ class TestBranchIsolation(TransactionCase):
         })
         model = self.env['account.journal'].with_user(self.user_a).with_context(allowed_company_ids=self.a.ids)
         self.assertFalse(model.search([('id', '=', journal.id)]))
+
+    def test_selector_includes_assigned_but_inactive_branch(self):
+        model = self.env['sale.order'].with_user(self.user_ab).with_context(allowed_company_ids=self.a.ids)
+        order = model.new({})
+        self.assertEqual(set(order.esi_branch_company_ids.ids), set((self.a | self.b).ids))
+        self.assertFalse(model.search([('id', '=', self.records[self.b.id][0].id)]))

@@ -19,7 +19,7 @@
             <form string="Tipo de Compra">
                 <sheet>
                     <div class="alert alert-info" role="alert">
-                        Este tipo clasifica la compra. Odoo 20 conserva el control nativo de recepción, rutas y almacenes.
+                        Las opciones habilitadas aplican el almacén y la facturación del tipo. Las entregas y recepciones respetan las cantidades registradas y los asistentes de Odoo.
                     </div>
                     <group>
                         <field name="name"/>

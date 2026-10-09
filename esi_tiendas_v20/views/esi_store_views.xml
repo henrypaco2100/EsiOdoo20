@@ -46,5 +46,8 @@
         <field name="res_model">esi.store</field>
         <field name="view_mode">list,form</field>
     </record>
-    <menuitem id="menu_esi_store" name="Tiendas anteriores (histórico)" parent="sale.menu_sale_config" action="action_esi_store" sequence="85" groups="base.group_no_one"/>
+    <menuitem id="menu_esi_store" name="Tiendas" parent="sale.menu_sale_config" action="action_esi_store" sequence="85" groups="base.group_no_one"/>
+    <record id="menu_esi_store" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 </odoo>

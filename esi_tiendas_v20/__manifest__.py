@@ -1,5 +1,5 @@
 {'name': 'Tiendas y Analítica v20',
- 'version': '20.0.3.0.0',
+ 'version': '20.0.3.1.0',
  'author': 'ESI',
  'maintainer': 'ESI',
  'license': 'LGPL-3',

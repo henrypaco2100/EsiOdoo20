@@ -13,4 +13,4 @@
  'name': 'Tipo de Ventas v20',
  'summary': 'Tipos por sucursal, facturación y validación opcional con '
             'permisos nativos',
- 'version': '20.0.3.0.0'}
+ 'version': '20.0.3.1.0'}
