@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <record id="report_form" model="ir.ui.view">
     <field name="name">esi.finance.report.form</field>
@@ -31,82 +32,103 @@
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
   </record>
-  <menuitem id="report_menu" name="Finanzas ESI" action="report_action" groups="account.group_account_user" web_icon="esi_finanzas_v20,static/description/icon.png"/>
+  <menuitem id="report_menu" name="Reportes financieros ESI" groups="account.group_account_user" parent="account.menu_finance_reports" sequence="80"/>
+  <record id="report_menu" model="ir.ui.menu">
+    <field name="web_icon" eval="False"/>
+    <field name="action" eval="False"/>
+  </record>
   <record id="action_balance" model="ir.actions.act_window">
     <field name="name">Balance general</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'balance'}</field>
   </record>
-  <menuitem id="menu_balance" name="Balance general" parent="report_menu" action="action_balance"/>
+  <menuitem id="menu_balance" name="Balance general" parent="report_menu" action="action_balance" sequence="10"/>
   <record id="action_profit" model="ir.actions.act_window">
     <field name="name">Estado de resultados</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'profit'}</field>
   </record>
-  <menuitem id="menu_profit" name="Estado de resultados" parent="report_menu" action="action_profit"/>
+  <menuitem id="menu_profit" name="Estado de resultados" parent="report_menu" action="action_profit" sequence="20"/>
   <record id="action_trial" model="ir.actions.act_window">
     <field name="name">Sumas y saldos</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'trial'}</field>
   </record>
-  <menuitem id="menu_trial" name="Sumas y saldos" parent="report_menu" action="action_trial"/>
+  <menuitem id="menu_trial" name="Sumas y saldos" parent="report_menu" action="action_trial" sequence="30"/>
   <record id="action_ledger" model="ir.actions.act_window">
     <field name="name">Libro mayor</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'ledger'}</field>
   </record>
-  <menuitem id="menu_ledger" name="Libro mayor" parent="report_menu" action="action_ledger"/>
+  <menuitem id="menu_ledger" name="Libro mayor" parent="report_menu" action="action_ledger" sequence="40"/>
   <record id="action_cash" model="ir.actions.act_window">
     <field name="name">Caja y bancos</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'cash'}</field>
   </record>
-  <menuitem id="menu_cash" name="Caja y bancos" parent="report_menu" action="action_cash"/>
+  <menuitem id="menu_cash" name="Caja y bancos" parent="report_menu" action="action_cash" sequence="50"/>
   <record id="action_statement" model="ir.actions.act_window">
     <field name="name">Estado de cuenta</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'statement'}</field>
   </record>
-  <menuitem id="menu_statement" name="Estado de cuenta" parent="report_menu" action="action_statement"/>
+  <menuitem id="menu_statement" name="Estado de cuenta" parent="report_menu" action="action_statement" sequence="60"/>
   <record id="action_receivable" model="ir.actions.act_window">
     <field name="name">Cuentas por cobrar vencidas</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'receivable'}</field>
   </record>
-  <menuitem id="menu_receivable" name="Cuentas por cobrar vencidas" parent="report_menu" action="action_receivable"/>
+  <menuitem id="menu_receivable" name="Cuentas por cobrar vencidas" parent="report_menu" action="action_receivable" sequence="70"/>
   <record id="action_payable" model="ir.actions.act_window">
     <field name="name">Cuentas por pagar vencidas</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'payable'}</field>
   </record>
-  <menuitem id="menu_payable" name="Cuentas por pagar vencidas" parent="report_menu" action="action_payable"/>
+  <menuitem id="menu_payable" name="Cuentas por pagar vencidas" parent="report_menu" action="action_payable" sequence="80"/>
   <record id="action_analytic" model="ir.actions.act_window">
-    <field name="name">Reporte anal&#237;tico</field>
+    <field name="name">Reporte analítico</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'analytic'}</field>
   </record>
-  <menuitem id="menu_analytic" name="Reporte anal&#237;tico" parent="report_menu" action="action_analytic"/>
+  <menuitem id="menu_analytic" name="Reporte analítico" parent="report_menu" action="action_analytic" sequence="90"/>
   <record id="action_executive" model="ir.actions.act_window">
     <field name="name">Resumen ejecutivo</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'executive'}</field>
   </record>
-  <menuitem id="menu_executive" name="Resumen ejecutivo" parent="report_menu" action="action_executive"/>
+  <menuitem id="menu_executive" name="Resumen ejecutivo" parent="report_menu" action="action_executive" sequence="100"/>
   <record id="action_tax" model="ir.actions.act_window">
     <field name="name">Resumen de impuestos</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
     <field name="context">{'default_kind': 'tax'}</field>
   </record>
-  <menuitem id="menu_tax" name="Resumen de impuestos" parent="report_menu" action="action_tax"/>
-<record id="action_cashflow" model="ir.actions.act_window"><field name="name">Flujo de efectivo</field><field name="res_model">esi.finance.report</field><field name="view_mode">form</field><field name="context">{'default_kind':'cashflow'}</field></record><menuitem id="menu_cashflow" name="Flujo de efectivo" parent="report_menu" action="action_cashflow"/><record id="cash_flow_line_form" model="ir.ui.view"><field name="name">account.move.line.esi.cashflow</field><field name="model">account.move.line</field><field name="inherit_id" ref="account.view_move_line_form"/><field name="arch" type="xml"><field name="account_id" position="after"><field name="esi_cash_flow" groups="account.group_account_user"/></field></field></record></odoo>
+  <menuitem id="menu_tax" name="Resumen de impuestos" parent="report_menu" action="action_tax" sequence="110"/>
+  <record id="action_cashflow" model="ir.actions.act_window">
+    <field name="name">Flujo de efectivo</field>
+    <field name="res_model">esi.finance.report</field>
+    <field name="view_mode">form</field>
+    <field name="context">{'default_kind':'cashflow'}</field>
+  </record>
+  <menuitem id="menu_cashflow" name="Flujo de efectivo" parent="report_menu" action="action_cashflow" sequence="120"/>
+  <record id="cash_flow_line_form" model="ir.ui.view">
+    <field name="name">account.move.line.esi.cashflow</field>
+    <field name="model">account.move.line</field>
+    <field name="inherit_id" ref="account.view_move_line_form"/>
+    <field name="arch" type="xml">
+      <field name="account_id" position="after">
+        <field name="esi_cash_flow" groups="account.group_account_user"/>
+      </field>
+    </field>
+  </record>
+</odoo>

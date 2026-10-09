@@ -1,1 +1,35 @@
-<odoo><record id="report_form" model="ir.ui.view"><field name="name">esi.purchase.report.form</field><field name="model">esi.purchase.report</field><field name="arch" type="xml"><form string="Compras ESI"><header><button name="action_preview" type="object" string="Consultar" class="btn-primary"/><button name="action_pdf" type="object" string="PDF"/><button name="action_xlsx" type="object" string="Excel"/></header><sheet><group><field name="company_id"/><field name="date_from"/><field name="date_to"/><field name="store_id"/><field name="partner_id"/></group><field name="preview" widget="html" nolabel="1"/></sheet></form></field></record><record id="report_action" model="ir.actions.act_window"><field name="name">Compras ESI</field><field name="res_model">esi.purchase.report</field><field name="view_mode">form</field></record><menuitem id="report_menu" name="Compras ESI"  action="report_action" groups="purchase.group_purchase_user" web_icon="esi_compras_report_v20,static/description/icon.png"/></odoo>
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <record id="report_form" model="ir.ui.view">
+    <field name="name">esi.purchase.report.form</field>
+    <field name="model">esi.purchase.report</field>
+    <field name="arch" type="xml">
+      <form string="Compras ESI">
+        <header>
+          <button name="action_preview" type="object" string="Consultar" class="btn-primary"/>
+          <button name="action_pdf" type="object" string="PDF"/>
+          <button name="action_xlsx" type="object" string="Excel"/>
+        </header>
+        <sheet>
+          <group>
+            <field name="company_id"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="store_id"/>
+            <field name="partner_id"/>
+          </group>
+          <field name="preview" widget="html" nolabel="1"/>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="report_action" model="ir.actions.act_window">
+    <field name="name">Compras ESI</field>
+    <field name="res_model">esi.purchase.report</field>
+    <field name="view_mode">form</field>
+  </record>
+  <menuitem id="report_menu" name="Informe de compras ESI" action="report_action" groups="purchase.group_purchase_user" parent="purchase.purchase_report_main" sequence="80"/>
+  <record id="report_menu" model="ir.ui.menu">
+    <field name="web_icon" eval="False"/>
+  </record>
+</odoo>
