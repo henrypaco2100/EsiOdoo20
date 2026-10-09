@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_sale_order_esi_sale_type" model="ir.ui.view">
         <field name="name">sale.order.esi.sale.type.v20</field>
@@ -8,6 +7,6 @@
             <field name="partner_id" position="after">
                 <field name="esi_sale_type_id" options="{'no_create': True}" readonly="state in ('sale','cancel')"/>
             </field>
-        </field>
+        <xpath expr="//header" position="inside"><field name="esi_can_register_payment" invisible="1"/><button name="action_esi_register_payment" type="object" string="Registrar pago" invisible="not esi_can_register_payment"/><button name="action_esi_apply_type_flow" type="object" string="Aplicar opciones del tipo" invisible="not esi_sale_type_id or state not in ('sale',)"/></xpath></field>
     </record>
 </odoo>

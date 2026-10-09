@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_esi_kardex_report,esi.kardex.report,model_esi_kardex_report,stock.group_stock_manager,crud,

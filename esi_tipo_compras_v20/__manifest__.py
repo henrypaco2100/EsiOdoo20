@@ -1,15 +1,16 @@
-{'name': 'ESI - Tipo de Compras v20',
- 'version': '20.0.2.0.0',
+{'application': False,
  'author': 'ESI',
- 'maintainer': 'ESI',
- 'license': 'LGPL-3',
  'category': 'Purchases',
- 'summary': 'Clasificación comercial de compras sin forzar recepción ni '
-            'almacén',
- 'depends': ['purchase'],
  'data': ['security/ir.access.csv',
           'views/esi_purchase_type_views.xml',
           'views/purchase_order_views.xml',
-          'security/company.xml'],
+          'security/company.xml',
+          'security/branches.xml'],
+ 'depends': ['purchase', 'esi_sucursales_v20'],
  'installable': True,
- 'application': False}
+ 'license': 'LGPL-3',
+ 'maintainer': 'ESI',
+ 'name': 'Tipo de Compras v20',
+ 'summary': 'Tipos por sucursal, facturación y validación opcional con '
+            'permisos nativos',
+ 'version': '20.0.3.0.0'}

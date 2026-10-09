@@ -1,5 +1,5 @@
-{'name': 'ESI - Agente IA por áreas',
- 'version': '20.0.2.0.0',
+{'name': 'Agente IA por áreas',
+ 'version': '20.0.3.0.0',
  'author': 'ESI',
  'maintainer': 'ESI',
  'license': 'LGPL-3',

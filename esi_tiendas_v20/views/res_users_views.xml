@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <record id="view_users_form_esi_store" model="ir.ui.view">
         <field name="name">res.users.form.esi.store.v20</field>
@@ -6,8 +6,8 @@
         <field name="inherit_id" ref="base.view_users_form"/>
         <field name="arch" type="xml">
             <group name="other_preferences" position="inside">
-                <field name="esi_store_id" options="{'no_create': True}"/>
-                <field name="esi_store_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                <field name="esi_store_id" options="{'no_create': True}" invisible="1"/>
+                <field name="esi_store_ids" widget="many2many_tags" options="{'no_create': True}" invisible="1"/>
             </group>
         </field>
     </record>
@@ -18,7 +18,7 @@
         <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
         <field name="arch" type="xml">
             <group name="other_preferences" position="inside">
-                <field name="esi_store_id" options="{'no_create': True}" readonly="0"/>
+                <field name="esi_store_id" options="{'no_create': True}" readonly="0" invisible="1"/>
             </group>
         </field>
     </record>

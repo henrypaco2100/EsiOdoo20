@@ -4,7 +4,7 @@
     <field name="name">esi.sales.report.form</field>
     <field name="model">esi.sales.report</field>
     <field name="arch" type="xml">
-      <form string="Ventas ESI">
+      <form string="Ventas">
         <header>
           <button name="action_preview" type="object" string="Consultar" class="btn-primary"/>
           <button name="action_pdf" type="object" string="PDF"/>
@@ -15,7 +15,7 @@
             <field name="company_id"/>
             <field name="date_from"/>
             <field name="date_to"/>
-            <field name="store_id"/>
+            <field name="store_id" invisible="1"/>
             <field name="partner_id"/>
           </group>
           <field name="preview" widget="html" nolabel="1"/>
@@ -24,11 +24,11 @@
     </field>
   </record>
   <record id="report_action" model="ir.actions.act_window">
-    <field name="name">Ventas ESI</field>
+    <field name="name">Ventas</field>
     <field name="res_model">esi.sales.report</field>
     <field name="view_mode">form</field>
   </record>
-  <menuitem id="report_menu" name="Informe de ventas ESI" action="report_action" groups="sales_team.group_sale_salesman" parent="sale.menu_sale_report" sequence="80"/>
+  <menuitem id="report_menu" name="Informe de ventas" action="report_action" groups="sales_team.group_sale_salesman" parent="sale.menu_sale_report" sequence="80"/>
   <record id="report_menu" model="ir.ui.menu">
     <field name="web_icon" eval="False"/>
   </record>

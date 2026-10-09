@@ -5,7 +5,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     esi_store_id = fields.Many2one(
-        'esi.store', check_company=True, string='Tienda / Sucursal ESI',
+        'esi.store', check_company=True, string='Tienda / Sucursal',
         domain="[('company_id', '=', company_id)]",
         default=lambda self: self.env.user.esi_store_id if self.env.user.esi_store_id.company_id == self.env.company else False,
         copy=True,

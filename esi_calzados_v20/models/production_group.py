@@ -4,7 +4,7 @@ from odoo.exceptions import UserError
 
 class EsiProductionGroup(models.Model):
     _name = 'esi.production.group'
-    _description = 'Grupo de Órdenes de Producción ESI'
+    _description = 'Grupo de Órdenes de Producción'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
@@ -83,7 +83,7 @@ class EsiProductionGroup(models.Model):
 
 class EsiProductionGroupLine(models.Model):
     _name = 'esi.production.group.line'
-    _description = 'Línea Grupo Producción ESI'
+    _description = 'Línea Grupo Producción'
 
     group_id = fields.Many2one('esi.production.group', required=True, ondelete='cascade')
     product_id = fields.Many2one('product.product', required=True, domain="[('is_storable', '=', True)]")

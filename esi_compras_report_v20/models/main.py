@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class Report(models.TransientModel):
     _name = 'esi.purchase.report'
     _inherit = 'esi.report.mixin'
-    _description = 'Compras ESI'
+    _description = 'Compras'
     company_id = fields.Many2one('res.company',required=True,default=lambda s:s.env.company)
     date_from = fields.Date(required=True,default=lambda s:fields.Date.today().replace(day=1))
     date_to = fields.Date(required=True,default=fields.Date.today)
@@ -18,12 +18,12 @@ class Report(models.TransientModel):
         start=tz.localize(datetime.combine(self.date_from,time.min)).astimezone(pytz.UTC).replace(tzinfo=None)
         end=tz.localize(datetime.combine(self.date_to+timedelta(days=1),time.min)).astimezone(pytz.UTC).replace(tzinfo=None)
         domain=[('company_id','=',self.company_id.id),('date_order','>=',start),('date_order','<',end)]
-        if self.store_id:
+        if self.store_id and not self.company_id.parent_id:
             if self.env.user.esi_store_ids and self.store_id not in self.env.user.esi_store_ids:raise UserError(_('Sucursal no autorizada.'))
             domain.append(('esi_store_id','=',self.store_id.id))
-        elif self.env.user.esi_store_ids:domain.append(('esi_store_id','in',self.env.user.esi_store_ids.ids))
+        elif self.env.user.esi_store_ids and not self.company_id.parent_id:domain.append(('esi_store_id','in',self.env.user.esi_store_ids.ids))
         if self.partner_id:domain.append(('partner_id','=',self.partner_id.id))
         recs=self.env['purchase.order'].search(domain,limit=20001,order='date_order,id')
         if len(recs)>20000:raise UserError(_('Reduzca el período: máximo 20.000 documentos.'))
         rows=[[r.name,str(fields.Datetime.context_timestamp(self,r.date_order)),r.partner_id.display_name or '',r.esi_store_id.display_name or '',r.state,r.currency_id.name,r.amount_total] for r in recs]
-        return 'Compras ESI: '+str(self.date_from)+' / '+str(self.date_to),['Documento','Fecha local','Contacto','Sucursal','Estado','Moneda','Total'],rows
+        return 'Compras: '+str(self.date_from)+' / '+str(self.date_to),['Documento','Fecha local','Contacto','Sucursal','Estado','Moneda','Total'],rows

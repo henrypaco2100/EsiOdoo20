@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 
 class EsiStore(models.Model):
     _name = 'esi.store'
-    _description = 'Tienda / Sucursal ESI'
+    _description = 'Tienda / Sucursal'
     _order = 'sequence, name'
 
     name = fields.Char(string='Tienda / Sucursal', required=True)

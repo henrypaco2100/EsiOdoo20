@@ -6,13 +6,13 @@ class ResUsers(models.Model):
     _inherit = 'res.users'
 
     esi_store_id = fields.Many2one(
-        'esi.store', string='Tienda ESI actual',
+        'esi.store', string='Tienda actual',
         domain="[('company_id', '=', company_id)]",
         user_writeable=True,
         help='Solo sirve como valor por defecto comercial/analítico. No limita almacenes ni documentos.',
     )
     esi_store_ids = fields.Many2many(
-        'esi.store', 'esi_store_user_rel', 'user_id', 'store_id', string='Tiendas ESI permitidas',
+        'esi.store', 'esi_store_user_rel', 'user_id', 'store_id', string='Tiendas permitidas',
         help='Lista informativa/operativa. Este módulo no crea reglas de registro sobre stock.',
     )
 

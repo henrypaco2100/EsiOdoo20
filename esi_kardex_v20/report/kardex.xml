@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="paper_kardex" model="report.paperformat">
+    <field name="name">ESI Kardex horizontal A3</field>
+    <field name="format">A3</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">20</field>
+    <field name="margin_bottom">15</field>
+    <field name="margin_left">8</field>
+    <field name="margin_right">8</field>
+  </record>
+  <record id="action_pdf" model="ir.actions.report">
+    <field name="name">Kardex físico</field>
+    <field name="model">esi.kardex.report</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">esi_kardex_v20.document</field>
+    <field name="paperformat_id" ref="paper_kardex"/>
+    <field name="print_report_name">'ESI_Kardex'</field>
+  </record>
+  <template id="document">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-call="web.external_layout">
+          <div class="page"><div t-out="body"/></div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>

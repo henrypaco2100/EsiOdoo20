@@ -13,12 +13,12 @@ class Sale(models.Model):
     _inherit = 'sale.order'
     def _is_cart_ready_for_payment(self):
         ready = super()._is_cart_ready_for_payment()
-        if self.website_id and not (self.esi_store_id or self.warehouse_id.esi_store_id or self.website_id.esi_store_id):
+        if self.website_id and not self.company_id.parent_id and not (self.esi_store_id or self.warehouse_id.esi_store_id or self.website_id.esi_store_id):
             self._add_blocking_alert(_('Este pedido necesita asignación de sucursal. Contacte al vendedor antes de pagar.'))
             return False
         return ready
     def action_confirm(self):
-        for order in self.filtered('website_id'):
+        for order in self.filtered(lambda o: o.website_id and not o.company_id.parent_id):
             if order.carrier_id.delivery_type == 'in_store':
                 order.esi_store_id = order.warehouse_id.esi_store_id
             if not order.esi_store_id:

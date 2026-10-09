@@ -5,16 +5,17 @@ from odoo.exceptions import UserError
 
 class MoveLine(models.Model):
     _inherit = 'account.move.line'
-    esi_cash_flow = fields.Selection([('operating','Operación'),('investing','Inversión'),('financing','Financiación'),('internal','Transferencia interna')], string='Actividad de flujo de efectivo', help='Clasificación para reportes ESI. No modifica importes, fechas ni valoración.')
+    esi_cash_flow = fields.Selection([('operating','Operación'),('investing','Inversión'),('financing','Financiación'),('internal','Transferencia interna')], string='Actividad de flujo de efectivo', help='Clasificación para reportes. No modifica importes, fechas ni valoración.')
 
 class FinanceReport(models.TransientModel):
     _name = 'esi.finance.report'
     _inherit = 'esi.report.mixin'
-    _description = 'Informes financieros ESI'
+    _description = 'Informes financieros'
     company_id = fields.Many2one('res.company', required=True, default=lambda s:s.env.company)
     date_from = fields.Date(required=True, default=lambda s:fields.Date.today().replace(day=1))
     date_to = fields.Date(required=True, default=fields.Date.today)
     kind = fields.Selection([('trial','Sumas y saldos'),('balance','Balance general'),('profit','Estado de resultados'),('ledger','Libro mayor'),('receivable','CxC por vencimiento'),('payable','CxP por vencimiento'),('cash','Movimientos de caja y bancos'),('cashflow','Flujo de efectivo por actividad'),('statement','Estado de cuenta de contacto'),('analytic','Resultado analítico'),('executive','Resumen ejecutivo'),('tax','Resumen de apuntes de impuestos')], required=True, default='trial')
+    include_branches = fields.Boolean(string='Incluir sucursales activas descendientes', default=False, help='Incluye solo las sucursales de esta compañía activadas en el selector superior. Comparten moneda con su matriz.')
     store_id = fields.Many2one('esi.store', string='Sucursal')
     analytic_id = fields.Many2one('account.analytic.account', string='Cuenta analítica')
     account_ids = fields.Many2many('account.account', string='Cuentas')
@@ -25,12 +26,13 @@ class FinanceReport(models.TransientModel):
         self.ensure_one();self.check_access('read')
         if self.company_id not in self.env.companies or self.date_from > self.date_to:
             raise UserError(_('Revise compañía y rango de fechas.'))
-        domain = [('company_id','=',self.company_id.id),('date','<=',self.date_to),('display_type','not in',['line_section','line_note'])]
+        report_companies = self.company_id._accessible_branches() if self.include_branches else self.company_id
+        domain = [('company_id','in',report_companies.ids),('date','<=',self.date_to),('display_type','not in',['line_section','line_note'])]
         if self.posted_only:domain += [('parent_state','=','posted')]
         else:domain += [('parent_state','!=','cancel')]
         if self.account_ids:domain += [('account_id','in',self.account_ids.ids)]
         if self.partner_id:domain += [('partner_id','=',self.partner_id.id)]
-        if self.store_id:domain += ['|',('esi_store_id','=',self.store_id.id),'&',('esi_store_id','=',False),('move_id.esi_store_id','=',self.store_id.id)]
+        if self.store_id and not self.company_id.parent_id and not self.include_branches:domain += ['|',('esi_store_id','=',self.store_id.id),'&',('esi_store_id','=',False),('move_id.esi_store_id','=',self.store_id.id)]
         if self.kind in ('receivable','payable'):
             domain += [('account_id.account_type','=', 'asset_receivable' if self.kind=='receivable' else 'liability_payable')]
         if self.kind in ('cash','cashflow'):domain += [('account_id.account_type','=','asset_cash')]
@@ -46,6 +48,7 @@ class FinanceReport(models.TransientModel):
             if not self.analytic_id:return 1.0
             return sum(float(v) for k,v in (line.analytic_distribution or {}).items() if str(self.analytic_id.id) in k.split(','))/100
         title = '%s · %s · %s a %s · %s' % (dict(self._fields['kind'].selection)[self.kind],self.company_id.name,self.date_from,self.date_to,self.company_id.currency_id.name)
+        title += ' · Entidades: ' + ', '.join(report_companies.mapped('name'))
         if self.analytic_id:title += ' · Importe proporcional a la distribución analítica'
         rows=[]
         if self.kind=='cashflow':

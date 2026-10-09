@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_kardex_form" model="ir.ui.view">
+    <field name="name">esi.kardex.report.form</field>
+    <field name="model">esi.kardex.report</field>
+    <field name="arch" type="xml">
+      <form string="Kardex físico">
+        <header>
+          <button name="action_preview" string="Consultar Kardex" type="object" class="btn-primary"/>
+          <button name="action_pdf" string="Descargar PDF" type="object"/>
+          <button name="action_xlsx" string="Descargar Excel" type="object"/>
+          <button name="action_reset_filters" string="Limpiar filtros" type="object"/>
+        </header>
+        <sheet>
+          <field name="allowed_location_ids" invisible="1"/>
+          <field name="details" invisible="1"/>
+          <div class="alert alert-info" role="alert">Elige un período y pulsa Consultar Kardex. Los campos vacíos incluyen todos los registros accesibles. Este informe muestra cantidades; no modifica existencias ni valoración.</div>
+          <notebook>
+            <page string="1. Período y productos" name="main_filters">
+              <group>
+                <group string="¿De qué compañía y período?">
+                  <field name="company_id" options="{'no_create': True}"/>
+                  <field name="period"/>
+                  <field name="date_from" readonly="period != 'custom'"/>
+                  <field name="date_to" readonly="period != 'custom'"/>
+                  <field name="report_mode" widget="radio"/>
+                </group>
+                <group string="¿Qué almacenes y productos?">
+                  <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]" options="{'no_create': True}" placeholder="Vacío = todos los almacenes"/>
+                  <field name="category_ids" widget="many2many_tags" options="{'no_create': True}" placeholder="Vacío = todas las categorías"/>
+                  <field name="product_ids" widget="many2many_tags" domain="[('type', '!=', 'service'), '|', ('company_id', '=', False), ('company_id', '=', company_id)] + ([('categ_id', 'child_of', category_ids)] if category_ids else [])" options="{'no_create': True}" placeholder="Vacío = todos los productos de esas categorías"/>
+                </group>
+              </group>
+              <p class="text-muted">El saldo inicial incluye los movimientos anteriores al período. Las categorías incluyen sus subcategorías.</p>
+            </page>
+            <page string="2. Más filtros y presentación" name="advanced_filters">
+              <group>
+                <group string="Afinar la búsqueda (opcional)">
+                  <field name="location_ids" widget="many2many_tags" domain="[('id', 'in', allowed_location_ids)]" options="{'no_create': True}" placeholder="Todas las ubicaciones internas de los almacenes"/>
+                  <field name="lot_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)] + ([('product_id', 'in', product_ids)] if product_ids else []) + ([('product_id.categ_id', 'child_of', category_ids)] if category_ids else [])" options="{'no_create': True}" placeholder="Todos los lotes / series de los productos"/>
+                  <field name="own_only"/>
+                </group>
+                <group string="¿Cómo quieres ver el resultado?">
+                  <field name="group_warehouse"/>
+                  <field name="group_category"/>
+                  <field name="separate_variants"/>
+                  <field name="show_locations" invisible="report_mode != 'detail'"/>
+                  <field name="uom_ids" widget="many2many_tags" options="{'no_create': True}" placeholder="Opcional: Caja, Paquete u otra UdM configurada"/>
+                </group>
+              </group>
+              <p class="text-muted">Al separar almacenes verás sus saldos individuales; al desmarcar se consolidan. Las unidades adicionales se convierten solo si comparten la misma referencia. PDF: máximo una unidad adicional; Excel: varias.</p>
+            </page>
+          </notebook>
+          <group string="Resumen de tu consulta"><field name="filter_summary" nolabel="1" readonly="1"/></group>
+          <separator string="Resultado"/>
+          <p class="text-muted" invisible="preview">Pulsa Consultar Kardex para generar el resultado. Al cambiar filtros, se limpia la vista anterior para evitar confusiones.</p>
+          <div style="overflow-x:auto"><field name="preview" widget="html" nolabel="1"/></div>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_kardex" model="ir.actions.act_window">
+    <field name="name">Kardex físico</field>
+    <field name="res_model">esi.kardex.report</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_kardex_form"/>
+  </record>
+  <menuitem id="menu_kardex" name="Kardex físico" parent="stock.menu_warehouse_report" action="action_kardex" sequence="90" groups="stock.group_stock_manager"/>
+</odoo>

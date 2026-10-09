@@ -18,7 +18,7 @@
         <field name="name">esi.production.group.form</field>
         <field name="model">esi.production.group</field>
         <field name="arch" type="xml">
-            <form string="Grupo de Producción ESI">
+            <form string="Grupo de Producción">
                 <header>
                     <button name="action_create_productions" type="object" string="Crear órdenes de producción" class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_cancel" type="object" string="Cancelar" invisible="state != 'draft'"/>
@@ -61,9 +61,9 @@
         <field name="arch" type="xml"><graph string="Grupos de Producción"><field name="responsible_id"/><field name="production_count" type="measure"/></graph></field>
     </record>
     <record id="action_esi_production_group" model="ir.actions.act_window">
-        <field name="name">Grupos de Producción ESI</field>
+        <field name="name">Grupos de Producción</field>
         <field name="res_model">esi.production.group</field>
         <field name="view_mode">list,form,pivot,graph</field>
     </record>
-    <menuitem id="menu_esi_production_group" name="Grupos de Producción ESI" parent="mrp.menu_mrp_manufacturing" action="action_esi_production_group" sequence="35"/>
+    <menuitem id="menu_esi_production_group" name="Grupos de Producción" parent="mrp.menu_mrp_manufacturing" action="action_esi_production_group" sequence="35"/>
 </odoo>

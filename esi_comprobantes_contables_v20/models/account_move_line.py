@@ -4,7 +4,7 @@ from odoo import fields, models
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    esi_analytic_names = fields.Char(string='Analítica ESI', compute='_compute_esi_analytic_names')
+    esi_analytic_names = fields.Char(string='Analítica', compute='_compute_esi_analytic_names')
 
     def _compute_esi_analytic_names(self):
         Analytic = self.env['account.analytic.account']

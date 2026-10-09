@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <record id="view_esi_store_list" model="ir.ui.view">
         <field name="name">esi.store.list</field>
@@ -18,7 +18,7 @@
         <field name="name">esi.store.form</field>
         <field name="model">esi.store</field>
         <field name="arch" type="xml">
-            <form string="Tienda / Sucursal ESI">
+            <form string="Tienda / Sucursal">
                 <sheet>
                     <div class="alert alert-info" role="alert">
                         La tienda es una dimensión comercial/analítica. Los almacenes, rutas, reabastecimiento y valoración siguen siendo nativos de Odoo 20.
@@ -42,10 +42,9 @@
         </field>
     </record>
     <record id="action_esi_store" model="ir.actions.act_window">
-        <field name="name">Tiendas / Sucursales ESI</field>
+        <field name="name">Tiendas / Sucursales</field>
         <field name="res_model">esi.store</field>
         <field name="view_mode">list,form</field>
     </record>
-    <menuitem id="menu_esi_store" name="Tiendas / Sucursales ESI" parent="sale.menu_sale_config"
-              action="action_esi_store" sequence="85" groups="sales_team.group_sale_manager"/>
+    <menuitem id="menu_esi_store" name="Tiendas anteriores (histórico)" parent="sale.menu_sale_config" action="action_esi_store" sequence="85" groups="base.group_no_one"/>
 </odoo>

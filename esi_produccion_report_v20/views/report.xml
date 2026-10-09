@@ -4,7 +4,7 @@
     <field name="name">esi.production.report.form</field>
     <field name="model">esi.production.report</field>
     <field name="arch" type="xml">
-      <form string="Informes de producción ESI">
+      <form string="Informes de producción">
         <header>
           <button name="action_preview" type="object" string="Consultar" class="btn-primary"/>
           <button name="action_pdf" type="object" string="PDF"/>
@@ -24,11 +24,11 @@
     </field>
   </record>
   <record id="report_action" model="ir.actions.act_window">
-    <field name="name">Informes de producción ESI</field>
+    <field name="name">Informes de producción</field>
     <field name="res_model">esi.production.report</field>
     <field name="view_mode">form</field>
   </record>
-  <menuitem id="report_menu" name="Informes de producción ESI" parent="mrp.menu_mrp_reporting" action="report_action" groups="mrp.group_mrp_user" sequence="80"/>
+  <menuitem id="report_menu" name="Informes de producción" parent="mrp.menu_mrp_reporting" action="report_action" groups="mrp.group_mrp_user" sequence="80"/>
   <record id="report_menu" model="ir.ui.menu">
     <field name="web_icon" eval="False"/>
   </record>

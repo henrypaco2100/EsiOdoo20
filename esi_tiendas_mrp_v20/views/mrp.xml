@@ -1,1 +1,15 @@
-<odoo><record id="production_store" model="ir.ui.view"><field name="name">mrp.production.esi.store</field><field name="model">mrp.production</field><field name="inherit_id" ref="mrp.mrp_production_form_view"/><field name="arch" type="xml"><xpath expr="//sheet/group" position="inside"><group><field name="esi_store_id"/></group></xpath></field></record></odoo>
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <record id="production_store" model="ir.ui.view">
+    <field name="name">mrp.production.esi.store</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet/group" position="inside">
+        <group>
+          <field name="esi_store_id" invisible="1"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+</odoo>

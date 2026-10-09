@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_esi_purchase_type_list" model="ir.ui.view">
         <field name="name">esi.purchase.type.list</field>
@@ -17,7 +16,7 @@
         <field name="name">esi.purchase.type.form</field>
         <field name="model">esi.purchase.type</field>
         <field name="arch" type="xml">
-            <form string="Tipo de Compra ESI">
+            <form string="Tipo de Compra">
                 <sheet>
                     <div class="alert alert-info" role="alert">
                         Este tipo clasifica la compra. Odoo 20 conserva el control nativo de recepción, rutas y almacenes.
@@ -29,15 +28,14 @@
                         <field name="active"/>
                     </group>
                     <field name="note"/>
-                </sheet>
+                <group string="Operación y facturación"><field name="warehouse_id"/><field name="journal_id"/><field name="validation_picking"/><field name="create_invoice"/><field name="validate_invoice"/><field name="allow_payment"/></group></sheet>
             </form>
         </field>
     </record>
     <record id="action_esi_purchase_type" model="ir.actions.act_window">
-        <field name="name">Tipo de Compras ESI</field>
+        <field name="name">Tipo de Compras</field>
         <field name="res_model">esi.purchase.type</field>
         <field name="view_mode">list,form</field>
     </record>
-    <menuitem id="menu_esi_purchase_type" name="Tipo de Compras ESI" parent="purchase.menu_purchase_config"
-              action="action_esi_purchase_type" sequence="25" groups="purchase.group_purchase_manager"/>
+    <menuitem id="menu_esi_purchase_type" name="Tipo de Compras" parent="purchase.menu_purchase_config" action="action_esi_purchase_type" sequence="25" groups="purchase.group_purchase_manager"/>
 </odoo>

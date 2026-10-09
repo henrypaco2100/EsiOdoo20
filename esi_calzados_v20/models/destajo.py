@@ -3,7 +3,7 @@ from odoo import api, fields, models
 
 class EsiDestajo(models.Model):
     _name = 'esi.destajo'
-    _description = 'Destajo de Producción ESI'
+    _description = 'Destajo de Producción'
     _inherit = ['mail.thread']
     _order = 'date desc, id desc'
 

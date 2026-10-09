@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class Report(models.TransientModel):
     _name = 'esi.production.report'
     _inherit = 'esi.report.mixin'
-    _description = 'Informe de producción ESI'
+    _description = 'Informe de producción'
     company_id = fields.Many2one('res.company',required=True,default=lambda s:s.env.company)
     date_from = fields.Date(required=True,default=lambda s:fields.Date.today().replace(day=1))
     date_to = fields.Date(required=True,default=fields.Date.today)
@@ -21,7 +21,7 @@ class Report(models.TransientModel):
         if self.group_id:domain.append(('esi_group_id','=',self.group_id.id))
         orders=self.env['mrp.production'].search(domain,limit=10001)
         if len(orders)>10000:raise UserError(_('Reduzca el período.'))
-        title='Producción ESI · %s / %s' % (self.date_from,self.date_to)
+        title='Producción · %s / %s' % (self.date_from,self.date_to)
         if self.kind=='summary':
             return title,['OF','Grupo','Producto','Cantidad','Unidad','Estado','Encargado','Sucursal'],[[o.name,o.esi_group_id.name or '',o.product_id.display_name,o.product_qty,o.uom_id.name,o.state,o.esi_responsible_id.name or '',o.esi_store_id.name or ''] for o in orders]
         if self.kind=='piecework':

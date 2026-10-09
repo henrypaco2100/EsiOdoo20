@@ -1,5 +1,5 @@
-{'name': 'ESI - Comprobantes Contables v20',
- 'version': '20.0.2.0.0',
+{'name': 'Comprobantes Contables v20',
+ 'version': '20.0.3.0.0',
  'author': 'ESI',
  'maintainer': 'ESI',
  'license': 'LGPL-3',

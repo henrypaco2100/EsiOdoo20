@@ -9,7 +9,7 @@ from odoo.exceptions import UserError
 
 class ReportMixin(models.AbstractModel):
     _name = 'esi.report.mixin'
-    _description = 'Exportación de reportes ESI'
+    _description = 'Exportación de reportes'
     preview = fields.Html(string='Vista previa', readonly=True, sanitize=True)
     export_file = fields.Binary(readonly=True, attachment=False)
     export_name = fields.Char(readonly=True)
@@ -49,7 +49,7 @@ class ReportMixin(models.AbstractModel):
 
 class Document(models.AbstractModel):
     _name = 'report.esi_reportes_base_v20.document'
-    _description = 'Documento ESI'
+    _description = 'Documento'
     def _get_report_values(self, docids, data=None):
         allowed = {'esi.finance.report','esi.sales.report','esi.purchase.report','esi.pos.report','esi.production.report'}
         data = data or {}

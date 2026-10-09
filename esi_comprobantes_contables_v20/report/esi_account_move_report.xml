@@ -12,7 +12,7 @@
     </record>
 
     <record id="action_report_esi_account_move" model="ir.actions.report">
-        <field name="name">Comprobante Contable ESI</field>
+        <field name="name">Comprobante Contable</field>
         <field name="model">account.move</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">esi_comprobantes_contables_v20.report_esi_account_move</field>
@@ -66,7 +66,7 @@
                                 </tr>
                             </tfoot>
                         </table>
-                        <div class="mt-4" style="font-size:10px;">Generado con ESI sobre la contabilidad nativa de Odoo 20.</div>
+                        <div class="mt-4" style="font-size:10px;">Generado con sobre la contabilidad nativa de Odoo 20.</div>
                     </div>
                 </t>
             </t>

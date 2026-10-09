@@ -1,10 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <record id="report_form" model="ir.ui.view">
     <field name="name">esi.finance.report.form</field>
     <field name="model">esi.finance.report</field>
     <field name="arch" type="xml">
-      <form string="Finanzas ESI">
+      <form string="Finanzas">
         <header>
           <button name="action_preview" type="object" string="Consultar" class="btn-primary"/>
           <button name="action_pdf" type="object" string="PDF"/>
@@ -13,11 +12,11 @@
         <sheet>
           <group>
             <field name="company_id"/>
-            <field name="kind"/>
+            <field name="include_branches"/><field name="kind"/>
             <field name="date_from"/>
             <field name="date_to"/>
             <field name="posted_only"/>
-            <field name="store_id"/>
+            <field name="store_id" invisible="1"/>
             <field name="analytic_id"/>
             <field name="account_ids" widget="many2many_tags"/>
             <field name="partner_id"/>
@@ -28,11 +27,11 @@
     </field>
   </record>
   <record id="report_action" model="ir.actions.act_window">
-    <field name="name">Finanzas ESI</field>
+    <field name="name">Finanzas</field>
     <field name="res_model">esi.finance.report</field>
     <field name="view_mode">form</field>
   </record>
-  <menuitem id="report_menu" name="Reportes financieros ESI" groups="account.group_account_user" parent="account.menu_finance_reports" sequence="80"/>
+  <menuitem id="report_menu" name="Reportes financieros" groups="account.group_account_user" parent="account.menu_finance_reports" sequence="80"/>
   <record id="report_menu" model="ir.ui.menu">
     <field name="web_icon" eval="False"/>
     <field name="action" eval="False"/>

@@ -5,9 +5,10 @@
              'esi_calzados_v20',
              'esi_tiendas_mrp_v20',
              'mrp_account',
-             'mrp'],
+             'mrp',
+             'esi_sucursales_v20'],
  'installable': True,
  'license': 'LGPL-3',
  'maintainer': 'ESI',
- 'name': 'ESI - Informes de producción',
- 'version': '20.0.2.2.0'}
+ 'name': 'Informes de producción',
+ 'version': '20.0.3.0.0'}
