@@ -42,14 +42,6 @@
         <field name="model">res.users</field>
         <field name="inherit_id" ref="base.view_users_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='company_ids']" position="before">
-                <div class="alert alert-info" role="alert" groups="base.group_system">
-                    <strong>Sucursales Odoo 20:</strong>
-                    agregue aquí las sucursales permitidas para el usuario. Después de guardar, el usuario
-                    debe recargar la sesión y seleccionar la sucursal desde el selector de compañía de la
-                    esquina superior derecha. No existe un segundo campo ESI de “activar sucursal”.
-                </div>
-            </xpath>
             <xpath expr="//field[@name='company_ids']" position="attributes">
                 <attribute name="string">Sucursales / Compañías permitidas</attribute>
             </xpath>

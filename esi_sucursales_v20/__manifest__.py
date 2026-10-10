@@ -1,5 +1,5 @@
 {'name': 'Sucursales y separación de operaciones',
- 'version': '20.0.3.2.0',
+ 'version': '20.0.3.2.1',
  'author': 'ESI',
  'maintainer': 'ESI',
  'license': 'LGPL-3',
