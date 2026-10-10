@@ -64,8 +64,15 @@ class TestBranchIsolation(TransactionCase):
         model = self.env['account.journal'].with_user(self.user_a).with_context(allowed_company_ids=self.a.ids)
         self.assertFalse(model.search([('id', '=', journal.id)]))
 
-    def test_selector_includes_assigned_but_inactive_branch(self):
+    def test_selector_only_includes_session_active_branches(self):
         model = self.env['sale.order'].with_user(self.user_ab).with_context(allowed_company_ids=self.a.ids)
         order = model.new({})
-        self.assertEqual(set(order.esi_branch_company_ids.ids), set((self.a | self.b).ids))
+        self.assertEqual(order.esi_branch_company_ids, self.a)
+        self.assertFalse(order.esi_show_branch)
         self.assertFalse(model.search([('id', '=', self.records[self.b.id][0].id)]))
+
+    def test_selector_shows_multiple_session_active_branches(self):
+        model = self.env['sale.order'].with_user(self.user_ab).with_context(allowed_company_ids=(self.a | self.b).ids)
+        order = model.new({})
+        self.assertEqual(set(order.esi_branch_company_ids.ids), set((self.a | self.b).ids))
+        self.assertTrue(order.esi_show_branch)

@@ -11,6 +11,6 @@
  'license': 'LGPL-3',
  'maintainer': 'ESI',
  'name': 'Tipo de Ventas v20',
- 'summary': 'Tipos por sucursal, facturación y validación opcional con '
+ 'summary': 'Tipos por sucursal sin interferir en logística; facturación y validación con '
             'permisos nativos',
- 'version': '20.0.3.1.0'}
+ 'version': '20.0.3.2.0'}

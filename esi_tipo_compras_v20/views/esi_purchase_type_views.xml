@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_esi_purchase_type_list" model="ir.ui.view">
         <field name="name">esi.purchase.type.list</field>
@@ -12,6 +13,7 @@
             </list>
         </field>
     </record>
+
     <record id="view_esi_purchase_type_form" model="ir.ui.view">
         <field name="name">esi.purchase.type.form</field>
         <field name="model">esi.purchase.type</field>
@@ -19,7 +21,9 @@
             <form string="Tipo de Compra">
                 <sheet>
                     <div class="alert alert-info" role="alert">
-                        Las opciones habilitadas aplican el almacén y la facturación del tipo. Las entregas y recepciones respetan las cantidades registradas y los asistentes de Odoo.
+                        El Tipo de Compra complementa a Odoo 20. No cambia la operación de recepción,
+                        el almacén ni las reglas de reabastecimiento. Para configurar otra sucursal,
+                        selecciónela primero en el selector nativo de compañía de Odoo.
                     </div>
                     <group>
                         <field name="name"/>
@@ -28,14 +32,31 @@
                         <field name="active"/>
                     </group>
                     <field name="note"/>
-                <group string="Operación y facturación"><field name="warehouse_id"/><field name="journal_id"/><field name="validation_picking"/><field name="create_invoice"/><field name="validate_invoice"/><field name="allow_payment"/></group></sheet>
+                    <group string="Operación y facturación">
+                        <field name="warehouse_id"/>
+                        <field name="journal_id"/>
+                        <field name="validation_picking"/>
+                        <field name="create_invoice"/>
+                        <field name="validate_invoice"/>
+                        <field name="allow_payment"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
+
     <record id="action_esi_purchase_type" model="ir.actions.act_window">
         <field name="name">Tipo de Compras</field>
         <field name="res_model">esi.purchase.type</field>
         <field name="view_mode">list,form</field>
     </record>
-    <menuitem id="menu_esi_purchase_type" name="Tipo de Compras" parent="purchase.menu_purchase_config" action="action_esi_purchase_type" sequence="25" groups="purchase.group_purchase_manager"/>
+
+    <menuitem
+        id="menu_esi_purchase_type"
+        name="Tipo de Compras"
+        parent="purchase.menu_purchase_config"
+        action="action_esi_purchase_type"
+        sequence="25"
+        groups="purchase.group_purchase_manager"
+    />
 </odoo>

@@ -1,5 +1,5 @@
 {'name': 'Sucursales y separación de operaciones',
- 'version': '20.0.3.1.0',
+ 'version': '20.0.3.2.0',
  'author': 'ESI',
  'maintainer': 'ESI',
  'license': 'LGPL-3',
@@ -7,5 +7,5 @@
  'data': ['security/branches.xml', 'views/company.xml'],
  'application': False,
  'installable': True,
- 'summary': 'Jerarquía nativa res.company, selector contextual y diarios por '
+ 'summary': 'Sucursales nativas Odoo 20, selector de sesión y diarios por '
             'sucursal'}

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_esi_sale_type_list" model="ir.ui.view">
         <field name="name">esi.sale.type.list</field>
@@ -12,6 +13,7 @@
             </list>
         </field>
     </record>
+
     <record id="view_esi_sale_type_form" model="ir.ui.view">
         <field name="name">esi.sale.type.form</field>
         <field name="model">esi.sale.type</field>
@@ -19,7 +21,9 @@
             <form string="Tipo de Venta">
                 <sheet>
                     <div class="alert alert-info" role="alert">
-                        Las opciones habilitadas aplican el almacén y la facturación del tipo. Las entregas y recepciones respetan las cantidades registradas y los asistentes de Odoo.
+                        El Tipo de Venta complementa a Odoo 20. No cambia el almacén del pedido, las rutas,
+                        el reabastecimiento ni el almacén elegido por eCommerce/Website. Para configurar otra
+                        sucursal, selecciónela primero en el selector nativo de compañía de Odoo.
                     </div>
                     <group>
                         <field name="name"/>
@@ -28,14 +32,31 @@
                         <field name="active"/>
                     </group>
                     <field name="note"/>
-                <group string="Operación y facturación"><field name="warehouse_id"/><field name="journal_id"/><field name="validation_picking"/><field name="create_invoice"/><field name="validate_invoice"/><field name="allow_payment"/></group></sheet>
+                    <group string="Operación y facturación">
+                        <field name="warehouse_id"/>
+                        <field name="journal_id"/>
+                        <field name="validation_picking"/>
+                        <field name="create_invoice"/>
+                        <field name="validate_invoice"/>
+                        <field name="allow_payment"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
+
     <record id="action_esi_sale_type" model="ir.actions.act_window">
         <field name="name">Tipo de Ventas</field>
         <field name="res_model">esi.sale.type</field>
         <field name="view_mode">list,form</field>
     </record>
-    <menuitem id="menu_esi_sale_type" name="Tipo de Ventas" parent="sale.menu_sale_config" action="action_esi_sale_type" sequence="35" groups="sales_team.group_sale_manager"/>
+
+    <menuitem
+        id="menu_esi_sale_type"
+        name="Tipo de Ventas"
+        parent="sale.menu_sale_config"
+        action="action_esi_sale_type"
+        sequence="35"
+        groups="sales_team.group_sale_manager"
+    />
 </odoo>
