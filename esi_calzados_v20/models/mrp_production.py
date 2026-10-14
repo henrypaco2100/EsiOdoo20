@@ -12,3 +12,16 @@ class MrpProduction(models.Model):
         help='Referencia analítica operativa. No se inyecta en la valoración de inventario.',
     )
     esi_note = fields.Text(string='Notas')
+
+    def action_esi_destajo(self):
+        self.ensure_one()
+        self.check_access('read')
+        return {'type': 'ir.actions.act_window', 'name': 'Registrar destajo',
+                'res_model': 'esi.destajo', 'view_mode': 'form', 'target': 'current',
+                'context': dict(self.env.context, default_production_id=self.id,
+                    default_analytic_account_id=self.esi_analytic_account_id.id)}
+
+    def _get_backorder_mo_vals(self):
+        values = super()._get_backorder_mo_vals()
+        values['esi_group_id'] = self.esi_group_id.id or False
+        return values

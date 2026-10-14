@@ -46,7 +46,7 @@ class EsiProductionGroup(models.Model):
                 if line.quantity <= 0:
                     raise UserError(_('La cantidad debe ser mayor que cero.'))
                 product = line.product_id
-                bom = line.bom_id or self.env['mrp.bom']._bom_find(product, company_id=group.company_id.id).get(product)
+                bom = line.bom_id or self.env['mrp.bom']._bom_find(product, company_id=group.company_id.id, bom_type='normal').get(product)
                 if not bom:
                     raise UserError(_('No existe una lista de materiales para %s.') % product.display_name)
                 vals_list.append({

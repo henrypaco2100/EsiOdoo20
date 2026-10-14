@@ -13,7 +13,7 @@
         <sheet>
           <group>
             <field name="company_id"/>
-            <field name="date_from"/>
+            <field name="date_basis" invisible="kind == 'piecework'"/><field name="date_from"/>
             <field name="date_to"/>
             <field name="group_id"/>
             <field name="kind"/>
@@ -32,4 +32,4 @@
   <record id="report_menu" model="ir.ui.menu">
     <field name="web_icon" eval="False"/>
   </record>
-</odoo>
+<record id="group_report_button" model="ir.ui.view"><field name="name">esi.production.group.report</field><field name="model">esi.production.group</field><field name="inherit_id" ref="esi_calzados_v20.view_esi_production_group_form"/><field name="arch" type="xml"><xpath expr="//header" position="inside"><button name="action_production_report" type="object" string="Informe del grupo" invisible="production_count == 0"/></xpath></field></record></odoo>

@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class EsiDestajo(models.Model):
@@ -36,3 +37,11 @@ class EsiDestajo(models.Model):
             if vals.get('name', 'Nuevo') == 'Nuevo':
                 vals['name'] = self.env['ir.sequence'].next_by_code('esi.destajo') or 'Nuevo'
         return super().create(vals_list)
+
+    @api.constrains('quantity', 'unit_price', 'analytic_account_id', 'production_id')
+    def _check_amounts_company(self):
+        for rec in self:
+            if rec.quantity <= 0 or rec.unit_price < 0:
+                raise ValidationError(_('La cantidad debe ser positiva y la tarifa no puede ser negativa.'))
+            if rec.analytic_account_id.company_id and rec.analytic_account_id.company_id != rec.company_id:
+                raise ValidationError(_('La cuenta analítica pertenece a otra compañía.'))
