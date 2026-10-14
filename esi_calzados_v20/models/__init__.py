@@ -5,3 +5,5 @@ from . import destajo
 from . import branches
 
 from . import variant_display, multi_output, sale_order
+
+from . import bom_compat

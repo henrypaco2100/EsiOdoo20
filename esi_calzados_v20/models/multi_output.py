@@ -76,8 +76,8 @@ class ProductionGroup(models.Model):
             'code': self.name, 'product_id': primary.product_id.id,
             'picking_type_id': self.picking_type_id.id, 'enable_batch_size': False,
             'product_qty': primary.quantity, 'uom_id': primary.uom_id.id,
-            'bom_line_ids': [Command.clear()] + components,
-            'byproduct_ids': [Command.clear()] + outputs})
+            'bom_line_ids': components,
+            'byproduct_ids': outputs})
         return primary, batch_bom
 
     def action_create_productions(self):
