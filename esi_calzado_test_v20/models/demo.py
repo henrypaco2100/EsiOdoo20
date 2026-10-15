@@ -51,10 +51,11 @@ class CalzadoDemo(models.Model):
         pair = env['uom.uom'].create({'name': '[DEMO] PAR', 'relative_factor': 1})
         foot2 = env['uom.uom'].create({'name': '[DEMO] PIE²', 'relative_uom_id': env.ref('uom.product_uom_square_meter').id, 'relative_factor': 0.09290304})
         attrs = {}
-        for seq, (label, names) in enumerate((('Talla', ['40', '41', '42']), ('Color', ['Negro', 'Café']),
+        for seq, (label, names) in enumerate((('Talla', ['39', '40', '41']), ('Color', ['Negro', 'Rojo']),
                 ('Modelo', ['Clásico', 'Reforzado']), ('Material', ['Cuero', 'Microfibra'])), 1):
             attrs[label] = env['product.attribute'].create({'name': '[DEMO] ' + label, 'sequence': seq,
                 'create_variant': 'always', 'esi_highlight_card': label in ('Talla', 'Color'),
+                'esi_group_production': label == 'Talla',
                 'value_ids': [Command.create({'name': n}) for n in names]})
         centers = env['mrp.workcenter']
         for i, stage in enumerate(STAGES, 1):
@@ -80,7 +81,7 @@ class CalzadoDemo(models.Model):
         primer = material('Preparador para suela', litre, 30)
         insole = material('Plantilla de confort', pair, 3)
         box = material('Caja para un par', unit, 2)
-        creams = {color: material('Acabado ' + color, litre, 25) for color in ('Negro', 'Café')}
+        creams = {color: material('Acabado ' + color, litre, 25) for color in ('Negro', 'Rojo')}
         templates = env['product.template']
         boms = env['mrp.bom']
         demo_lines = []
@@ -135,15 +136,29 @@ class CalzadoDemo(models.Model):
             component(box, 1, 4)
             for color, cream in creams.items():
                 component(cream, 0.004, 4, condition('Color', color))
-            example = template.product_variant_ids.filtered(lambda p: {'40','Negro','Clásico','Cuero'}.issubset(set(p.product_template_attribute_value_ids.mapped('name'))))[:1]
-            demo_lines.append(Command.create({'product_id': example.id, 'quantity': 5, 'bom_id': bom.id}))
-        group = env['esi.production.group'].create({'company_id': self.company_id.id, 'mode': 'variants',
+            if index == 1:
+                for size, color, qty in [('40', 'Negro', 20), ('39', 'Negro', 20), ('41', 'Negro', 10), ('40', 'Rojo', 30)]:
+                    example = template.product_variant_ids.filtered(lambda p: {size,color,'Clásico','Cuero'}.issubset(set(p.product_template_attribute_value_ids.mapped('name'))))[:1]
+                    demo_lines.append(Command.create({'product_id': example.id, 'quantity': qty, 'bom_id': bom.id}))
+        group = env['esi.production.group'].create({'company_id': self.company_id.id, 'mode': 'multi',
             'responsible_id': env.uid, 'picking_type_id': operation_type.id, 'line_ids': demo_lines,
-            'note': 'DEMO: cinco pares por modelo. Recetas con operaciones y componentes por variante; usar OF por variante.'})
+            'note': 'DEMO: 50 pares negros (20 talla 40, 20 talla 39, 10 talla 41) y 30 rojos talla 40. Resultado: dos OF con cinco etapas.'})
         self.write({'state': 'ready', 'template_ids': [Command.set(templates.ids)],
             'bom_ids': [Command.set(boms.ids)], 'material_ids': [Command.set(materials.ids)],
             'workcenter_ids': [Command.set(centers.ids)], 'group_id': group.id})
         return self.action_products()
+
+    def action_enable_size_grouping(self):
+        self.ensure_one()
+        self.check_access('write')
+        attrs = self.template_ids.attribute_line_ids.attribute_id.filtered(lambda a: a.name in ('Talla', '[DEMO] Talla'))
+        if not attrs:
+            raise UserError(_('Abra el atributo de talla y marque Agrupar valores en una misma OF.'))
+        attrs.write({'esi_group_production': True})
+        if self.group_id.state == 'draft' and not self.group_id.production_ids:
+            self.group_id.mode = 'multi'
+        return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': {
+            'title': _('Agrupación habilitada'), 'message': _('La talla compartirá OF en los nuevos grupos. Las órdenes existentes no se modificaron.'), 'type': 'success'}}
 
     def action_products(self):
         self.ensure_one()

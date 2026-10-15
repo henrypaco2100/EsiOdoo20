@@ -9,7 +9,7 @@ class TestMultiOutput(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env.user.group_ids += cls.env.ref('mrp.group_mrp_byproducts') | cls.env.ref('mrp.group_mrp_manager')
-        attribute = cls.env['product.attribute'].create({'name': 'Talla prueba', 'esi_highlight_card': True,
+        attribute = cls.env['product.attribute'].create({'name': 'Talla prueba', 'esi_highlight_card': True, 'esi_group_production': True,
             'value_ids': [Command.create({'name': str(n)}) for n in (40, 41, 42)]})
         cls.template = cls.env['product.template'].create({'name': 'Botín prueba', 'is_storable': True,
             'attribute_line_ids': [Command.create({'attribute_id': attribute.id, 'value_ids': [Command.set(attribute.value_ids.ids)]})]})

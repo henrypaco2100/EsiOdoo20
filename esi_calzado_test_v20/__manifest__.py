@@ -1,6 +1,6 @@
 {
     'name': 'Demo Calzado: recetas y cinco etapas',
-    'version': '20.0.1.0.1',
+    'version': '20.0.2.0.0',
     'author': 'ESI',
     'license': 'LGPL-3',
     'depends': ['esi_calzados_v20', 'esi_produccion_report_v20'],

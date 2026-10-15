@@ -2,7 +2,7 @@
   <record id="attribute_highlight" model="ir.ui.view">
     <field name="name">product.attribute.card.highlight</field><field name="model">product.attribute</field>
     <field name="inherit_id" ref="product.product_attribute_view_form"/>
-    <field name="arch" type="xml"><field name="name" position="after"><field name="esi_highlight_card"/></field></field>
+    <field name="arch" type="xml"><field name="name" position="after"><field name="esi_highlight_card"/><field name="esi_group_production"/></field></field>
   </record>
   <record id="variant_card_highlight" model="ir.ui.view">
     <field name="name">product.product.card.highlight</field><field name="model">product.product</field>
@@ -20,5 +20,5 @@
     <field name="arch" type="xml"><xpath expr="//field[@name='name']" position="after"><div class="fw-bold fs-2 text-primary text-break mb-2" invisible="not esi_variant_highlight"><field name="esi_variant_highlight"/></div></xpath></field>
   </record>
   <record id="action_products_by_variant" model="ir.actions.act_window"><field name="name">Productos por talla / variante</field><field name="res_model">product.product</field><field name="view_mode">kanban,list,form</field><field name="domain">[('is_storable', '=', True)]</field></record>
-  <menuitem id="menu_products_by_variant" name="Productos por talla / variante" parent="mrp.menu_mrp_root" action="action_products_by_variant" sequence="75" groups="mrp.group_mrp_user"/>
+  <record id="menu_products_by_variant" model="ir.ui.menu"><field name="name">Productos por talla / variante</field><field name="active" eval="False"/></record>
 </odoo>

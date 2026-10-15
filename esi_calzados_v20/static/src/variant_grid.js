@@ -6,7 +6,7 @@ export class EsiVariantGrid extends Component {
     static template = 'esi_calzados_v20.VariantGrid';
     props = useProps(standardFieldProps);
     get grid() {
-        try { return JSON.parse(this.props.record.data[this.props.name] || '{}'); }
+        try { const value = JSON.parse(this.props.record.data[this.props.name] || '{}'); return value && typeof value === 'object' ? value : {}; }
         catch { return {}; }
     }
     async change(rowIndex, cellIndex, event) {

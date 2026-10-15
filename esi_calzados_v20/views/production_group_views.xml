@@ -36,9 +36,11 @@
                         <field name="analytic_account_id"/>
                         <field name="company_id" groups="base.group_multi_company"/>
                     </group>
+                    <field name="esi_grid_template_id" invisible="1"/><field name="esi_grid_data" invisible="1"/><field name="esi_grid_changes" invisible="1"/>
                     <field name="line_ids" readonly="state != 'draft'">
                         <list editable="bottom">
-                            <field name="product_id"/>
+                            <field name="product_template_id" widget="esi_group_product" options="{'no_create': True}" readonly="product_id"/>
+                            <field name="product_id" column_invisible="True"/>
                             <field name="quantity"/>
                             <field name="uom_id"/>
                             <field name="bom_id"/>

@@ -10,6 +10,34 @@
                 <field name="esi_group_id" readonly="1"/>
                 <field name="esi_analytic_account_id"/>
             </field>
+            <xpath expr="//label[@for='product_qty']" position="before">
+                <field name="esi_total_output_qty" string="Total del lote (todas las tallas)" invisible="not esi_size_batch" class="fw-bold"/>
+            </xpath>
+            <xpath expr="//label[@for='product_qty']" position="attributes">
+                <attribute name="invisible">esi_size_batch</attribute>
+            </xpath>
+            <xpath expr="//label[@for='product_qty']" position="after">
+                <label for="product_qty" string="Cantidad talla principal" invisible="not esi_size_batch" class="d-touch-none"/>
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <field name="esi_size_batch" invisible="1"/>
+                <field name="esi_batch_attribute_ids" invisible="1"/>
+                <group string="Fabricación por tallas" invisible="not esi_batch_attribute_ids">
+                    <field name="esi_batch_description"/>
+                    <field name="esi_total_output_qty"/>
+                    <field name="esi_source_bom_id"/>
+                    <field name="esi_size_grid" widget="esi_variant_grid" readonly="1" nolabel="1" colspan="2"/>
+                    <div colspan="2" class="text-muted">El total incluye todas las tallas. La cantidad estándar de Odoo corresponde a la talla principal; las demás se registran como salidas adicionales. Para terminar todo el lote, registre también estas salidas.</div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="production_total_sizes_list" model="ir.ui.view">
+        <field name="name">mrp.production.total.sizes.list</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="product_qty" position="after"><field name="esi_total_output_qty" string="Total todas las tallas" optional="show"/></field>
         </field>
     </record>
 </odoo>

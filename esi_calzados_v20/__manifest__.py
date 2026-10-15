@@ -1,5 +1,6 @@
 {'application': True,
  'assets': {'web.assets_backend': ['esi_calzados_v20/static/src/variant_grid.js',
+                                   'esi_calzados_v20/static/src/group_product.js',
                                    'esi_calzados_v20/static/src/variant_grid.xml']},
  'author': 'ESI',
  'category': 'Manufacturing',
@@ -27,4 +28,4 @@
  'name': 'Calzados MRP v20',
  'summary': 'Grupos de producción, responsable, analítica y destajos sin '
             'alterar valoración de Odoo',
- 'version': '20.0.4.1.0'}
+ 'version': '20.0.5.0.0'}

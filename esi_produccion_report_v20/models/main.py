@@ -57,8 +57,8 @@ class Report(models.TransientModel):
         title += ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
         if self.kind == 'summary':
-            return title, ['OF', 'Grupo', 'Producto principal', 'Cantidad principal', 'Unidad', 'Estado', 'Encargado', 'Sucursal'], [
-                [o.name, o.esi_group_id.name or '', o.product_id.display_name, o.product_qty, o.uom_id.name,
+            return title, ['OF', 'Grupo', 'Producto / características', 'Cantidad total', 'Cantidad talla principal', 'Unidad', 'Estado', 'Encargado', 'Sucursal'], [
+                [o.name, o.esi_group_id.name or '', o.esi_batch_description if o.esi_batch_attribute_ids else o.product_id.display_name, o.esi_total_output_qty, o.product_qty, o.uom_id.name,
                  labels.get(o.state, o.state), o.esi_responsible_id.name or '', o.company_id.name] for o in orders]
         rows = []
         if self.kind == 'outputs':

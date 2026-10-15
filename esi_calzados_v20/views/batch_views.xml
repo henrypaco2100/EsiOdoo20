@@ -3,10 +3,10 @@
     <field name="name">esi.production.group.multi.output</field><field name="model">esi.production.group</field>
     <field name="inherit_id" ref="view_esi_production_group_form"/>
     <field name="arch" type="xml">
-      <field name="responsible_id" position="before"><field name="mode" readonly="state != 'draft'"/><field name="picking_type_id" readonly="state != 'draft'" required="1"/><field name="sale_id" invisible="not sale_id"/><field name="batch_bom_id" invisible="not batch_bom_id"/></field>
-      <xpath expr="//field[@name='line_ids']/list/field[@name='product_id']" position="after"><field name="variant_label"/></xpath>
+      <field name="responsible_id" position="before"><field name="mode" readonly="state != 'draft'"/><field name="picking_type_id" readonly="state != 'draft'" required="1"/><field name="sale_id" invisible="not sale_id"/><field name="batch_bom_id" invisible="1"/></field>
+      <xpath expr="//field[@name='line_ids']/list/field[@name='product_id']" position="after"><field name="variant_label" string="Variantes"/></xpath>
       <xpath expr="//field[@name='line_ids']/list/field[@name='bom_id']" position="before"><field name="product_tmpl_id" column_invisible="True"/></xpath>
-      <field name="line_ids" position="before"><div class="alert alert-info" invisible="mode != 'multi'">Una OF: una talla principal y las demás como salidas adicionales nativas. Las cantidades de cada talla entran separadas al inventario. Requiere la misma receta y consumo por unidad. Las recetas con operaciones o materiales distintos se procesan por variante.</div></field>
+      <field name="line_ids" position="before"><div class="alert alert-info" invisible="mode != 'multi'">Las tallas marcadas para agrupar comparten una OF. Color, modelo y material separan las órdenes. Se suman los consumos por variante y se conservan las cinco etapas y las salidas por talla.</div></field>
     </field>
   </record>
   <record id="sale_group_button" model="ir.ui.view"><field name="name">sale.order.production.group</field><field name="model">sale.order</field><field name="inherit_id" ref="sale.view_order_form"/><field name="arch" type="xml"><xpath expr="//header" position="inside"><button name="action_esi_production_group" type="object" string="Grupo de fabricación" groups="mrp.group_mrp_user"/></xpath></field></record>

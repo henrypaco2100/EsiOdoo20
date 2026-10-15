@@ -62,7 +62,7 @@ class VariantGrid(models.TransientModel):
                 raise UserError(_('Esta cuadrícula admite hasta 250 variantes por producto.'))
             if any(l.attribute_id.create_variant != 'always' for l in template.valid_product_template_attribute_line_ids):
                 raise UserError(_('Para esta cuadrícula use atributos con creación de variantes instantánea.'))
-            self.grid_json = json.dumps(template._get_template_matrix(display_extra_price=False))
+            self.grid_json = json.dumps(template.esi_get_production_matrix())
 
     def action_apply(self):
         self.ensure_one()
