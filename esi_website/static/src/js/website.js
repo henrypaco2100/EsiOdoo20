@@ -1,8 +1,10 @@
 (function () {
 'use strict';
 function start() {
- const button = document.querySelector('.menu-toggle');
- const nav = document.querySelector('.main-nav');
+ const root = document.querySelector('.esi-site');
+ if (!root) return;
+ const button = root.querySelector('.menu-toggle');
+ const nav = root.querySelector('.main-nav');
  function close() { if (!button || !nav) return; button.setAttribute('aria-expanded','false'); button.setAttribute('aria-label','Abrir menú'); nav.classList.remove('is-open'); }
  button?.addEventListener('click', function () { const open = button.getAttribute('aria-expanded') !== 'true'; button.setAttribute('aria-expanded',String(open)); button.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú'); nav?.classList.toggle('is-open',open); });
  nav?.querySelectorAll('a').forEach(a => a.addEventListener('click',close));

@@ -18,7 +18,7 @@ class TestDirectSizePlan(TransactionCase):
             'attribute_line_ids': [Command.create({'attribute_id': attr.id,
                 'value_ids': [Command.set(attr.value_ids.ids)]}) for attr in [cls.size, cls.color]]})
         cls.products = cls.template.product_variant_ids.filtered(lambda p: 'Negro' in p.product_template_attribute_value_ids.mapped('name')).sorted('id')
-        cls.material = cls.env['product.product'].create({'name': 'Material común', 'is_storable': True})
+        cls.material = cls.env['product.product'].create({'name': 'Material común', 'esi_component_ok': True, 'is_storable': True})
         cls.bom = cls.env['mrp.bom'].create({'product_tmpl_id': cls.template.id, 'product_qty': 1,
             'bom_line_ids': [Command.create({'product_id': cls.material.id, 'product_qty': 2})]})
         cls.picking = cls.env['stock.picking.type'].search([('company_id','=',cls.env.company.id),('code','=','mrp_operation')],limit=1)

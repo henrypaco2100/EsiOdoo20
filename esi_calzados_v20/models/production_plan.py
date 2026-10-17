@@ -172,7 +172,7 @@ class ProductionPlan(models.Model):
                 'name': existing.name if existing else _('OF por tallas'), 'company_id': company.id,
                 'picking_type_id': picking.id, 'line_ids': [Command.create({
                     'product_id': p.id, 'quantity': qty, 'bom_id': bom.id}) for p, qty in selected.items()]})
-            _, _, bom, source = plan._batch_recipe(plan.line_ids, primary_product=product)
+            primary_product, primary_quantity, bom, source = plan._batch_recipe(plan.line_ids, primary_product=product)
         result = dict(vals)
         # These preview commands reflect the single reference variant and must
         # not override the new native snapshot's computed moves/work orders.

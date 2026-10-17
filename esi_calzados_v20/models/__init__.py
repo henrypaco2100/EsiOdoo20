@@ -12,3 +12,6 @@ from . import production_plan
 
 from . import bom_variants
 from . import production_outputs
+
+from . import components
+from . import recipe_grid

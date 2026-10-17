@@ -14,7 +14,7 @@ class TestMultiOutput(TransactionCase):
         cls.template = cls.env['product.template'].create({'name': 'Botín prueba', 'is_storable': True,
             'attribute_line_ids': [Command.create({'attribute_id': attribute.id, 'value_ids': [Command.set(attribute.value_ids.ids)]})]})
         cls.products = cls.template.product_variant_ids.sorted('id')
-        cls.material = cls.env['product.product'].create({'name': 'Material prueba', 'is_storable': True})
+        cls.material = cls.env['product.product'].create({'name': 'Material prueba', 'esi_component_ok': True, 'is_storable': True})
         cls.bom = cls.env['mrp.bom'].create({'product_tmpl_id': cls.template.id, 'product_qty': 1,
             'bom_line_ids': [Command.create({'product_id': cls.material.id, 'product_qty': 2, 'uom_id': cls.material.uom_id.id})]})
         cls.operation = cls.env['stock.picking.type'].search([('code', '=', 'mrp_operation'), ('company_id', '=', cls.env.company.id)], limit=1)

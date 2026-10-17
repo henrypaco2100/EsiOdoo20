@@ -1,5 +1,8 @@
 {'application': True,
- 'assets': {'web.assets_backend': ['esi_calzados_v20/static/src/variant_grid.js',
+ 'post_init_hook': 'post_init_hook',
+ 'assets': {'web.assets_backend': ['esi_calzados_v20/static/src/recipe_grid.js',
+                                   'esi_calzados_v20/static/src/recipe_grid.xml',
+                                   'esi_calzados_v20/static/src/variant_grid.js',
                                    'esi_calzados_v20/static/src/group_product.js',
                                    'esi_calzados_v20/static/src/variant_grid.xml']},
  'author': 'ESI',
@@ -15,6 +18,7 @@
           'views/batch_views.xml',
           'views/variant_grid.xml',
           'views/bom_variants.xml',
+          'views/components.xml',
           'views/production_plan.xml'],
  'depends': ['mrp',
              'sale_stock',
@@ -30,4 +34,4 @@
  'name': 'Calzados MRP v20',
  'summary': 'Grupos de producción, responsable, analítica y destajos sin '
             'alterar valoración de Odoo',
- 'version': '20.0.7.0.0'}
+ 'version': '20.0.8.0.0'}

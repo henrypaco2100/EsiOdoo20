@@ -1,28 +1,22 @@
-# Validación de esta entrega
+# Verificación 20.0.1.1.0
 
-- XML QWeb analizado correctamente con lxml.
-- Python compilado sin errores de sintaxis; JavaScript validado con `node --check`.
-- Manifest y rutas de todos los recursos comprobados.
-- Fotografía y logotipo verificados como JPEG válidos.
-- Once secciones y su orden contrastados con el HTML publicado de B12.
-- Texto de las diez secciones ajenas al formulario comparado automáticamente:
-  coincide con la versión publicada consultada.
-- Todas las anclas internas apuntan a identificadores existentes.
-- Recursos de imagen locales, sin scripts B12 ni reCAPTCHA B12.
-- Formulario con token CSRF y validación explícita de campos en servidor.
-- Validador: caso válido, correo inválido, nombre vacío, rubro no permitido y
-  mensaje excesivo; comprobación de escape HTML.
+Comprobaciones locales ejecutadas:
+- Python válido y JavaScript sin errores de sintaxis.
+- XML de plantilla y registro de página válidos.
+- website.layout y contenedor #wrap.oe_structure presentes.
+- Once secciones conservadas.
+- Manifest actualizado y recursos registrados en web.assets_frontend.
+- CSS limitado al contenedor ESI; sin reset global Tailwind.
+- Sin ruta GET /esi: la página utiliza el control nativo de publicación.
+- Registro de página separado de la vista, con publicación inicial y noupdate.
+- Caché de la página con formulario desactivada.
+- ZIP íntegro y sin archivos compilados Python.
 
-## Pendiente, obligatorio antes de producción
+Pendiente: instalación/actualización en Odoo 20 real; visibilidad de los botones;
+editar y guardar; publicar/despublicar e incógnito; envío de formulario y CRM;
+comprobación visual de escritorio/móvil con los módulos instalados del usuario.
 
-No se dispone de Odoo 20 ejecutándose en este entorno. No se ha instalado el
-módulo, compilado su paquete con Odoo, renderizado QWeb mediante Odoo ni creado
-una oportunidad en una base real. La validación sintáctica no certifica esos pasos.
-
-La prueba visual automatizada local no se pudo ejecutar porque no está instalado
-el ejecutable Chromium. No se certifica una comparación visual píxel a píxel.
-Los estilos responsive originales se conservan; verificar escritorio y móvil
-siguiendo README, incluida la visualización del logotipo.
-
-La prueba integral en copia de ESIBOLIVIA debe comprobar también el backend,
-la reversión por desinstalación y cualquier tema/módulo existente con rutas `/`.
+Referencias técnicas consultadas (rama master, puede diferir de tu build 20.0):
+https://github.com/odoo/odoo/blob/master/addons/website/models/website_page.py
+https://github.com/odoo/odoo/blob/master/addons/website/models/ir_http.py
+https://github.com/odoo/odoo/blob/master/addons/website/views/website_templates.xml

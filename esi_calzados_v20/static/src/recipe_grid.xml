@@ -1,0 +1,37 @@
+<templates>
+  <t t-name="esi_calzados_v20.RecipeSelectionDialog">
+    <Dialog size="this.size" title="this.props.dialogTitle" withBodyPadding="false">
+      <div class="alert alert-info m-3">Marque las tallas permitidas. Cada fila representa una combinación de color, modelo y material. Al marcar otra fila se sustituye la selección anterior. Aquí se eligen variantes; las cantidades se indican en la orden de fabricación.</div>
+      <div t-ref="this.productMatrixRef" class="table-responsive">
+        <table class="o_matrix_input_table table table-striped table-bordered mb-0">
+          <thead><tr>
+            <th t-foreach="this.props.header" t-as="column" t-key="column_index" class="text-center"><t t-out="column.name"/></th>
+          </tr></thead>
+          <tbody>
+            <tr t-foreach="this.props.rows" t-as="row" t-key="row_index">
+              <th><t t-out="row[0].name"/></th>
+              <td t-foreach="row.slice(1)" t-as="cell" t-key="cell_index" class="text-center align-middle">
+                <input t-if="cell.is_possible_combination" type="checkbox" class="o_matrix_input form-check-input"
+                  t-att-checked="!!cell.qty" t-att-data-row="row_index" t-att-data-product="cell.product_id"
+                  t-att-aria-label="row[0].name + ' / ' + this.props.header[cell_index + 1].name"
+                  t-on-change="this.selectCell"/>
+                <span t-else="" class="text-muted">No disponible</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <t t-set-slot="footer">
+        <button class="btn btn-primary" t-on-click="this._onConfirm">Confirmar</button>
+        <button class="btn btn-secondary" t-on-click="() => this.props.close()">Descartar</button>
+      </t>
+    </Dialog>
+  </t>
+  <t t-name="esi_calzados_v20.RecipeVariantsField">
+    <div>
+      <button t-if="!this.props.readonly" type="button" class="btn btn-outline-primary mb-2" t-on-click="this.open">Seleccionar tallas</button>
+      <div t-if="!this.selected.length" class="text-muted">Seleccione el producto y marque sus tallas en la cuadrícula.</div>
+      <div t-foreach="this.selected" t-as="variant" t-key="variant.id" class="small"><t t-out="variant.data.display_name"/></div>
+    </div>
+  </t>
+</templates>

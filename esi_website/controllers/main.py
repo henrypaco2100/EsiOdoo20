@@ -25,19 +25,24 @@ def validate_form(data):
 
 
 class ESIWebsite(Website):
-    @http.route(['/', '/index', '/esi'], type='http', auth='public', website=True,
-                methods=['GET'], sitemap=True)
+    @http.route(['/', '/index'], type='http', auth='public', website=True,
+                methods=['GET'], sitemap=False)
     def index(self, **kw):
-        success = bool(request.session.pop('esi_advice_success', False))
-        return request.render('esi_website.homepage', {
-            'values': {}, 'error': None, 'success': success,
-        }, headers={'Cache-Control': 'no-store'})
+        # /esi is served by Odoo's native website.page pipeline. It supplies
+        # main_object, editable metadata and enforces publication/access rules.
+        page = request.env.ref('esi_website.page_esi_home', raise_if_not_found=False)
+        if page:
+            return request.redirect(page.sudo().url, code=302)
+        return super().index(**kw)
 
     @http.route('/esi/asesoria', type='http', auth='public', website=True,
                 methods=['POST'], csrf=True, sitemap=False)
     def advice(self, **post):
         # Only explicit business fields reach the ORM; no client-controlled model,
         # company, user, team, record ID or redirect is accepted.
+        page = request.env.ref('esi_website.page_esi_home', raise_if_not_found=False)
+        if not page or not (page.sudo().is_visible or request.env.user.has_group('website.group_website_designer')):
+            return request.not_found()
         values, error = validate_form(post)
         if post.get('website_url'):
             error = 'No se pudo procesar la solicitud. Escríbenos por WhatsApp.'
@@ -45,9 +50,9 @@ class ESIWebsite(Website):
         if now - float(request.session.get('esi_last_advice', 0)) < 60:
             error = 'Espera un minuto antes de enviar otra solicitud.'
         if error:
-            return request.render('esi_website.homepage', {
-                'values': values, 'error': error, 'success': False,
-            }, status=400, headers={'Cache-Control': 'no-store'})
+            request.session['esi_form_values'] = {key: value[:LIMITS[key]] for key, value in values.items()}
+            request.session['esi_form_error'] = error
+            return request.redirect('/esi#contacto', code=303)
         description = Markup('<p><b>Rubro:</b> %s</p><p>%s</p>') % (
             escape(values['rubro']), escape(values['mensaje']).replace('\n', Markup('<br/>')))
         company = request.website.company_id
@@ -65,4 +70,4 @@ class ESIWebsite(Website):
         })
         request.session['esi_last_advice'] = now
         request.session['esi_advice_success'] = True
-        return request.redirect('/#contacto', code=303)
+        return request.redirect('/esi#contacto', code=303)

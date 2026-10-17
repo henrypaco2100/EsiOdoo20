@@ -1,103 +1,85 @@
-# ESI Website — Odoo 20.0 Community
+# ESI Website 20.0.1.1.0 — Editor y publicación
 
-Módulo técnico: `esi_website`. Destino de producción solicitado: **ESIBOLIVIA**.
-Dominio previsto: **https://www.esibolivia-odoo.online**.
+Módulo técnico: `esi_website`. Actualiza la versión 20.0.1.0.0; no es otro módulo.
+Destino de producción solicitado: ESIBOLIVIA. Primero probar en una copia.
 
-## Estado y alcance
+## Corrección
 
-Preparado para Odoo 20.0 Community. **No se verificó la instalación en un servidor
-Odoo 20 real. Es obligatorio probarlo primero en una copia aislada de la base.**
-Durante la preparación no se conectó ni modificó ninguna base de datos.
+La primera versión entregaba HTML independiente mediante un controlador. Eso
+omitía website.layout, el registro website.page y las zonas editables que necesita
+Odoo. No modificaba permisos, pero impedía usar sus controles nativos.
 
-Se conserva el HTML publicado del sitio B12 y sus estilos compilados, con las
-11 secciones originales, iconos SVG y fotografía de portada locales. Los originales
-`index.astro` y `global.css` se incluyen en `originales/` como referencia. La cabecera
-y el pie proceden del HTML publicado, no de una reconstrucción inventada.
-El logotipo oficial reemplaza la marca tipográfica provisional. Se elimina el
-sello de B12 y sus scripts de analítica, editor, reCAPTCHA y envío de formularios.
-La tipografía conserva la pila original Inter / system-ui; el original consultado
-no suministra un archivo Inter. Se usará la fuente de sistema si Inter no está instalada.
-No se incorpora un favicon nuevo.
+Esta versión:
+- Usa `website.layout`, el paquete `web.assets_frontend` y `#wrap.oe_structure`.
+- Registra «ESI — Inicio» como página real de Odoo, inicialmente publicada.
+- Sirve `/esi` mediante el mecanismo nativo de páginas de Odoo, que controla la
+  visibilidad, la publicación y los metadatos del editor. No hay ruta Python GET
+  que muestre el contenido saltándose el estado de publicación.
+- Redirige `/` y `/index` a esa página. La dirección final es `/esi`.
+- Conserva las once secciones, fotografía, logotipo y contenido B12.
+- Limita el CSS a `.esi-site`, para no cambiar la barra ni los paneles de Odoo.
+- Permite editar textos, imágenes y contenido de las zonas editables. El formulario
+  funcional está protegido contra ediciones accidentales de sus campos técnicos.
+- No cambia grupos, usuarios, permisos, otras bases, Docker, DNS ni Nginx.
 
-La página se sirve mediante un documento QWeb independiente y un paquete de
-recursos `esi_website.assets` para evitar que Bootstrap u otros temas alteren el
-diseño original. No usa el editor visual de bloques de Odoo; los cambios de diseño
-se realizan en las plantillas y estilos del módulo. El menú móvil usa JavaScript local.
+El diseño sigue siendo personalizado. No todas las opciones de diseño específicas
+de los bloques estándar de Odoo se aplican a cada tarjeta personalizada.
 
-## Formulario
+## Actualizar la instalación existente
 
-Dependencias: `website` y `crm` (Community). Cada envío válido crea una oportunidad
-CRM sin vendedor ni equipo asignados, en la compañía del sitio web actual.
-Campos: nombre, empresa, teléfono, correo, rubro y mensaje. Usa validación en
-servidor, token CSRF, campos permitidos explícitos, escape HTML y campo antirrobots.
-Hay un intervalo mínimo de 60 segundos por sesión entre envíos correctos; no es
-una protección global contra ataques. No necesita B12, claves API ni SMTP.
-No promete ni envía correos automáticamente: revisar las solicitudes en CRM.
-Si CRM tiene filtros de «Mis oportunidades», quitarlos para ver las no asignadas.
+1. Respalda la base y el filestore. Prueba estos pasos primero en una copia aislada.
+2. Reemplaza la carpeta anterior `esi_website` por la carpeta de este ZIP en tu
+   directorio de addons. No coloques una carpeta `esi_website` dentro de otra.
+3. Reinicia el servicio/contenedor Odoo correspondiente. Es necesario descargar
+   las rutas Python de la versión anterior; actualizar solo XML no basta.
+4. Entra en la base elegida, abre Aplicaciones, busca «ESI Website» y pulsa
+   **Actualizar** en el módulo existente. No basta con actualizar la lista de apps.
+   No hace falta desinstalar la versión anterior.
+5. Abre Sitio web → Ir al sitio web y entra en `/esi`. Recarga con Ctrl+F5.
+6. Con tu usuario «Editor y diseñador», verifica **Editar** y el interruptor
+   **Publicado / No publicado**. La página también debe figurar en Sitio → Páginas
+   como «ESI — Inicio».
+7. Edita un texto, guarda, recarga y comprueba que permanece. Prueba una imagen.
+8. Despublica y abre `/esi` en incógnito: el visitante no debe ver el contenido.
+   El diseñador debe poder acceder y volver a publicar. Repite entrando por `/`.
+9. Publica y envía una asesoría de prueba. Debe crear una oportunidad CRM y mostrar
+   confirmación. El formulario no admite envíos públicos con la página no visible.
+10. Tras aprobar la prueba, aplica la misma actualización únicamente en ESIBOLIVIA.
 
-## 1. Prueba en una copia aislada
+Si la barra no cambia, comprueba que reiniciaste la instancia correcta y que la
+versión instalada es 20.0.1.1.0. No aumentes permisos de usuarios para resolverlo.
 
-1. Descomprime el ZIP. Copia la carpeta `esi_website` completa a una ruta de addons
-   del entorno de pruebas. Debe contener directamente `__manifest__.py`.
-2. Utiliza una copia aislada de ESIBOLIVIA con Odoo **20.0 Community**, sin correos
-   salientes ni conexiones externas de producción. No pruebes sobre la base real.
-3. Reinicia únicamente Odoo de pruebas para cargar los controladores Python.
-4. Activa modo desarrollador, actualiza la lista de aplicaciones y busca
-   «ESI Website». Instálalo únicamente dentro de la copia de pruebas.
-5. Abre `/esi` y `/`. Comprueba escritorio (1440 px), tableta (768 px) y móvil
-   (390 px): logo, fotografía, menú, anclas, columnas, SVG, WhatsApp y correo.
-6. Envía una solicitud ficticia. Verifica confirmación y una sola oportunidad CRM
-   con todos los campos. Prueba correo inválido, campos vacíos, CSRF ausente,
-   doble envío, recarga y botón atrás. Comprueba que el texto HTML introducido
-   en el mensaje se muestra como texto, no como código ejecutable.
-7. Revisa los logs: sin errores QWeb, assets, permisos ni campos inexistentes.
-8. Comprueba acceso al backend mediante `/web/login` y el flujo normal de trabajo.
+## Edición y mantenimiento
 
-## 2. Instalación en ESIBOLIVIA tras aprobar la prueba
+El estado de publicación se conserva en actualizaciones futuras mediante
+`noupdate` en el registro de página. La plantilla del módulo se actualiza para
+aplicar esta corrección. Futuras actualizaciones de esa plantilla pueden
+sobrescribir personalizaciones guardadas en su vista; respáldalas antes.
 
-Realiza previamente una copia de seguridad de base y filestore. Usa la misma
-carpeta probada. Colócala en el directorio de addons que ya utiliza tu instancia.
-Por ejemplo, si esa ruta está en tu configuración:
-`/opt/odoo20/odoo01/addons/EsiOdoo20/esi_website`.
+Cabecera y pie originales están dentro del contenido ESI. Se ocultan únicamente
+la cabecera/pie públicos predeterminados de Odoo; la interfaz del editor permanece
+bajo control nativo de Odoo.
 
-Reinicia la instancia correspondiente, entra expresamente en **ESIBOLIVIA**,
-actualiza la lista de aplicaciones e instala «ESI Website». No uses «-d all», no
-actualices módulos de otras bases ni instales este módulo en ellas. La existencia
-de la carpeta compartida no instala el módulo en otras bases. Este módulo no
-incluye scripts SQL, cambios de configuración ni conexiones a otras bases.
+No existe restricción por nombre de base en el código para permitir la prueba en
+una copia. No instales el módulo en otras bases. Las rutas de inicio afectan a los
+sitios de la base donde se instala: revisar antes de usarlo en una base multisitio.
 
-El nombre de base no está fijado en el código: así se puede probar en una copia.
-La selección de **ESIBOLIVIA** es responsabilidad del proceso de instalación.
-No sustituir ese nombre por ESIBOLIVIA0001 sin comprobar el nombre real autorizado.
+## Formulario y recursos
 
-## 3. Dominio y página de inicio
+Dependencias: website y crm Community. Crea oportunidades en la compañía del sitio
+actual, sin vendedor/equipo asignado. Revisa CRM sin filtro «Mis oportunidades».
+Incluye CSRF, validación, escape HTML, campo antirrobots y separación de 60 segundos
+por sesión. No envía correos automáticamente y no requiere scripts de B12.
+La caché de páginas se desactiva solo para las páginas basadas en esta vista,
+porque contienen token CSRF y mensajes de sesión.
 
-Al instalar, las rutas `/`, `/index` y `/esi` muestran el sitio ESI **en la base donde
-se instala**. Esto afecta a todos los sitios web de esa base; para un entorno
-multisitio hace falta adaptar el alcance antes de instalar. No elimina páginas
-anteriores ni modifica registros de contenido ajenos al módulo.
+La fuente conserva Inter/system-ui del original; no se suministró una fuente Inter
+local. No se crea un favicon. Dominio previsto: www.esibolivia-odoo.online.
 
-Configura en el sitio web de esa base el dominio `https://www.esibolivia-odoo.online`.
-DNS, certificado TLS para `www`, proxy y selección de base deben apuntar a esa
-instancia. El módulo no configura Nginx, Docker, DNS, SSL ni dbfilter. No fija
-web.base.url ni redirige otras bases. Conserva tus rutas de acceso al backend.
+## Verificación
 
-## Actualización y retirada
-
-Para actualizar: reemplaza la carpeta, reinicia la instancia y actualiza solo
-`esi_website` dentro de la base elegida. Para retirar: desinstálalo desde Aplicaciones
-y reinicia la instancia. Se retiran las vistas/recursos del módulo; las oportunidades
-CRM ya creadas permanecen. Verifica la página de inicio anterior tras retirarlo.
-
-## Archivos principales
-
-- `views/templates.xml`: página QWeb con el contenido original.
-- `controllers/main.py`: portada y recepción de asesorías.
-- `static/src/css/website.css`: CSS original compilado y ajustes del logotipo.
-- `static/src/js/website.js`: menú móvil y estado de envío.
-- `static/src/img/`: fotografía y logotipo, sin dependencias de CDN.
-- `originales/`: Astro y CSS recibidos, conservados para mantenimiento.
-- `VALIDACION.md`: verificaciones locales y límites.
-
-Referencia original: https://esi-especialistas-en-sistemas-integrados-staging.b12sites.com/
-Referencia técnica: https://www.odoo.com/documentation/20.0/developer/reference/backend/http.html
+Se comprobaron localmente sintaxis, estructura QWeb, aislamiento de CSS, rutas y
+archivos del ZIP. Se contrastó la integración con el código público de Website de
+Odoo en la rama master consultada. **No se ejecutó una instalación en tu versión
+Odoo 20 ni una prueba real de editar/guardar/publicar.** Debe verificarse en la copia.
+No se accedió ni se modificó ninguna base durante la preparación del archivo.

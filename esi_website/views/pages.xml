@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+  <record id="page_esi_home" model="website.page">
+    <field name="name">ESI — Inicio</field>
+    <field name="url">/esi</field>
+    <field name="view_id" ref="esi_website.homepage"/>
+    <field name="is_published" eval="True"/>
+  </record>
+</odoo>

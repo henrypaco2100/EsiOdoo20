@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 class TestBomTemporaryRows(TransactionCase):
     def test_create_write_and_real_delete(self):
         product = self.env['product.product'].create({'name': 'Virtual test output'})
-        component = self.env['product.product'].create({'name': 'Virtual test material'})
+        component = self.env['product.product'].create({'name': 'Virtual test material', 'esi_component_ok': True})
         bom = self.env['mrp.bom'].create({
             'product_tmpl_id': product.product_tmpl_id.id,
             'bom_line_ids': [(0, 'virtual_1', {'product_id': component.id, 'product_qty': 2}),
