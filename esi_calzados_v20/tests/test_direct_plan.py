@@ -57,7 +57,7 @@ class TestDirectSizePlan(TransactionCase):
             'esi_template_id': self.template.id, 'picking_type_id': self.picking.id})
         mo._onchange_esi_template()
         self.assertTrue(mo.product_id)
-        self.assertEqual(len(json.loads(mo.esi_plan_grid)['matrix']), 1)
+        self.assertFalse(mo.esi_plan_grid)
         self.assertEqual(self.env['mrp.bom'].with_context(active_test=False).search_count([]), count)
 
     def test_other_color_rejected(self):

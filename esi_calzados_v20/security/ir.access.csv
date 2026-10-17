@@ -6,3 +6,4 @@ access_esi_production_group_manager,esi.production.group.manager,model_esi_produ
 access_esi_destajo_manager,esi.destajo.manager,model_esi_destajo,mrp.group_mrp_manager,crud,
 access_esi_variant_grid_mrp,variant.grid.mrp,model_esi_variant_grid,mrp.group_mrp_user,crud,
 access_esi_variant_grid_stock,variant.grid.stock,model_esi_variant_grid,stock.group_stock_user,crud,
+access_esi_output_user,esi.production.output.line.user,model_esi_production_output_line,mrp.group_mrp_user,crud,

@@ -2,7 +2,7 @@
   <record id="attribute_highlight" model="ir.ui.view">
     <field name="name">product.attribute.card.highlight</field><field name="model">product.attribute</field>
     <field name="inherit_id" ref="product.product_attribute_view_form"/>
-    <field name="arch" type="xml"><field name="name" position="after"><field name="esi_highlight_card"/><field name="esi_group_production"/></field></field>
+    <field name="arch" type="xml"><xpath expr="//group[@name='main_fields']" position="inside"><group string="Fabricación y visualización"><field name="esi_highlight_card" string="Destacar valores en la tarjeta"/><field name="esi_group_production" string="Compartir materiales entre sus valores"/></group></xpath></field>
   </record>
   <record id="variant_card_highlight" model="ir.ui.view">
     <field name="name">product.product.card.highlight</field><field name="model">product.product</field>

@@ -3,7 +3,7 @@ from odoo import api, fields, models
 
 class ProductAttribute(models.Model):
     _inherit = 'product.attribute'
-    esi_group_production = fields.Boolean(string='Agrupar valores en una misma OF',
+    esi_group_production = fields.Boolean(string='Compartir materiales entre sus valores',
         help='Marque Talla para fabricar varias tallas juntas. Los demás atributos separan las órdenes. Se suman los consumos aplicables a cada variante; no se ignoran materiales específicos por talla.')
     esi_highlight_card = fields.Boolean(string='Destacar en tarjeta del producto',
         help='Muestra el nombre y valor del atributo en letra grande debajo del producto. Por ejemplo: Talla: 40.')

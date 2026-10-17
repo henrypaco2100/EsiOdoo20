@@ -124,9 +124,11 @@ class ProductionPlan(models.Model):
             raise UserError(_('La variante no pertenece a la plantilla seleccionada.'))
         grouped = template.attribute_line_ids.attribute_id.filtered('esi_group_production')
         if not grouped:
-            raise UserError(_('Marque Agrupar valores en una misma OF en el atributo Talla.'))
-        # Also validate the matrix generation limits and instant-variant policy.
-        template.esi_get_production_matrix()
+            raise UserError(_('Marque Compartir materiales entre sus valores en el atributo Talla.'))
+        # Legacy matrix orders keep their original validation. The new list
+        # selects existing SKUs directly and does not generate a Cartesian grid.
+        if not value('esi_variant_line_mode'):
+            template.esi_get_production_matrix()
         def key(p):
             return production_key(template.id, [(v.attribute_id.id, v.id) for v in p.product_template_attribute_value_ids], grouped.ids, p.id)
         allowed_key = key(product)
@@ -152,13 +154,14 @@ class ProductionPlan(models.Model):
                 seen.add(p.id)
                 selected[p] = qty
         except (KeyError, ValueError, TypeError, AttributeError) as exc:
-            raise UserError(_('Revise la cuadrícula: cantidades positivas y únicamente tallas de la misma combinación de color, modelo y material.')) from exc
+            raise UserError(_('Revise la distribución: cantidades positivas y únicamente tallas de la misma combinación de color, modelo y material.')) from exc
         if product not in selected:
             raise UserError(_('La variante de referencia debe tener cantidad mayor que cero. Elija como referencia una talla que vaya a fabricar.'))
         bom = self.env['mrp.bom'].browse(value('esi_plan_bom_id')).exists()
         bom.check_access('read')
         if not bom or bom.type != 'normal' or bom.product_id or bom.product_tmpl_id != template or (bom.company_id and bom.company_id != company):
             raise UserError(_('Seleccione una receta común de plantilla válida para esta compañía.'))
+        bom._esi_check_allowed_products(self.env['product.product'].browse([p.id for p in selected]))
         picking = self.env['stock.picking.type'].browse(value('picking_type_id')).exists()
         if not picking or picking.code != 'mrp_operation' or picking.company_id != company:
             raise UserError(_('Seleccione la operación de fabricación de la compañía.'))
