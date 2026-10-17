@@ -20,6 +20,8 @@
       <xpath expr="//div[@name='qty']//field[@name='product_qty']" position="attributes"><attribute name="readonly" add="esi_variant_line_mode" separator=" or "/></xpath>
       <xpath expr="//notebook" position="before">
         <group string="Variantes a fabricar en esta orden" invisible="not esi_variant_line_mode">
+          <field name="esi_output_grid_changes" invisible="1"/><field name="esi_output_selection_json" invisible="1"/>
+          <field name="esi_variant_line_mode" widget="esi_output_selector" nolabel="1" invisible="state != 'draft'"/>
           <field name="esi_output_total" string="Total solicitado" class="fw-bold"/>
           <field name="esi_total_output_qty" string="Total del plan vigente" invisible="state == 'draft'"/>
           <field name="esi_output_line_ids" nolabel="1" colspan="2" readonly="state != 'draft'">

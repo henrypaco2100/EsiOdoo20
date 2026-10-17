@@ -15,3 +15,5 @@ from . import production_outputs
 
 from . import components
 from . import recipe_grid
+
+from . import output_grid

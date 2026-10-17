@@ -34,4 +34,7 @@
       <div t-foreach="this.selected" t-as="variant" t-key="variant.id" class="small"><t t-out="variant.data.display_name"/></div>
     </div>
   </t>
+  <t t-name="esi_calzados_v20.SelectionButton">
+    <button t-if="!this.props.readonly" type="button" class="btn btn-outline-primary mb-2" t-on-click="this.open">Seleccionar tallas</button>
+  </t>
 </templates>

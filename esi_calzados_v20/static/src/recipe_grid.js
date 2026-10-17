@@ -114,3 +114,91 @@ registry.category('fields').add('esi_recipe_variants', {
     component: RecipeVariantsField, supportedTypes: ['many2many'],
     relatedFields: () => [{ name: 'display_name', type: 'char' }],
 });
+
+export class RecipeButtonField extends RecipeVariantsField {
+    static template = 'esi_calzados_v20.SelectionButton';
+}
+
+export class OutputSelectionDialog extends ProductMatrixDialog {
+    async _onConfirm() {
+        const record = this.props.record;
+        // product_template_id is the recipe ID for this dialog (native numeric prop).
+        if (record.data.state !== 'draft' || !record.data.esi_variant_line_mode ||
+            record.data.esi_plan_bom_id?.id !== this.props.product_template_id) {
+            this.props.close();
+            return;
+        }
+        const byAttributes = new Map(this.props.rows.flatMap(row => row.slice(1))
+            .filter(cell => cell.is_possible_combination)
+            .map(cell => [cell.ptav_ids.join(','), cell.product_id]));
+        const inputs = [...this.productMatrixRef().querySelectorAll('.o_matrix_input')];
+        const quantities = [];
+        for (const input of inputs) {
+            const qty = Number(input.value || 0);
+            input.setCustomValidity('');
+            if (!Number.isFinite(qty) || qty < 0) {
+                input.setCustomValidity('Introduzca cero o una cantidad positiva.');
+                input.reportValidity();
+                return;
+            }
+            quantities.push({product_id: byAttributes.get(input.getAttribute('ptav_ids')), qty});
+        }
+        if (!quantities.some(cell => cell.qty > 0)) {
+            inputs[0]?.setCustomValidity('Indique al menos una cantidad positiva.');
+            inputs[0]?.reportValidity();
+            return;
+        }
+        await record.update({esi_output_grid_changes: JSON.stringify({
+            bom_id: this.props.product_template_id, quantities,
+        })});
+        this.props.close();
+    }
+}
+
+export class OutputSelectorField extends Component {
+    static template = 'esi_calzados_v20.SelectionButton';
+    props = useProps(standardFieldProps);
+    setup() {
+        this.orm = useService('orm');
+        this.dialog = useService('dialog');
+        this.notification = useService('notification');
+        this.opened = false;
+    }
+    async open() {
+        const record = this.props.record;
+        if (this.props.readonly || record.data.state !== 'draft' || !record.data.esi_variant_line_mode || this.opened) { return; }
+        const bom = record.data.esi_plan_bom_id;
+        if (!bom?.id) {
+            this.notification.add('Seleccione primero una receta compartida.', {type:'warning'});
+            return;
+        }
+        this.opened = true;
+        let delegated = false;
+        try {
+            const grid = await this.orm.call('mrp.bom', 'esi_get_output_selection_grid', [[bom.id]]);
+            if (record.data.esi_plan_bom_id?.id !== bom.id || record.data.state !== 'draft') { return; }
+            const current = JSON.parse(record.data.esi_output_selection_json || '[]');
+            const quantities = new Map(current.map(line => [line.product_id, line.quantity]));
+            let count = 0;
+            for (const row of grid.matrix) {
+                for (const cell of row.slice(1)) {
+                    cell.qty = quantities.get(cell.product_id) || 0;
+                    if (cell.is_possible_combination) { count++; }
+                }
+            }
+            if (!count) {
+                this.notification.add('La receta no tiene tallas activas disponibles.', {type:'warning'});
+                return;
+            }
+            this.dialog.add(OutputSelectionDialog, {
+                header:grid.header, rows:grid.matrix, dialogTitle:'Seleccionar tallas y cantidades',
+                editedCellAttributes:'', product_template_id:bom.id, record,
+            }, {onClose:()=>{this.opened=false;}});
+            delegated=true;
+        } finally {
+            if (!delegated) {this.opened=false;}
+        }
+    }
+}
+registry.category('fields').add('esi_recipe_button', {component:RecipeButtonField, supportedTypes:['boolean']});
+registry.category('fields').add('esi_output_selector', {component:OutputSelectorField, supportedTypes:['boolean']});

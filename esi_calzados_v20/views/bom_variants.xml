@@ -6,7 +6,8 @@
       <xpath expr="//field[@name='product_tmpl_id']" position="attributes"><attribute name="widget">esi_recipe_product</attribute></xpath>
       <xpath expr="//field[@name='product_tmpl_id']" position="after">
         <field name="esi_multi_variant" widget="esi_recipe_shared"/>
-        <field name="esi_allowed_variant_ids" widget="esi_recipe_variants" invisible="not esi_multi_variant" required="esi_multi_variant" domain="[('product_tmpl_id', '=', product_tmpl_id), ('is_storable', '=', True), ('company_id', 'in', [False, company_id])]" options="{'no_create': True}"/>
+        <field name="esi_multi_variant" widget="esi_recipe_button" nolabel="1" invisible="not esi_multi_variant"/>
+        <field name="esi_allowed_variant_ids" widget="many2many" invisible="not esi_multi_variant" required="esi_multi_variant" domain="[('product_tmpl_id', '=', product_tmpl_id), ('is_storable', '=', True), ('company_id', 'in', [False, company_id])]" options="{'no_create': True}"><list><field name="display_name" string="Variante / talla"/></list></field>
       </xpath>
       <xpath expr="//field[@name='product_id']" position="attributes"><attribute name="invisible" add="esi_multi_variant" separator=" or "/></xpath>
     </field>
