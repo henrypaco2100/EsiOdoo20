@@ -1,0 +1,34 @@
+<odoo>
+  <record id="production_direct_size_plan" model="ir.ui.view">
+    <field name="name">mrp.production.direct.size.plan</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//group/group/field[@name='product_id']" position="before">
+        <field name="esi_template_id" readonly="state != 'draft' or esi_group_id" options="{'no_create': True}"/>
+        <field name="esi_plan_dirty" invisible="1"/>
+      </xpath>
+      <xpath expr="//group/group/field[@name='product_id']" position="attributes">
+        <attribute name="string">Variante de referencia</attribute>
+        <attribute name="domain">[('is_storable', '=', True)] + ([('product_tmpl_id', '=', esi_template_id)] if esi_template_id else [])</attribute>
+        <attribute name="readonly">state != 'draft' or esi_group_id</attribute>
+      </xpath>
+      <xpath expr="//label[@name='bom_label']" position="attributes"><attribute name="invisible" add="(esi_plan_grid and state == 'draft')" separator=" or "/></xpath>
+      <xpath expr="//div[@name='bom_div']" position="attributes"><attribute name="invisible" add="(esi_plan_grid and state == 'draft')" separator=" or "/></xpath>
+      <xpath expr="//div[@name='qty']//field[@name='product_qty']" position="attributes"><attribute name="readonly" add="esi_plan_grid" separator=" or "/></xpath>
+      <xpath expr="//notebook" position="before">
+        <group string="Productos terminados por talla" invisible="not esi_plan_grid or state != 'draft'">
+          <field name="esi_plan_bom_id" required="esi_plan_grid and state == 'draft'" options="{'no_create': True}"/>
+          <field name="esi_plan_total" class="fw-bold"/>
+          <div colspan="2">La variante de referencia fija color, modelo y material. Indique aquí las cantidades de cada talla. Todas se producirán en esta misma OF.</div>
+          <field name="esi_plan_grid" widget="esi_variant_grid" readonly="state != 'draft'" nolabel="1" colspan="2"/>
+          <div class="alert alert-info" colspan="2" invisible="not esi_plan_dirty">Guarde la OF para calcular los componentes y las operaciones de todas las tallas. No se crean órdenes adicionales.</div>
+        </group>
+      </xpath>
+      <xpath expr="//notebook" position="attributes"><attribute name="invisible" add="esi_plan_dirty" separator=" or "/></xpath>
+      <xpath expr="//field[@name='move_raw_ids']" position="attributes"><attribute name="readonly" add="(esi_plan_grid and state == 'draft')" separator=" or "/></xpath>
+      <xpath expr="//field[@name='workorder_ids']" position="attributes"><attribute name="readonly" add="(esi_plan_grid and state == 'draft')" separator=" or "/></xpath>
+      <xpath expr="//field[@name='move_byproduct_ids']" position="attributes"><attribute name="readonly" add="(esi_plan_grid and state == 'draft')" separator=" or "/></xpath>
+    </field>
+  </record>
+</odoo>

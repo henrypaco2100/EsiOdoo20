@@ -52,7 +52,7 @@ class Production(models.Model):
         if {'product_id', 'bom_id', 'uom_id'}.intersection(vals):
             for mo in self.filtered('esi_size_batch'):
                 for key in ('product_id', 'bom_id', 'uom_id'):
-                    if key in vals and vals[key] != mo[key].id:
+                    if key in vals and vals[key] != mo[key].id and not (mo.state == 'draft' and 'esi_plan_grid' in vals):
                         raise UserError(_('No cambie el producto, unidad o receta de una OF agrupada. Cancele la OF y prepare un nuevo grupo con la distribución correcta.'))
         return super().write(vals)
 

@@ -6,12 +6,13 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <field name="user_id" position="after">
+                <field name="esi_plan_grid" invisible="1"/>
                 <field name="esi_responsible_id"/>
                 <field name="esi_group_id" readonly="1"/>
                 <field name="esi_analytic_account_id"/>
             </field>
             <xpath expr="//label[@for='product_qty']" position="before">
-                <field name="esi_total_output_qty" string="Total del lote (todas las tallas)" invisible="not esi_size_batch" class="fw-bold"/>
+                <field name="esi_total_output_qty" string="Total del lote (todas las tallas)" invisible="not esi_size_batch or (esi_plan_grid and state == 'draft')" class="fw-bold"/>
             </xpath>
             <xpath expr="//label[@for='product_qty']" position="attributes">
                 <attribute name="invisible">esi_size_batch</attribute>
@@ -22,7 +23,7 @@
             <xpath expr="//notebook" position="before">
                 <field name="esi_size_batch" invisible="1"/>
                 <field name="esi_batch_attribute_ids" invisible="1"/>
-                <group string="Fabricación por tallas" invisible="not esi_batch_attribute_ids">
+                <group string="Fabricación por tallas" invisible="not esi_batch_attribute_ids or (esi_plan_grid and state == 'draft')">
                     <field name="esi_batch_description"/>
                     <field name="esi_total_output_qty"/>
                     <field name="esi_source_bom_id"/>

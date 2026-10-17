@@ -38,7 +38,7 @@ class ProductionGroup(models.Model):
             buckets[key] = buckets.get(key, self.env['esi.production.group.line']) | line
         return list(buckets.values())
 
-    def _batch_recipe(self, lines):
+    def _batch_recipe(self, lines, primary_product=None):
         self.ensure_one()
         if not self.env.user.has_group('mrp.group_mrp_manager'):
             raise UserError(_('Crear una receta agrupada requiere Responsable de Fabricación.'))
@@ -48,6 +48,11 @@ class ProductionGroup(models.Model):
         for line in lines:
             quantities[line.product_id] = quantities.get(line.product_id, 0.0) + line.quantity
         ordered = sorted(quantities, key=lambda p: (-quantities[p], p.id))
+        if primary_product:
+            if primary_product not in quantities:
+                raise UserError(_('Introduzca una cantidad para la variante de referencia.'))
+            ordered.remove(primary_product)
+            ordered.insert(0, primary_product)
         primary = ordered[0]
         boms = self.env['mrp.bom']
         for line in lines:
