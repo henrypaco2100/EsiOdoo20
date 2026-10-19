@@ -1,15 +1,32 @@
 <odoo>
   <record id="bom_allowed_variants" model="ir.ui.view">
-    <field name="name">mrp.bom.allowed.variants</field><field name="model">mrp.bom</field>
+    <field name="name">mrp.bom.allowed.variants</field>
+    <field name="model">mrp.bom</field>
     <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
     <field name="arch" type="xml">
-      <xpath expr="//field[@name='product_tmpl_id']" position="attributes"><attribute name="widget">esi_recipe_product</attribute></xpath>
+      <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+        <attribute name="widget">esi_recipe_product</attribute>
+      </xpath>
       <xpath expr="//field[@name='product_tmpl_id']" position="after">
         <field name="esi_multi_variant" widget="esi_recipe_shared"/>
-        <field name="esi_multi_variant" widget="esi_recipe_button" nolabel="1" invisible="not esi_multi_variant"/>
-        <field name="esi_allowed_variant_ids" widget="many2many" invisible="not esi_multi_variant" required="esi_multi_variant" domain="[('product_tmpl_id', '=', product_tmpl_id), ('is_storable', '=', True), ('company_id', 'in', [False, company_id])]" options="{'no_create': True}"><list><field name="display_name" string="Variante / talla"/></list></field>
       </xpath>
-      <xpath expr="//field[@name='product_id']" position="attributes"><attribute name="invisible" add="esi_multi_variant" separator=" or "/></xpath>
+      <xpath expr="//sheet/notebook" position="before">
+        <div name="esi_allowed_variants_section" class="w-100 mb-4" invisible="not esi_multi_variant">
+          <separator string="Variantes permitidas"/>
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+            <field name="esi_multi_variant" widget="esi_recipe_button" nolabel="1" class="w-auto"/>
+          </div>
+          <field name="esi_allowed_variant_ids" widget="many2many" nolabel="1" class="w-100"
+            required="esi_multi_variant"
+            domain="[('product_tmpl_id', '=', product_tmpl_id), ('is_storable', '=', True), ('company_id', 'in', [False, company_id])]"
+            options="{'no_create': True}">
+            <list><field name="display_name" string="Variante / talla"/></list>
+          </field>
+        </div>
+      </xpath>
+      <xpath expr="//field[@name='product_id']" position="attributes">
+        <attribute name="invisible" add="esi_multi_variant" separator=" or "/>
+      </xpath>
     </field>
   </record>
 </odoo>
