@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_esi_customize" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.esi.customize</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="ESI - Administración" name="app_odoo_customize" groups="base.group_system">
+                    <block title="Personalización" help="Opciones generales del sistema ESI.">
+                        <setting string="Nombre del sistema" help="Nombre administrativo de referencia para la instalación.">
+                            <field name="esi_system_name"/>
+                        </setting>
+                    </block>
+                    <block title="Mantenimiento de datos" help="Limpieza controlada de información por sucursal / compañía.">
+                        <setting string="Limpieza por sucursal" help="Permite limpiar una, varias o todas las sucursales activas y permitidas para el administrador.">
+                            <button name="action_open_esi_cleanup" type="object" string="Abrir asistente de limpieza" class="btn-primary"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

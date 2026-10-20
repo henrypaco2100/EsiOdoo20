@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esi_data_cleanup_wizard_form" model="ir.ui.view">
+        <field name="name">esi.data.cleanup.wizard.form</field>
+        <field name="model">esi.data.cleanup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Limpieza de datos por sucursal" class="esi_cleanup_form">
+                <field name="allowed_company_ids" invisible="1"/>
+                <field name="can_clean" invisible="1"/>
+                <div class="alert alert-danger" role="alert">
+                    <strong>Herramienta destructiva.</strong>
+                    Esta operación elimina datos definitivamente. Realice una copia de seguridad antes de continuar.
+                </div>
+                <group string="1. Seleccione el alcance">
+                    <field name="scope" widget="radio"/>
+                    <field name="company_ids"
+                           widget="many2many_tags"
+                           domain="[('id', 'in', allowed_company_ids)]"
+                           options="{'no_create': True, 'no_open': True}"
+                           invisible="scope == 'all'"
+                           required="scope == 'selected'"/>
+                    <field name="target_summary" readonly="1"/>
+                </group>
+                <group string="2. Confirme la operación">
+                    <label for="confirmation" string="Escriba LIMPIAR para habilitar los botones"/>
+                    <field name="confirmation" placeholder="LIMPIAR"/>
+                </group>
+                <separator string="3. Datos operativos a limpiar"/>
+                <div class="esi_cleanup_grid">
+                    <button name="action_clean_sales" type="object" string="Ventas" icon="fa-shopping-cart" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los datos de VENTAS de las sucursales seleccionadas?"/>
+                    <button name="action_clean_purchase" type="object" string="Compras" icon="fa-credit-card" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los datos de COMPRAS de las sucursales seleccionadas?"/>
+                    <button name="action_clean_pos" type="object" string="Punto de Venta" icon="fa-desktop" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los datos de POS de las sucursales seleccionadas?"/>
+                    <button name="action_clean_mrp" type="object" string="Fabricación" icon="fa-cogs" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los datos de FABRICACIÓN de las sucursales seleccionadas?"/>
+                    <button name="action_clean_inventory" type="object" string="Inventario" icon="fa-cubes" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los movimientos de INVENTARIO de las sucursales seleccionadas?"/>
+                    <button name="action_clean_account" type="object" string="Contabilidad" icon="fa-calculator" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los movimientos CONTABLES de las sucursales seleccionadas?"/>
+                    <button name="action_clean_expense" type="object" string="Gastos" icon="fa-money" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los GASTOS de las sucursales seleccionadas?"/>
+                    <button name="action_clean_project" type="object" string="Proyectos" icon="fa-tasks" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los datos de PROYECTOS de las sucursales seleccionadas?"/>
+                    <button name="action_clean_quality" type="object" string="Calidad" icon="fa-check-circle" class="btn btn-outline-danger" invisible="not can_clean" confirm="¿Eliminar definitivamente los datos de CALIDAD de las sucursales seleccionadas?"/>
+                </div>
+                <div class="alert alert-info mt-3" role="alert">
+                    <strong>Datos maestros compartidos protegidos:</strong> productos, variantes, atributos, contactos, listas de materiales y configuraciones globales no se eliminan desde una limpieza parcial por sucursal.
+                </div>
+                <footer>
+                    <button name="action_clean_all_operations" type="object" string="Limpiar todas las operaciones" class="btn btn-danger" invisible="not can_clean" confirm="ATENCIÓN: se eliminarán TODAS LAS OPERACIONES de las sucursales indicadas. ¿Desea continuar?"/>
+                    <button string="Cancelar" special="cancel" class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_esi_data_cleanup_wizard" model="ir.actions.act_window">
+        <field name="name">Limpieza por sucursal</field>
+        <field name="res_model">esi.data.cleanup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_esi_admin_root" name="Herramientas ESI" sequence="95" groups="base.group_system"/>
+    <menuitem id="menu_esi_data_cleanup" name="Limpieza por sucursal" parent="menu_esi_admin_root" action="action_esi_data_cleanup_wizard" sequence="10" groups="base.group_system"/>
+</odoo>

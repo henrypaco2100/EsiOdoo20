@@ -1,0 +1,13 @@
+.esi_cleanup_form {
+    .esi_cleanup_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: .75rem;
+        margin: 1rem 0;
+    }
+    .esi_cleanup_grid .btn {
+        min-height: 52px;
+        text-align: left;
+        font-weight: 600;
+    }
+}
