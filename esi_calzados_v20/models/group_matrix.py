@@ -43,12 +43,22 @@ class Group(models.Model):
     esi_grid_template_id = fields.Many2one('product.template', store=False)
     esi_grid_data = fields.Text(store=False)
 
+    @api.onchange('company_id')
+    def _clear_grid_company(self):
+        self.esi_grid_template_id = False
+        self.esi_grid_data = False
+        self.esi_grid_changes = False
+
     @api.onchange('esi_grid_template_id')
     def _load_size_grid(self):
         self.esi_grid_data = False
         template = self.esi_grid_template_id
         if not template:
             return
+        if self.state != 'draft' or self.production_ids:
+            raise UserError(_('Las variantes solo se pueden elegir antes de generar las OF.'))
+        if not template.is_storable or (template.company_id and template.company_id != self.company_id):
+            raise UserError(_('Seleccione un producto almacenable de esta compañía o compartido.'))
         grid = template.esi_get_production_matrix()
         quantities = {}
         for line in self.line_ids.filtered(lambda l: l.product_id.product_tmpl_id == template):
@@ -105,6 +115,13 @@ class Group(models.Model):
 
 class Line(models.Model):
     _inherit = 'esi.production.group.line'
+    variant_label = fields.Char(compute='_compute_variant_label', related=False, string='Variantes')
+
+    @api.depends('product_id.product_template_attribute_value_ids')
+    def _compute_variant_label(self):
+        for line in self:
+            line.variant_label = ' · '.join(line.product_id.product_template_attribute_value_ids.mapped('name'))
+
     product_template_id = fields.Many2one('product.template', compute='_compute_product_template',
         readonly=False, store=True, precompute=True, string='Producto', domain="[('is_storable', '=', True)]")
 
