@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esi_cleanup_profile_list" model="ir.ui.view">
+        <field name="name">esi.cleanup.profile.list</field>
+        <field name="model">esi.cleanup.profile</field>
+        <field name="arch" type="xml"><list string="Perfiles de limpieza de pruebas"><field name="name"/><field name="mode"/><field name="scope"/><field name="state"/><field name="last_run"/></list></field>
+    </record>
+    <record id="view_esi_cleanup_profile_form" model="ir.ui.view">
+        <field name="name">esi.cleanup.profile.form</field>
+        <field name="model">esi.cleanup.profile</field>
+        <field name="arch" type="xml">
+            <form string="Limpieza avanzada de base de pruebas">
+                <header>
+                    <button name="action_preview" type="object" string="1. Calcular vista previa" class="btn-primary"/>
+                    <button name="action_execute" type="object" string="2. Ejecutar eliminación definitiva" class="btn-danger" invisible="state != 'preview'" confirm="ATENCIÓN: está a punto de eliminar datos de forma irreversible. ¿Confirma que esta es una base de pruebas y que dispone de respaldo?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,preview,done"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-danger" role="alert"><strong>SOLO PARA BASES DE PRUEBAS.</strong> La eliminación es irreversible. El módulo conserva el contacto del usuario de acceso, otros contactos asociados a usuarios, los módulos instalados y la configuración técnica. Use una copia de seguridad.</div>
+                    <h1><field name="name" placeholder="Ej.: Reiniciar entorno de pruebas ESI"/></h1>
+                    <group string="1. Tipo de limpieza y sucursales" col="2">
+                        <field name="mode" widget="radio"/>
+                        <field name="scope" widget="radio"/>
+                        <field name="company_ids" widget="many2many_tags" invisible="scope == 'all'" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="protected_contact" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Ventas y documentos">
+                            <group><field name="sales"/><field name="sale_status" invisible="not sales or mode == 'integral'"/><field name="purchases"/><field name="pos"/><field name="accounting"/><field name="expenses"/></group>
+                        </page>
+                        <page string="Productos e inventario">
+                            <group><field name="products"/><field name="product_ids" widget="many2many_tags" invisible="not products and not bom" options="{'no_create': True}"/><field name="bom"/><field name="inventory"/><field name="manufacturing"/></group>
+                            <div class="alert alert-warning" role="alert">Los productos, contactos y otros datos compartidos solo pueden limpiarse en modo de todas las compañías de la base. Los productos seleccionados se filtran por sus IDs; sin selección se incluyen todos los productos aplicables.</div>
+                        </page>
+                        <page string="Otros datos y tableros">
+                            <group><field name="projects"/><field name="quality"/><field name="contacts"/><field name="dashboards"/><field name="additional_model"/><field name="specific_record_ids" invisible="not additional_model"/></group>
+                            <div class="alert alert-info" role="alert">Los tableros solo se procesan cuando existe un modelo de tablero compatible. No se borran acciones, vistas técnicas ni menús del sistema.</div>
+                        </page>
+                        <page string="Vista previa y ejecución">
+                            <group><field name="preview_text" readonly="1" widget="text" nolabel="1" placeholder="Pulse Calcular vista previa para contar los registros"/></group>
+                            <group string="Confirmación final"><label for="confirmation" string="En limpieza selectiva escriba ELIMINAR DATOS. En reinicio integral escriba REINICIAR BASE DE PRUEBAS."/><field name="confirmation" placeholder="Frase de confirmación"/></group>
+                        </page>
+                        <page string="Informe de resultados"><field name="last_run" readonly="1"/><field name="report_text" readonly="1" widget="text" nolabel="1"/></page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_esi_cleanup_profiles" model="ir.actions.act_window">
+        <field name="name">Limpieza de base de pruebas</field><field name="res_model">esi.cleanup.profile</field><field name="view_mode">list,form</field><field name="target">current</field>
+    </record>
+    <menuitem id="menu_esi_cleanup_settings" name="Limpieza de base de pruebas" parent="base.menu_administration" action="action_esi_cleanup_profiles" groups="base.group_system" sequence="96"/>
+</odoo>

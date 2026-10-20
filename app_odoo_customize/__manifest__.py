@@ -1,22 +1,10 @@
 {
-    "name": "ESI - Personalización y Limpieza Multisucursal Odoo 20",
-    "version": "20.0.1.0.1",
-    "category": "Administration",
-    "summary": "Herramientas administrativas y limpieza segura por sucursal/compañía",
-    "author": "ESI",
-    "license": "LGPL-3",
-    "depends": ["base_setup", "web", "esi_sucursales_v20"],
-    "data": [
-        "security/ir.access.csv",
-        "views/cleanup_wizard_views.xml",
-        "views/res_config_settings_views.xml",
-    ],
-    "assets": {
-        "web.assets_backend": [
-            "app_odoo_customize/static/src/scss/cleanup.scss",
-        ],
-    },
-    "installable": True,
-    "application": True,
-    "auto_install": False,
+ 'name': 'ESI - Limpieza avanzada de base de pruebas',
+ 'version': '20.0.2.0.0',
+ 'category': 'Administration',
+ 'summary': 'Limpieza selectiva y reinicio de datos de pruebas por sucursal',
+ 'author': 'ESI', 'license': 'LGPL-3',
+ 'depends': ['base_setup', 'web', 'esi_sucursales_v20'],
+ 'data': ['security/ir.access.csv', 'views/cleanup_views.xml'],
+ 'installable': True, 'application': False, 'auto_install': False,
 }
