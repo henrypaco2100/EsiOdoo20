@@ -88,9 +88,25 @@ class EsiCleanupProfile(models.Model):
         return [('id', 'in', ids)]
 
     def _selected(self):
-        names = list(OPERATIONS) if self.mode == 'integral' else [key for key in OPERATIONS if getattr(self, key)]
-        extra = ['products', 'bom', 'contacts', 'dashboards'] if self.mode == 'integral' else [key for key in ('products','bom','contacts','dashboards') if getattr(self, key)]
-        return names + extra + (['additional'] if self.additional_model else [])
+        # En cualquier modalidad, cada casilla gobierna su propia categoría.
+        keys = list(OPERATIONS) + ['products', 'bom', 'contacts', 'dashboards']
+        return [key for key in keys if getattr(self, key)] + (['additional'] if self.additional_model else [])
+
+    def _set_all_categories(self, enabled):
+        self.ensure_one()
+        self._ensure_admin()
+        keys = list(OPERATIONS) + ['products', 'bom', 'contacts', 'dashboards']
+        values = {key: enabled for key in keys}
+        values.update({'state': 'draft', 'preview_text': False, 'confirmation': False})
+        # No modificar el modelo adicional: es una selección independiente.
+        self.write(values)
+        return self._reopen()
+
+    def action_mark_all(self):
+        return self._set_all_categories(True)
+
+    def action_clear_all(self):
+        return self._set_all_categories(False)
 
     def _protected_partners(self):
         users = self.env['res.users'].sudo().with_context(active_test=False).search([])
@@ -110,7 +126,7 @@ class EsiCleanupProfile(models.Model):
             if key in OPERATIONS:
                 for model, _unused in OPERATIONS[key]:
                     domain = []
-                    if key == 'sales' and model in ('sale.order','sale.order.line') and self.sale_status != 'all' and self.mode != 'integral':
+                    if key == 'sales' and model in ('sale.order','sale.order.line') and self.sale_status != 'all':
                         state_field = 'state' if model == 'sale.order' else 'order_id.state'
                         domain.append((state_field, '=', self.sale_status))
                     entries.append((key, model, domain))
