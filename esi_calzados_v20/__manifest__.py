@@ -32,6 +32,6 @@
  'license': 'LGPL-3',
  'maintainer': 'ESI',
  'name': 'Calzados MRP v20',
- 'summary': 'Grupos de producción, responsable, analítica y destajos sin '
+ 'summary': 'Grupos de fabricación, responsable, analítica y destajos sin '
             'alterar valoración de Odoo',
- 'version': '20.0.8.2.0'}
+ 'version': '20.0.8.3.0'}

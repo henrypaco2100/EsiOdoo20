@@ -4,22 +4,22 @@ from odoo.exceptions import UserError
 
 class EsiProductionGroup(models.Model):
     _name = 'esi.production.group'
-    _description = 'Grupo de Órdenes de Producción'
+    _description = 'Grupo de fabricación'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    name = fields.Char(default='Nuevo', readonly=True, copy=False, tracking=True)
-    company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company)
-    responsible_id = fields.Many2one('res.users', string='Encargado de producción', tracking=True)
+    name = fields.Char(string='Referencia', default='Nuevo', readonly=True, copy=False, tracking=True)
+    company_id = fields.Many2one('res.company', string='Sucursal / Compañía', required=True, default=lambda self: self.env.company)
+    responsible_id = fields.Many2one('res.users', string='Responsable de fabricación', tracking=True)
     analytic_account_id = fields.Many2one(
         'account.analytic.account', string='Cuenta analítica',
         domain="[('company_id', 'in', [False, company_id])]",
     )
     line_ids = fields.One2many('esi.production.group.line', 'group_id', string='Productos')
-    production_ids = fields.One2many('mrp.production', 'esi_group_id', string='Órdenes de producción', readonly=True)
-    production_count = fields.Integer(compute='_compute_production_count', store=True)
-    state = fields.Selection([('draft','Borrador'),('created','OF creadas'),('cancel','Cancelado')], default='draft', tracking=True)
-    note = fields.Text()
+    production_ids = fields.One2many('mrp.production', 'esi_group_id', string='Órdenes de fabricación', readonly=True)
+    production_count = fields.Integer(string='Órdenes de fabricación', compute='_compute_production_count', store=True)
+    state = fields.Selection([('draft','Borrador'),('created','OF creadas'),('cancel','Cancelado')], default='draft', tracking=True, string='Estado')
+    note = fields.Text(string='Notas internas')
 
     @api.depends('production_ids')
     def _compute_production_count(self):
@@ -38,7 +38,7 @@ class EsiProductionGroup(models.Model):
             if group.state != 'draft':
                 continue
             if not group.responsible_id:
-                raise UserError(_('Seleccione un encargado de producción.'))
+                raise UserError(_('Seleccione un responsable de fabricación.'))
             if not group.line_ids:
                 raise UserError(_('Agregue al menos un producto al grupo.'))
             vals_list = []
@@ -69,7 +69,7 @@ class EsiProductionGroup(models.Model):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Órdenes de producción'),
+            'name': _('Órdenes de fabricación'),
             'res_model': 'mrp.production',
             'view_mode': 'list,form',
             'domain': [('esi_group_id', '=', self.id)],
@@ -83,11 +83,11 @@ class EsiProductionGroup(models.Model):
 
 class EsiProductionGroupLine(models.Model):
     _name = 'esi.production.group.line'
-    _description = 'Línea Grupo Producción'
+    _description = 'Línea de grupo de fabricación'
 
     group_id = fields.Many2one('esi.production.group', required=True, ondelete='cascade')
-    product_id = fields.Many2one('product.product', required=True, domain="[('is_storable', '=', True)]")
-    quantity = fields.Float(default=1.0, required=True)
-    uom_id = fields.Many2one('uom.uom', related='product_id.uom_id', readonly=True)
-    bom_id = fields.Many2one('mrp.bom', string='LdM', domain="[('product_tmpl_id', '=', product_tmpl_id)]")
+    product_id = fields.Many2one('product.product', string='Producto / variante', required=True, domain="[('is_storable', '=', True)]")
+    quantity = fields.Float(string='Cantidad', default=1.0, required=True)
+    uom_id = fields.Many2one('uom.uom', string='Unidad', related='product_id.uom_id', readonly=True)
+    bom_id = fields.Many2one('mrp.bom', string='Lista de materiales', domain="[('product_tmpl_id', '=', product_tmpl_id)]")
     product_tmpl_id = fields.Many2one('product.template', related='product_id.product_tmpl_id', store=False)
