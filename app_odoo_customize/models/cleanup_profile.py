@@ -2,6 +2,7 @@ import json
 import logging
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from psycopg2 import sql
 
 _logger = logging.getLogger(__name__)
 
@@ -10,7 +11,7 @@ OPERATIONS = {
     'sales': [('sale.order.line', [('order_id.state', 'in', ['draft', 'sent'])]), ('sale.order', [])],
     'purchases': [('purchase.order.line', []), ('purchase.order', [])],
     'pos': [('pos.payment', []), ('pos.order.line', []), ('pos.order', []), ('pos.session', [])],
-    'manufacturing': [('mrp.workorder', []), ('mrp.production', []), ('mrp.unbuild', [])],
+    'manufacturing': [('mrp.production', []), ('mrp.workorder', []), ('mrp.unbuild', [])],
     'inventory': [('stock.move.line', []), ('stock.move', []), ('stock.picking', []), ('stock.scrap', []), ('stock.quant', []), ('stock.lot', [])],
     'accounting': [('account.payment', []), ('account.move', [])],
     'expenses': [('hr.expense', []), ('hr.expense.sheet', [])],
@@ -36,6 +37,7 @@ class EsiCleanupProfile(models.Model):
     expenses = fields.Boolean(string='Gastos')
     projects = fields.Boolean(string='Proyectos')
     quality = fields.Boolean(string='Calidad')
+    force_sql = fields.Boolean(string='Forzar DELETE SQL y eliminar dependencias', default=True, help='Elimina dependencias de claves foráneas en profundidad. Solo para bases de pruebas respaldadas.')
     products = fields.Boolean(string='Productos y variantes')
     bom = fields.Boolean(string='Listas de materiales')
     contacts = fields.Boolean(string='Contactos, excepto los protegidos')
@@ -159,6 +161,114 @@ class EsiCleanupProfile(models.Model):
     def _reopen(self):
         return {'type': 'ir.actions.act_window', 'res_model': self._name, 'res_id': self.id, 'view_mode': 'form', 'target': 'current'}
 
+    def _prepare_for_removal(self, model_name, records):
+        """Use Odoo workflows, not SQL deletes bypassing ORM business invariants."""
+        if not records:
+            return
+        if model_name == 'mrp.production':
+            # MO unlink is only supported after its cancellation, and cancelling
+            # production also updates linked stock moves and work orders.
+            active = records.filtered(lambda r: r.state not in ('draft', 'cancel'))
+            if active:
+                if 'done' in active.mapped('state'):
+                    names = ', '.join(active.filtered(lambda r: r.state == 'done').mapped('name')[:15])
+                    raise UserError(_(
+                        'Hay fabricaciones FINALIZADAS que no se pueden cancelar directamente: %s. '
+                        'Es necesario revertir primero sus movimientos de inventario y valoración. '
+                        'No se permite forzar el borrado SQL porque dejaría existencias y asientos inconsistentes.'
+                    ) % names)
+                method = next((getattr(active, name) for name in ('action_cancel', 'button_cancel')
+                               if callable(getattr(active, name, None))), None)
+                if not method:
+                    raise UserError(_('Esta edición de Fabricación no ofrece un método de cancelación compatible.'))
+                method()
+                pending = active.filtered(lambda r: r.state != 'cancel')
+                if pending:
+                    raise UserError(_('No se pudieron cancelar las fabricaciones: %s') % ', '.join(pending.mapped('name')[:15]))
+        elif model_name == 'mrp.workorder':
+            # Work orders should normally cascade from unlink of their production.
+            # Do not attempt to delete completed production work using raw SQL.
+            active = records.filtered(lambda r: r.state not in ('cancel', 'pending', 'ready'))
+            if active:
+                raise UserError(_('Hay órdenes de trabajo activas o terminadas que requieren cancelación desde su fabricación.'))
+
+    def _sql_fk_edges(self):
+        """FKs pointing at an ID (or a unique parent key); only ID targets are handled."""
+        self.env.cr.execute("""
+            SELECT child.relname, att.attname, parent.relname,
+                   EXISTS(SELECT 1 FROM pg_attribute a WHERE a.attrelid=child.oid
+                          AND a.attname='id' AND a.attnum>0 AND NOT a.attisdropped)
+            FROM pg_constraint c
+            JOIN pg_class child ON child.oid=c.conrelid
+            JOIN pg_class parent ON parent.oid=c.confrelid
+            JOIN pg_namespace ns ON ns.oid=child.relnamespace
+            JOIN pg_attribute att ON att.attrelid=child.oid AND att.attnum=c.conkey[1]
+            JOIN pg_attribute pat ON pat.attrelid=parent.oid AND pat.attnum=c.confkey[1]
+            WHERE c.contype='f' AND array_length(c.conkey,1)=1
+              AND pat.attname='id' AND ns.nspname=current_schema()
+              AND child.relkind IN ('r','p')
+        """)
+        edges = {}
+        for child, col, parent, has_id in self.env.cr.fetchall():
+            edges.setdefault(parent, []).append((child, col, has_id))
+        return edges
+
+    def _sql_company_guard(self, table, ids, allowed, total_scope):
+        """Never expand destructive cascades to other companies or protected users."""
+        if table in ('res_users', 'res_company', 'ir_module_module', 'esi_cleanup_profile') or table.startswith(('ir_model', 'ir_ui_view', 'ir_actions', 'ir_rule', 'ir_access', 'ir_config_parameter')):
+            raise UserError(_('La dependencia alcanza una tabla técnica protegida: %s. No se eliminó nada.') % table)
+        if table == 'res_partner':
+            protected = self._protected_partners()
+            if protected.intersection(ids):
+                raise UserError(_('La eliminación afectaría un contacto protegido vinculado a un usuario. Se ha revertido todo.'))
+        self.env.cr.execute("""SELECT 1 FROM information_schema.columns
+                 WHERE table_schema=current_schema() AND table_name=%s AND column_name='company_id'""", (table,))
+        if self.env.cr.fetchone() and not total_scope:
+            self.env.cr.execute(sql.SQL('SELECT id FROM {} WHERE id = ANY(%s) AND company_id IS NOT NULL AND NOT(company_id = ANY(%s)) LIMIT 1').format(sql.Identifier(table)), (ids, allowed))
+            if self.env.cr.fetchone():
+                raise UserError(_('Una dependencia de %s pertenece a otra sucursal. Se cancela todo el borrado.') % table)
+
+    def _sql_delete_tree(self, table, ids, edges, allowed, total_scope, path=None, processed=None):
+        """Delete referenced children before their parents, using a single Odoo transaction.
+
+        This follows actual PostgreSQL FKs and handles M2M relation tables without IDs.
+        Any unexpected constraint/cycle aborts and rolls back the entire request.
+        """
+        path = path or set()
+        processed = processed if processed is not None else {}
+        ids = set(ids) - processed.get(table, set())
+        if not ids:
+            return 0
+        if table in path:
+            raise UserError(_('Existe una dependencia circular de SQL en %s. La transacción fue cancelada.') % table)
+        self._sql_company_guard(table, list(ids), allowed, total_scope)
+        if len(ids) > 300000:
+            raise UserError(_('La tabla %s supera el límite de seguridad por lote; divida la operación.') % table)
+        subtotal = 0
+        for child, column, has_id in edges.get(table, []):
+            if child == table:
+                # Self references are handled recursively, but PostgreSQL may
+                # block cycles. Such cycles are surfaced as errors, not concealed.
+                pass
+            for start in range(0, len(ids), 1000):
+                batch = sorted(ids)[start:start+1000]
+                if has_id:
+                    self.env.cr.execute(sql.SQL('SELECT id FROM {} WHERE {} = ANY(%s)').format(sql.Identifier(child), sql.Identifier(column)), (batch,))
+                    child_ids = [row[0] for row in self.env.cr.fetchall()]
+                    if child_ids:
+                        subtotal += self._sql_delete_tree(child, child_ids, edges, allowed, total_scope, path | {table}, processed)
+                else:
+                    if child.startswith(('res_users', 'ir_')):
+                        raise UserError(_('La relación %s está protegida.') % child)
+                    self.env.cr.execute(sql.SQL('DELETE FROM {} WHERE {} = ANY(%s)').format(sql.Identifier(child), sql.Identifier(column)), (batch,))
+                    subtotal += max(0, self.env.cr.rowcount)
+        current = list(ids)
+        for start in range(0, len(current), 1000):
+            self.env.cr.execute(sql.SQL('DELETE FROM {} WHERE id = ANY(%s)').format(sql.Identifier(table)), (current[start:start+1000],))
+            subtotal += max(0, self.env.cr.rowcount)
+        processed.setdefault(table, set()).update(ids)
+        return subtotal
+
     def action_execute(self):
         self.ensure_one()
         self._ensure_admin()
@@ -171,6 +281,13 @@ class EsiCleanupProfile(models.Model):
         if not entries or not any(domain is not None for _, _, domain, _ in entries):
             raise UserError(_('No hay operaciones válidas para ejecutar.'))
         lines = []
+        use_sql = bool(self.force_sql)
+        edges = self._sql_fk_edges() if use_sql else {}
+        allowed = self._company_ids()
+        total_scope = set(allowed) == set(self.env['res.company'].sudo().search([]).ids)
+        if use_sql and not total_scope and self.mode == 'integral':
+            raise UserError(_('El reinicio integral SQL solo se permite al seleccionar todas las sucursales de la base.'))
+        self.env.flush_all()
         # Do not mask errors: atomic transaction rolls back if a dependency or business rule blocks unlink.
         for category, name, domain, note in entries:
             if domain is None:
@@ -181,7 +298,16 @@ class EsiCleanupProfile(models.Model):
             count = len(records)
             if count:
                 try:
-                    records.unlink()
+                    if use_sql:
+                        if not getattr(Model, '_auto', False):
+                            raise UserError(_('El modelo %s no utiliza una tabla SQL automática.') % name)
+                        # Explicit SQL bypasses ORM workflows by design for disposable tests.
+                        self._sql_delete_tree(Model._table, records.ids, edges, allowed, total_scope)
+                        self.env.invalidate_all()
+                    else:
+                        self._prepare_for_removal(name, records)
+                        records = Model.search(domain)
+                        records.unlink()
                 except Exception as exc:
                     _logger.exception('ESI cleanup failed for %s', name)
                     raise UserError(_('No se pudo limpiar %s (%s). Toda esta ejecución se revertirá. Error: %s') % (name, count, str(exc))) from exc

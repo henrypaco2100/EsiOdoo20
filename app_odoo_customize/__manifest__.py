@@ -1,6 +1,6 @@
 {
  'name': 'ESI - Limpieza avanzada de base de pruebas',
- 'version': '20.0.2.0.0',
+ 'version': '20.0.3.0.0',
  'category': 'Administration',
  'summary': 'Limpieza selectiva y reinicio de datos de pruebas por sucursal',
  'author': 'ESI', 'license': 'LGPL-3',
