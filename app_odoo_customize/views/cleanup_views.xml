@@ -11,7 +11,7 @@
         <field name="arch" type="xml">
             <form string="Limpieza avanzada de base de pruebas">
                 <header>
-                    <button name="action_preview" type="object" string="1. Calcular vista previa" class="btn-primary"/>
+                    <button name="action_mark_all" type="object" string="Marcar todas" class="btn-secondary"/><button name="action_clear_all" type="object" string="Desmarcar todas" class="btn-secondary"/><button name="action_preview" type="object" string="1. Calcular vista previa" class="btn-primary"/>
                     <button name="action_execute" type="object" string="2. Ejecutar eliminación definitiva" class="btn-danger" invisible="state != 'preview'" confirm="ATENCIÓN: está a punto de eliminar datos de forma irreversible. ¿Confirma que esta es una base de pruebas y que dispone de respaldo?"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,preview,done"/>
                 </header>
@@ -24,7 +24,7 @@
                         <field name="company_ids" widget="many2many_tags" invisible="scope == 'all'" options="{'no_create': True, 'no_open': True}"/>
                         <field name="protected_contact" readonly="1"/><field name="force_sql"/>
                     </group>
-                    <notebook>
+                    <div class="alert alert-info" role="alert">Solo se borrarán las categorías marcadas, también en reinicio integral. No se eliminan categorías desmarcadas.</div><notebook>
                         <page string="Ventas y documentos">
                             <group><field name="sales"/><field name="sale_status" invisible="not sales or mode == 'integral'"/><field name="purchases"/><field name="pos"/><field name="accounting"/><field name="expenses"/></group>
                         </page>
