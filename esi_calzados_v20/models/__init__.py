@@ -14,6 +14,7 @@ from . import bom_variants
 from . import production_outputs
 
 from . import components
+from . import manufacture_option
 from . import recipe_grid
 
 from . import output_grid

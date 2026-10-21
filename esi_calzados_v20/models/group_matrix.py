@@ -123,7 +123,7 @@ class Line(models.Model):
             line.variant_label = ' · '.join(line.product_id.product_template_attribute_value_ids.mapped('name'))
 
     product_template_id = fields.Many2one('product.template', compute='_compute_product_template',
-        readonly=False, store=True, precompute=True, string='Producto', domain="[('is_storable', '=', True)]")
+        readonly=False, store=True, precompute=True, string='Producto', domain="[('is_storable', '=', True), ('esi_manufacture_ok', '=', True)]")
 
     @api.depends('product_id')
     def _compute_product_template(self):

@@ -86,7 +86,7 @@ class EsiProductionGroupLine(models.Model):
     _description = 'Línea de grupo de fabricación'
 
     group_id = fields.Many2one('esi.production.group', required=True, ondelete='cascade')
-    product_id = fields.Many2one('product.product', string='Producto / variante', required=True, domain="[('is_storable', '=', True)]")
+    product_id = fields.Many2one('product.product', string='Producto / variante', required=True, domain="[('is_storable', '=', True), ('esi_manufacture_ok', '=', True)]")
     quantity = fields.Float(string='Cantidad', default=1.0, required=True)
     uom_id = fields.Many2one('uom.uom', string='Unidad', related='product_id.uom_id', readonly=True)
     bom_id = fields.Many2one('mrp.bom', string='Lista de materiales', domain="[('product_tmpl_id', '=', product_tmpl_id)]")

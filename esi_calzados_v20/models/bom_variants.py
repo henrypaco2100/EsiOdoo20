@@ -77,7 +77,9 @@ class Bom(models.Model):
         return result
 
     def explode(self, product, quantity, picking_type=False, never_attribute_values=False):
-        if product:
+        # Native MRP also calls explode on an empty BoM during form onchange.
+        # Preserve that behavior; validate allowed variants only for a real BoM.
+        if self and product:
             self._esi_check_allowed_products(product)
         return super().explode(product, quantity, picking_type, never_attribute_values)
 

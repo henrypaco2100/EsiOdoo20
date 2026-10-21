@@ -4,6 +4,9 @@
     <field name="inherit_id" ref="product.product_template_form_view"/>
     <field name="arch" type="xml">
       <xpath expr="//div[@name='options']" position="inside">
+        <span name="esi_manufacture_option" class="d-inline-flex" invisible="type != 'consu'">
+          <field name="esi_manufacture_ok" widget="boolean_checkbox" class="w-auto"/><label for="esi_manufacture_ok"/>
+        </span>
         <span name="esi_component_option" class="d-inline-flex" invisible="type == 'combo'">
           <field name="esi_component_ok" widget="boolean_checkbox" class="w-auto"/><label for="esi_component_ok"/>
         </span>

@@ -10,7 +10,7 @@ class ProductionPlan(models.Model):
 
     esi_template_id = fields.Many2one('product.template', string='Plantilla del calzado',
         compute='_compute_esi_template', store=True, readonly=False, precompute=True,
-        domain="[('is_storable', '=', True)]")
+        domain="[('is_storable', '=', True), ('esi_manufacture_ok', '=', True)]")
     esi_plan_bom_id = fields.Many2one('mrp.bom', string='Receta común', check_company=True,
         domain="[('product_tmpl_id', '=', esi_template_id), ('product_id', '=', False), ('type', '=', 'normal'), ('company_id', 'in', [False, company_id])]")
     esi_plan_grid = fields.Text(string='Cantidades por talla', copy=False)
