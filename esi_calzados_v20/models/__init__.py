@@ -18,3 +18,5 @@ from . import manufacture_option
 from . import recipe_grid
 
 from . import output_grid
+
+from . import material_budget

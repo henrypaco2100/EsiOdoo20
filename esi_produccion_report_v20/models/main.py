@@ -14,12 +14,14 @@ class Report(models.TransientModel):
     date_to = fields.Date(required=True, default=fields.Date.today)
     date_basis = fields.Selection([('date_start', 'Inicio de fabricación'), ('date_finished', 'Finalización (solo terminadas)')], default='date_start', required=True, string='Fecha utilizada')
     group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', '=', company_id)]")
+    production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', '=', company_id)]")
     kind = fields.Selection([('summary', 'Resumen de órdenes'), ('outputs', 'Productos terminados por talla'),
-        ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción')], required=True, default='summary')
+        ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
 
     @api.onchange('company_id')
     def _onchange_company_filters(self):
         self.group_id = False
+        self.production_id = False
         self.preview = False
 
     def _report_data(self):
@@ -51,14 +53,19 @@ class Report(models.TransientModel):
             domain.append(('state', '=', 'done'))
         if self.group_id:
             domain.append(('esi_group_id', '=', self.group_id.id))
+        if self.production_id:
+            self.production_id.check_access('read')
+            if self.production_id.company_id != self.company_id:
+                raise UserError(_('La orden pertenece a otra sucursal.'))
+            domain.append(('id', '=', self.production_id.id))
         orders = self.env['mrp.production'].search(domain, order='date_start,id', limit=10001)
         if len(orders) > 10000:
             raise UserError(_('El reporte supera 10.000 órdenes. Reduzca el período.'))
         title += ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
         if self.kind == 'summary':
-            return title, ['OF', 'Grupo', 'Producto / características', 'Cantidad total', 'Cantidad talla principal', 'Unidad', 'Estado', 'Encargado', 'Sucursal'], [
-                [o.name, o.esi_group_id.name or '', o.esi_batch_description if o.esi_batch_attribute_ids else o.product_id.display_name, o.esi_total_output_qty, o.product_qty, o.uom_id.name,
+            return title, ['OF', 'Grupo', 'Producto / características', 'Cantidad total (todas las tallas)', 'Unidad', 'Estado', 'Encargado', 'Sucursal'], [
+                [o.name, o.esi_group_id.name or '', o.esi_batch_description if o.esi_batch_attribute_ids else o.product_id.display_name, o.esi_display_total_qty, o.uom_id.name,
                  labels.get(o.state, o.state), o.esi_responsible_id.name or '', o.company_id.name] for o in orders]
         rows = []
         if self.kind == 'outputs':
@@ -68,6 +75,27 @@ class Report(models.TransientModel):
                         move.product_id.esi_variant_highlight or '', move.product_uom_qty,
                         move.quantity if move.state == 'done' else 0.0, move.uom_id.name, labels.get(order.state, order.state)])
             headers = ['OF', 'Grupo', 'Producto', 'Talla / atributos', 'Planificado', 'Entrado al inventario', 'Unidad', 'Estado OF']
+        elif self.kind == 'estimate':
+            if not self.env.user.has_group('mrp.group_mrp_manager'):
+                raise UserError(_('El análisis de costos requiere el rol de responsable de fabricación.'))
+            for order in orders:
+                for move in order.move_raw_ids.filtered(lambda m: m.state != 'cancel'):
+                    rows.append([order.name, move.product_id.display_name, move.product_uom_qty,
+                        move.uom_id.name, move.esi_estimated_unit_cost, move.esi_estimated_cost,
+                        order.company_id.currency_id.name])
+                rows.append([order.name, 'TOTAL MATERIALES', '', '', '', order.esi_material_estimate, order.company_id.currency_id.name])
+            title += ' · Costo actual × cantidad planificada; sin mano de obra ni gastos'
+            headers = ['OF', 'Componente', 'Cantidad', 'Unidad', 'Costo unitario estimado', 'Subtotal estimado', 'Moneda']
+        elif self.kind == 'purchase':
+            if not self.env.user.has_group('purchase.group_purchase_user'):
+                raise UserError(_('La consulta de compras pendientes requiere permisos de Compras.'))
+            for order in orders:
+                for row in order._esi_purchase_shortages():
+                    product = row['product']
+                    rows.append([order.name, product.display_name, product.uom_id.name, row['required'],
+                        row['reserved'], row['free'], row['pending'], row['shortage']])
+            title += ' · Por OF; stock libre compartido, no sumar entre órdenes'
+            headers = ['OF', 'Material', 'Unidad', 'Necesario', 'Reservado / recogido', 'Stock libre', 'Compra vinculada pendiente', 'Faltante por comprar']
         elif self.kind == 'cost':
             if not self.env.user.has_group('mrp.group_mrp_manager'):
                 raise UserError(_('El análisis de costos requiere el rol de responsable de fabricación.'))
@@ -106,3 +134,16 @@ class ProductionGroup(models.Model):
                 default_company_id=self.company_id.id, default_group_id=self.id, default_kind='outputs',
                 default_date_from=min(dates) if dates else fields.Date.context_today(self),
                 default_date_to=max(dates) if dates else fields.Date.context_today(self))}
+
+
+class Production(models.Model):
+    _inherit = 'mrp.production'
+
+    def action_esi_production_report(self):
+        self.ensure_one()
+        self.check_access('read')
+        day = fields.Datetime.context_timestamp(self, self.date_start).date() if self.date_start else fields.Date.context_today(self)
+        return {'type': 'ir.actions.act_window', 'name': _('Informe de fabricación'),
+            'res_model': 'esi.production.report', 'view_mode': 'form',
+            'context': dict(self.env.context, default_company_id=self.company_id.id,
+                default_production_id=self.id, default_date_from=day, default_date_to=day, default_kind='summary')}

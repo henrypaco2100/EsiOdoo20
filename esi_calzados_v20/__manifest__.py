@@ -19,7 +19,7 @@
           'views/variant_grid.xml',
           'views/bom_variants.xml',
           'views/components.xml',
-          'views/production_plan.xml'],
+          'views/production_plan.xml', 'views/material_budget.xml'],
  'depends': ['mrp',
              'sale_stock',
              'purchase_stock',
@@ -34,4 +34,4 @@
  'name': 'Calzados MRP v20',
  'summary': 'Grupos de fabricación, responsable, analítica y destajos sin '
             'alterar valoración de Odoo',
- 'version': '20.0.8.8.0'}
+ 'version': '20.0.9.0.0'}
