@@ -12,12 +12,18 @@
         </header>
         <sheet>
           <group>
-            <field name="company_id"/>
-            <field name="date_basis" invisible="kind == 'piecework'"/><field name="date_from"/>
-            <field name="date_to"/>
-            <field name="group_id"/><field name="production_id" invisible="kind == 'piecework'"/>
-            <field name="kind"/>
+            <group string="Qué desea consultar">
+              <field name="company_id"/>
+              <field name="production_id" options="{'no_create': True}"/>
+              <field name="kind" string="Contenido del informe"/>
+            </group>
+            <group string="Filtros de varias órdenes" invisible="production_id">
+              <field name="date_basis" invisible="kind == 'piecework'"/>
+              <field name="date_from"/><field name="date_to"/>
+              <field name="group_id"/><field name="state_filter"/>
+            </group>
           </group>
+          <div class="alert alert-info" invisible="production_id">Seleccione una orden para su ficha completa, o filtre por fechas para consultar varias órdenes.</div>
           <field name="preview" widget="html" nolabel="1"/>
         </sheet>
       </form>

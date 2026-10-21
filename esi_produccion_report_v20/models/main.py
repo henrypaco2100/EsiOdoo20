@@ -1,5 +1,6 @@
 from datetime import datetime, time, timedelta
 from collections import defaultdict
+from html import escape
 import pytz
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
@@ -15,20 +16,48 @@ class Report(models.TransientModel):
     date_basis = fields.Selection([('date_start', 'Inicio de fabricación'), ('date_finished', 'Finalización (solo terminadas)')], default='date_start', required=True, string='Fecha utilizada')
     group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', '=', company_id)]")
     production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', '=', company_id)]")
-    kind = fields.Selection([('summary', 'Resumen de órdenes'), ('outputs', 'Productos terminados por talla'),
+    kind = fields.Selection([('detail', 'Ficha completa de una orden'), ('summary', 'Resumen de órdenes'), ('outputs', 'Productos terminados por talla'),
         ('operations', 'Seguimiento de operaciones'), ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
+
+    state_filter = fields.Selection([('all', 'Todos'), ('open', 'Pendientes y en progreso'), ('done', 'Terminadas')], default='all', required=True, string='Estado de fabricación')
 
     def _esi_operation_summary(self, order):
         workorders = order.workorder_ids.sorted(lambda w: (w.sequence if 'sequence' in w._fields else 0, w.id))
         if not workorders:
             return ('Sin operaciones', '—', '0/0')
-        current = workorders.filtered(lambda w: w.state == 'progress')[:1]
+        usable = workorders.filtered(lambda w: w.state != 'cancel')
+        current = usable.filtered(lambda w: w.state == 'progress')
         if not current:
-            current = workorders.filtered(lambda w: w.state not in ('done', 'cancel'))[:1]
-        current_name = (current.operation_id.name or current.workcenter_id.name) if current else 'Finalizadas'
-        current_state = dict(workorders._fields['state']._description_selection(self.env)).get(current.state, current.state) if current else 'Hecho'
-        done = len(workorders.filtered(lambda w: w.state == 'done'))
-        return (current_name, current_state, '%s/%s' % (done, len(workorders)))
+            current = usable.filtered(lambda w: w.state == 'ready')
+        if not current:
+            current = usable.filtered(lambda w: w.state not in ('done', 'cancel'))[:1]
+        labels = dict(workorders._fields['state']._description_selection(self.env))
+        names = ' / '.join(w.name for w in current) if current else ('Finalizadas' if usable else 'Canceladas')
+        states = ' / '.join(dict.fromkeys(labels.get(w.state, w.state) for w in current)) if current else ('Hecho' if usable else 'Cancelado')
+        return names, states, '%s/%s' % (len(usable.filtered(lambda w: w.state == 'done')), len(usable))
+
+    @api.onchange('production_id', 'kind', 'date_from', 'date_to', 'date_basis', 'group_id', 'state_filter')
+    def _onchange_report_filters(self):
+        self.preview = False
+        if self.kind == 'detail' and not self.production_id:
+            return
+        if self.company_id in self.env.companies and self.date_from and self.date_to and self.date_from <= self.date_to:
+            self.preview = self._html(*self._report_data())
+
+    def _html(self, title, headers, rows):
+        if self.kind != 'detail':
+            return super()._html(title, headers, rows)
+        order = self.production_id
+        operation, state, progress = self._esi_operation_summary(order)
+        labels = dict(order._fields['state']._description_selection(self.env))
+        html = '<h2>%s</h2><p><b>%s</b> · %s</p>' % (escape(order.name), escape(order.company_id.name), escape(labels.get(order.state, order.state)))
+        html += '<div class="alert alert-info"><b>Operación actual:</b> %s · %s<br/><b>Avance:</b> %s operaciones terminadas<br/><b>Cantidad planificada:</b> %s %s</div>' % (escape(operation), escape(state), escape(progress), order.esi_display_total_qty, escape(order.uom_id.name))
+        sections = {}
+        for section, item, qty, unit, status, note in rows:
+            sections.setdefault(section, []).append([item, qty, unit, status, note])
+        for section, data in sections.items():
+            html += super()._html(section, ['Detalle', 'Cantidad', 'Unidad', 'Estado', 'Información'], data)
+        return html
 
     @api.onchange('company_id')
     def _onchange_company_filters(self):
@@ -41,6 +70,8 @@ class Report(models.TransientModel):
         self.check_access('read')
         if self.company_id not in self.env.companies:
             raise UserError(_('Active la sucursal seleccionada en el selector superior antes de consultar.'))
+        if self.kind == 'detail' and not self.production_id:
+            raise UserError(_('Seleccione una orden para ver su ficha completa.'))
         if not self.date_from or not self.date_to or self.date_from > self.date_to:
             raise UserError(_('Revise el rango de fechas.'))
         if self.group_id:
@@ -52,6 +83,10 @@ class Report(models.TransientModel):
             domain = [('company_id', '=', self.company_id.id), ('date', '>=', self.date_from), ('date', '<=', self.date_to)]
             if self.group_id:
                 domain.append(('group_id', '=', self.group_id.id))
+            if self.production_id:
+                if self.production_id.company_id != self.company_id:
+                    raise UserError(_('La orden pertenece a otra sucursal.'))
+                domain.append(('production_id', '=', self.production_id.id))
             records = self.env['esi.destajo'].search(domain, order='date,id', limit=10001)
             if len(records) > 10000:
                 raise UserError(_('El reporte supera 10.000 destajos. Reduzca el período.'))
@@ -70,10 +105,15 @@ class Report(models.TransientModel):
             if self.production_id.company_id != self.company_id:
                 raise UserError(_('La orden pertenece a otra sucursal.'))
             domain = [('company_id', '=', self.company_id.id), ('id', '=', self.production_id.id), ('state', '!=', 'cancel')]
+        if not self.production_id:
+            if self.state_filter == 'open':
+                domain.append(('state', 'not in', ['done', 'cancel']))
+            elif self.state_filter == 'done':
+                domain.append(('state', '=', 'done'))
         orders = self.env['mrp.production'].search(domain, order='date_start,id', limit=10001)
         if len(orders) > 10000:
             raise UserError(_('El reporte supera 10.000 órdenes. Reduzca el período.'))
-        title += ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
+        title = ('Fabricación · %s · %s' % (self.company_id.name, self.production_id.name)) if self.production_id else title + ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
         if self.kind == 'summary':
             headers = ['OF', 'Grupo', 'Producto / características', 'Cantidad total (tallas)',
@@ -88,7 +128,24 @@ class Report(models.TransientModel):
                     operation, operation_state, advance, o.esi_responsible_id.name or '', o.company_id.name])
             return title, headers, rows
         rows = []
-        if self.kind == 'operations':
+        if self.kind == 'detail':
+            order = self.production_id
+            operation, operation_state, advance = self._esi_operation_summary(order)
+            rows.append(['Resumen', order.product_id.product_tmpl_id.display_name, order.esi_display_total_qty, order.uom_id.name, labels.get(order.state, order.state), 'Operación actual: %s (%s), avance %s' % (operation, operation_state, advance)])
+            rows.append(['Resumen', 'Responsable', '', '', '', order.esi_responsible_id.name or order.user_id.name or 'Sin asignar'])
+            rows.append(['Resumen', 'Origen / grupo', '', '', '', '%s / %s' % (order.origin or '—', order.esi_group_id.name or '—')])
+            wo_labels = dict(self.env['mrp.workorder']._fields['state']._description_selection(self.env))
+            for wo in order.workorder_ids.sorted(lambda w: (w.operation_id.sequence, w.id)):
+                rows.append(['Operaciones', wo.name, wo.qty_production, wo.uom_id.name, wo_labels.get(wo.state, wo.state), '%s · previsto %.2f min · real %.2f min' % (wo.workcenter_id.name, wo.duration_expected, wo.duration)])
+            for move in order.move_finished_ids.filtered(lambda m: m.state != 'cancel'):
+                rows.append(['Tallas / productos terminados', move.product_id.display_name, move.product_uom_qty, move.uom_id.name, 'En inventario' if move.state == 'done' else 'Pendiente', 'Registrado: %.2f' % (move.quantity if move.picked or move.state == 'done' else 0)])
+            for move in order.move_raw_ids.filtered(lambda m: m.state != 'cancel'):
+                info = 'Consumido: %.2f' % move.quantity if move.state == 'done' else 'Reservado / recogido: %.2f' % move.quantity
+                if self.env.user.has_group('mrp.group_mrp_manager'):
+                    info += ' · estimado %.2f %s' % (move.esi_estimated_cost, order.company_id.currency_id.name)
+                rows.append(['Materiales', move.product_id.display_name, move.product_uom_qty, move.uom_id.name, move.operation_id.name or 'Sin operación', info])
+            headers = ['Sección', 'Detalle', 'Cantidad', 'Unidad', 'Estado / operación', 'Información']
+        elif self.kind == 'operations':
             state_labels = dict(self.env['mrp.workorder']._fields['state']._description_selection(self.env))
             for order in orders:
                 for wo in order.workorder_ids:
@@ -172,8 +229,6 @@ class Production(models.Model):
     def action_esi_production_report(self):
         self.ensure_one()
         self.check_access('read')
-        day = fields.Datetime.context_timestamp(self, self.date_start).date() if self.date_start else fields.Date.context_today(self)
-        return {'type': 'ir.actions.act_window', 'name': _('Informe de fabricación'),
-            'res_model': 'esi.production.report', 'view_mode': 'form',
-            'context': dict(self.env.context, default_company_id=self.company_id.id,
-                default_production_id=self.id, default_date_from=day, default_date_to=day, default_kind='summary')}
+        report = self.env['esi.production.report'].create({'company_id': self.company_id.id,
+            'production_id': self.id, 'kind': 'detail'})
+        return report.action_preview()

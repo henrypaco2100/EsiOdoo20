@@ -62,7 +62,7 @@ class Production(models.Model):
         # Draft MOs have not generated stock moves. Estimate the requirements
         # from the size-specific shared recipe, without confirming the order.
         draft_demand = defaultdict(float)
-        if self.state == 'draft' and self.esi_variant_line_mode:
+        if self.state == 'draft' and self.esi_variant_line_mode and not moves:
             bom = self.esi_plan_bom_id
             if not bom or not self.esi_output_line_ids:
                 raise UserError(_('Seleccione una receta y las cantidades por talla, y guarde la orden antes de comprar.'))
@@ -123,12 +123,6 @@ class Production(models.Model):
         return {'type': 'ir.actions.act_window', 'res_model': wizard._name, 'res_id': wizard.id,
             'name': _('Comprar materiales faltantes'), 'view_mode': 'form', 'target': 'new'}
 
-    def action_esi_material_purchases(self):
-        self.ensure_one()
-        self.check_access('read')
-        orders = self.env['purchase.order.line'].search(['|', ('esi_material_production_id', '=', self.id), ('move_dest_ids', 'in', self.move_raw_ids.ids), ('company_id', '=', self.company_id.id)]).order_id
-        return {'type': 'ir.actions.act_window', 'name': _('Compras de materiales'), 'res_model': 'purchase.order',
-            'view_mode': 'list,form', 'domain': [('id', 'in', orders.ids)]}
 
 
 class MaterialPurchase(models.TransientModel):

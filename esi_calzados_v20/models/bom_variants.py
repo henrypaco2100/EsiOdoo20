@@ -7,6 +7,9 @@ from .grouping_math import production_key
 class Bom(models.Model):
     _inherit = 'mrp.bom'
 
+    esi_batch_snapshot = fields.Boolean(copy=False, index=True, string='Receta técnica de una OF')
+    esi_total_basis = fields.Boolean(copy=False, string='Base en total de tallas')
+
     esi_multi_variant = fields.Boolean(string='Receta compartida entre tallas',
         help='Seleccione las variantes terminadas que pueden utilizar esta receta. Solo pueden variar los atributos marcados para compartir materiales.')
     esi_allowed_variant_ids = fields.Many2many('product.product',

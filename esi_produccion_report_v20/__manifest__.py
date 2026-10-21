@@ -1,6 +1,6 @@
 {'application': False,
  'author': 'ESI',
- 'data': ['security/ir.access.csv', 'views/report.xml'],
+ 'data': ['security/ir.access.csv', 'views/report.xml', 'views/native_report.xml'],
  'depends': ['esi_reportes_base_v20',
              'esi_calzados_v20',
              'esi_tiendas_mrp_v20',
@@ -11,4 +11,4 @@
  'license': 'LGPL-3',
  'maintainer': 'ESI',
  'name': 'Informes de producción',
- 'version': '20.0.10.0.0'}
+ 'version': '20.0.10.1.0'}

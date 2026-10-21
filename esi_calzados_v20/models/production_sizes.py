@@ -7,6 +7,8 @@ from odoo.exceptions import UserError
 class Production(models.Model):
     _inherit = 'mrp.production'
 
+    esi_native_total_mode = fields.Boolean(related='bom_id.esi_total_basis')
+
     esi_size_batch = fields.Boolean(string='OF agrupada por tallas', readonly=True, copy=True)
     esi_source_bom_id = fields.Many2one('mrp.bom', string='Receta original', readonly=True, copy=True, check_company=True)
     esi_source_base_qty = fields.Float(default=1.0, readonly=True, copy=True)
@@ -47,31 +49,39 @@ class Production(models.Model):
         reference SKU must nevertheless contain only its own allocation.
         """
         self.ensure_one()
-        if not self.esi_size_batch or not self.bom_id:
+        if not self.esi_size_batch or not self.esi_native_total_mode or not self.bom_id:
             return self.product_qty
         bom = self.bom_id
         if bom.product_id != self.product_id or bom.product_qty <= 0:
             raise UserError(_('La receta temporal de tallas no coincide con la variante de referencia.'))
         other = sum(line.uom_id._compute_quantity(line.product_qty, self.uom_id, round=False)
                     for line in bom.byproduct_ids)
-        primary = self.uom_id._compute_quantity(bom.product_qty, self.uom_id, round=False) - other
+        primary = bom.uom_id._compute_quantity(bom.product_qty, self.uom_id, round=False) - other
         if primary <= 0:
             raise UserError(_('La distribución de tallas no permite obtener una cantidad principal positiva.'))
-        return primary * (self.product_qty / self.uom_id._compute_quantity(bom.product_qty, self.uom_id, round=False))
+        return primary * (self.product_qty / bom.uom_id._compute_quantity(bom.product_qty, self.uom_id, round=False))
 
     def _get_moves_finished_values(self):
-        """Odoo 20 main finished move is normally product_qty.
-
-        With a multivariant batch that value represents ALL sizes, so narrow
-        just the main stock move; byproduct moves preserve their native BoM
-        ratios and cost-share logic. No manual stock move is duplicated.
-        """
-        values = super()._get_moves_finished_values()
-        if len(self) == 1 and self.esi_size_batch:
-            for value in values:
-                if value.get('product_id') == self.product_id.id and not value.get('byproduct_id'):
-                    value['product_uom_qty'] = self._esi_primary_output_qty()
+        values = []
+        for mo in self:
+            current = super(Production, mo)._get_moves_finished_values()
+            if mo.esi_size_batch and mo.esi_native_total_mode:
+                for value in current:
+                    if value.get('product_id') == mo.product_id.id and not value.get('byproduct_id'):
+                        value['product_uom_qty'] = mo._esi_primary_output_qty()
+            values.extend(current)
         return values
+
+    @api.depends('workorder_ids.state', 'move_finished_ids.quantity',
+                 'move_finished_ids.picked', 'move_finished_ids.state',
+                 'move_finished_ids.uom_id', 'bom_id.esi_total_basis')
+    def _get_produced_qty(self):
+        result = super()._get_produced_qty()
+        for mo in self.filtered(lambda r: r.esi_size_batch and r.esi_native_total_mode):
+            moves = mo.move_finished_ids.filtered(lambda m: m.state != 'cancel' and m.picked
+                and m.product_id.product_tmpl_id == mo.product_id.product_tmpl_id)
+            mo.qty_produced = sum(m.uom_id._compute_quantity(m.quantity, mo.uom_id, round=False) for m in moves)
+        return result
 
     def _get_backorder_mo_vals(self):
         vals = super()._get_backorder_mo_vals()
@@ -113,6 +123,6 @@ class Workorder(models.Model):
         # planned workload to ALL sizes only for scheduling, not stock valuation.
         total_qty = mo.uom_id._compute_quantity(mo.esi_total_output_qty, self.uom_id, round=False)
         primary_qty = mo.uom_id._compute_quantity(mo.product_qty, self.uom_id, round=False)
-        workload = self.qty_to_produce
+        workload = self.qty_to_produce if mo.esi_native_total_mode else total_qty * self.qty_to_produce / primary_qty
         cycles = math.ceil(workload / capacity) if capacity else 0
         return setup + cleanup + cycles * self.operation_id.time_cycle * ratio * 100.0 / center.time_efficiency

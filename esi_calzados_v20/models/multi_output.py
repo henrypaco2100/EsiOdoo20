@@ -104,7 +104,7 @@ class ProductionGroup(models.Model):
             'uom_id': p.uom_id.id, 'cost_share': shares[i]}) for i, p in enumerate(ordered) if i]
         # Native copy remaps operation IDs and dependency links onto the copied BoM.
         # Keep the original BoM base capacity for work order duration calculations.
-        batch_bom = bom.copy({'esi_multi_variant': False, 'esi_allowed_variant_ids': [Command.clear()], 'active': False, 'company_id': self.company_id.id,
+        batch_bom = bom.copy({'esi_batch_snapshot': True, 'esi_total_basis': True, 'esi_multi_variant': False, 'esi_allowed_variant_ids': [Command.clear()], 'active': False, 'company_id': self.company_id.id,
             'code': self.name, 'product_id': primary.id,
             'picking_type_id': self.picking_type_id.id, 'enable_batch_size': False,
             'product_qty': sum(amounts), 'uom_id': primary.uom_id.id,

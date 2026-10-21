@@ -1,0 +1,6 @@
+<odoo>
+  <record id="mrp.mrp_routing_action" model="ir.actions.act_window">
+    <field name="domain">[('bom_id.esi_batch_snapshot', '=', False), '|', ('bom_id', '=', False), ('bom_id.active', '=', True)]</field>
+    <field name="context">{'search_default_bom': 1}</field>
+  </record>
+</odoo>

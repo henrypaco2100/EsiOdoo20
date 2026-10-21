@@ -1,0 +1,22 @@
+<odoo>
+  <template id="native_order_operation_status" inherit_id="mrp.report_mrporder">
+    <xpath expr="//span[@t-field='o.product_qty']" position="replace">
+      <span t-if="o.esi_size_batch" t-field="o.esi_total_output_qty"/>
+      <span t-else="" t-field="o.product_qty"/>
+    </xpath>
+    <xpath expr="//tr[@t-foreach='o.workorder_ids']/td[last()]" position="after">
+      <td><span t-field="line2.state"/></td>
+    </xpath>
+    <xpath expr="//div[@t-if='o.workorder_ids']//thead/tr" position="inside"><th>Estado actual</th></xpath>
+    <xpath expr="//div[@class='page o_mrp_mo_report']" position="inside">
+      <div t-if="o.esi_size_batch" class="mt-3">
+        <h3>Distribución por talla</h3>
+        <table class="table table-sm"><thead><tr><th>Producto / talla</th><th>Planificado</th><th>Registrado</th><th>Unidad</th></tr></thead>
+          <tbody><t t-foreach="o.move_finished_ids.filtered(lambda m: m.state != 'cancel')" t-as="move">
+            <tr><td><span t-field="move.product_id"/></td><td><span t-field="move.product_uom_qty"/></td><td><span t-esc="move.quantity if move.picked or move.state == 'done' else 0"/></td><td><span t-field="move.uom_id"/></td></tr>
+          </t></tbody>
+        </table>
+      </div>
+    </xpath>
+  </template>
+</odoo>

@@ -16,7 +16,7 @@
       </xpath>
       <xpath expr="//label[@name='bom_label']" position="attributes"><attribute name="invisible" add="esi_variant_line_mode" separator=" or "/></xpath>
       <xpath expr="//div[@name='bom_div']" position="attributes"><attribute name="invisible" add="esi_variant_line_mode" separator=" or "/></xpath>
-      <xpath expr="//div[@name='qty']" position="attributes"><attribute name="invisible" add="(esi_variant_line_mode and state == 'draft')" separator=" or "/></xpath>
+
       <xpath expr="//div[@name='qty']//field[@name='product_qty']" position="attributes"><attribute name="readonly" add="esi_variant_line_mode" separator=" or "/></xpath>
       <xpath expr="//notebook" position="before">
         <group string="Variantes a fabricar en esta orden" invisible="not esi_variant_line_mode">
