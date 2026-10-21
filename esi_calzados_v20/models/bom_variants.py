@@ -87,6 +87,17 @@ class Bom(models.Model):
 class Production(models.Model):
     _inherit = 'mrp.production'
 
+    @api.depends('product_id', 'never_product_template_attribute_value_ids')
+    def _compute_bom_id(self):
+        # Native MRP keeps a generic recipe when only the variant changes.
+        # Shared recipes are generic too, but have a restricted variant list.
+        # Let native lookup select a valid recipe using our existing domain.
+        for mo in self:
+            if (mo.state == 'draft' and mo.bom_id.esi_multi_variant
+                    and mo.product_id not in mo.bom_id.esi_allowed_variant_ids):
+                mo.bom_id = False
+        return super()._compute_bom_id()
+
     @api.constrains('bom_id', 'product_id')
     def _check_allowed_bom_variant(self):
         for mo in self.filtered('bom_id'):

@@ -38,9 +38,12 @@ class ProductionPlan(models.Model):
             return
         template = self.esi_template_id
         if self.product_id.product_tmpl_id != template:
-            self.product_id = template.product_variant_ids[:1]
+            # Clear the old recipe BEFORE changing the product: assigning the
+            # product triggers native workorder recomputation synchronously.
+            self.bom_id = False
             self.esi_plan_grid = False
             self.esi_plan_bom_id = False
+            self.product_id = template.product_variant_ids[:1]
         self._esi_load_plan_grid()
 
     @api.onchange('product_id')

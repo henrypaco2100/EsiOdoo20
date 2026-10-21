@@ -86,11 +86,18 @@ class TestEmptyBom(unittest.TestCase):
         self.assertTrue(mo.esi_plan_dirty)
         self.assertEqual([x.product_id for x in mo.esi_output_line_ids], [10])
 
-    def test_regular_recipe_resets_new_order_mode(self):
+    def test_recipe_change_keeps_size_mode(self):
         mo = self.order(False)
         mo.esi_variant_line_mode = True
         onchange(mo)
-        self.assertFalse(mo.esi_variant_line_mode)
+        self.assertTrue(mo.esi_variant_line_mode)
+
+    def test_no_recipe_keeps_sizes_visible(self):
+        mo = self.order(False)
+        mo.esi_plan_bom_id = False
+        onchange(mo)
+        self.assertTrue(mo.esi_variant_line_mode)
+        self.assertEqual(len(mo.esi_output_line_ids), 2)
 
     def test_saved_distribution_keeps_mode(self):
         mo = self.order(False, saved_mode=True)

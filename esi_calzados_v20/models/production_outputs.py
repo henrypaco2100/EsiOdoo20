@@ -50,16 +50,18 @@ class Production(models.Model):
     def _onchange_output_recipe(self):
         if self.state != 'draft' or self.esi_group_id:
             return
-        # The shared recipe selects the mode; no manual checkbox is needed.
-        # An existing distribution must retain its mode until a replacement
-        # shared recipe is selected, as required by write().
-        self.esi_variant_line_mode = bool(
-            self.esi_plan_bom_id.esi_multi_variant or self._origin.esi_variant_line_mode)
-        if not self.esi_variant_line_mode or not self.esi_plan_bom_id:
+        # Direct footwear orders always use size lines, including while the
+        # user is still selecting the shared recipe. Keep the technical flag
+        # for native backorders and group-generated orders handled separately.
+        self.esi_variant_line_mode = True
+        if not self.esi_plan_bom_id:
             return
         allowed = self.esi_plan_bom_id.esi_allowed_variant_ids
         self.esi_output_line_ids = self.esi_output_line_ids.filtered(lambda line: line.product_id in allowed)
         if self.product_id not in allowed:
+            # The current native recipe may belong to another color/material.
+            # Release it before selecting a permitted reference variant.
+            self.bom_id = False
             self.product_id = allowed[:1]
         self.esi_plan_dirty = True
 
@@ -107,7 +109,7 @@ class Production(models.Model):
             if values.get('esi_variant_line_mode'):
                 values = self._esi_values_from_output_lines(values)
             elif values.get('esi_output_line_ids'):
-                raise UserError(_('Active Fabricar varias tallas para utilizar la lista de variantes.'))
+                raise UserError(_('Seleccione una receta compartida para utilizar la lista de variantes.'))
             prepared.append(values)
         return super().create(prepared)
 
