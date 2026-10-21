@@ -107,11 +107,11 @@ class ProductionGroup(models.Model):
         batch_bom = bom.copy({'esi_multi_variant': False, 'esi_allowed_variant_ids': [Command.clear()], 'active': False, 'company_id': self.company_id.id,
             'code': self.name, 'product_id': primary.id,
             'picking_type_id': self.picking_type_id.id, 'enable_batch_size': False,
-            'product_qty': quantities[primary], 'uom_id': primary.uom_id.id,
+            'product_qty': sum(amounts), 'uom_id': primary.uom_id.id,
             'bom_line_ids': [Command.create(v) for v in components.values()], 'byproduct_ids': outputs})
         for original, copied in zip(bom.operation_ids, batch_bom.operation_ids.sorted()):
             copied.write({'time_mode': 'manual', 'time_cycle_manual': original.time_cycle})
-        return primary, quantities[primary], batch_bom, bom
+        return primary, sum(amounts), batch_bom, bom
 
     def action_create_productions(self):
         for group in self:

@@ -34,4 +34,4 @@
  'name': 'Calzados MRP v20',
  'summary': 'Grupos de fabricación, responsable, analítica y destajos sin '
             'alterar valoración de Odoo',
- 'version': '20.0.9.0.0'}
+ 'version': '20.0.10.0.0'}

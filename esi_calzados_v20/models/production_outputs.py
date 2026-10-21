@@ -72,7 +72,7 @@ class Production(models.Model):
             if valid:
                 primary = valid.sorted(lambda l: (-l.quantity, l.product_id.id))[:1]
                 self.product_id = primary.product_id
-                self.product_qty = primary.quantity
+                self.product_qty = sum(line.product_id.uom_id._compute_quantity(line.quantity, primary.product_id.uom_id, round=False) for line in valid)
                 self.uom_id = primary.product_id.uom_id
             self.esi_plan_dirty = True
 

@@ -182,7 +182,7 @@ class ProductionPlan(models.Model):
         for name in ('move_raw_ids', 'move_finished_ids', 'move_byproduct_ids', 'workorder_ids'):
             result.pop(name, None)
         result.update(product_id=product.id, esi_template_id=template.id,
-            product_qty=selected[product], uom_id=product.uom_id.id, bom_id=bom.id,
+            product_qty=sum(p.uom_id._compute_quantity(q, product.uom_id, round=False) for p, q in selected.items()), uom_id=product.uom_id.id, bom_id=bom.id,
             company_id=company.id, esi_size_batch=len(selected) > 1,
             esi_source_bom_id=source.id,
             esi_source_base_qty=source.uom_id._compute_quantity(source.product_qty, product.uom_id, round=False),

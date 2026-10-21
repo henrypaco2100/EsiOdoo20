@@ -16,7 +16,19 @@ class Report(models.TransientModel):
     group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', '=', company_id)]")
     production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', '=', company_id)]")
     kind = fields.Selection([('summary', 'Resumen de órdenes'), ('outputs', 'Productos terminados por talla'),
-        ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
+        ('operations', 'Seguimiento de operaciones'), ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
+
+    def _esi_operation_summary(self, order):
+        workorders = order.workorder_ids.sorted(lambda w: (w.sequence if 'sequence' in w._fields else 0, w.id))
+        if not workorders:
+            return ('Sin operaciones', '—', '0/0')
+        current = workorders.filtered(lambda w: w.state == 'progress')[:1]
+        if not current:
+            current = workorders.filtered(lambda w: w.state not in ('done', 'cancel'))[:1]
+        current_name = (current.operation_id.name or current.workcenter_id.name) if current else 'Finalizadas'
+        current_state = dict(workorders._fields['state']._description_selection(self.env)).get(current.state, current.state) if current else 'Hecho'
+        done = len(workorders.filtered(lambda w: w.state == 'done'))
+        return (current_name, current_state, '%s/%s' % (done, len(workorders)))
 
     @api.onchange('company_id')
     def _onchange_company_filters(self):
@@ -57,18 +69,36 @@ class Report(models.TransientModel):
             self.production_id.check_access('read')
             if self.production_id.company_id != self.company_id:
                 raise UserError(_('La orden pertenece a otra sucursal.'))
-            domain.append(('id', '=', self.production_id.id))
+            domain = [('company_id', '=', self.company_id.id), ('id', '=', self.production_id.id), ('state', '!=', 'cancel')]
         orders = self.env['mrp.production'].search(domain, order='date_start,id', limit=10001)
         if len(orders) > 10000:
             raise UserError(_('El reporte supera 10.000 órdenes. Reduzca el período.'))
         title += ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
         if self.kind == 'summary':
-            return title, ['OF', 'Grupo', 'Producto / características', 'Cantidad total (todas las tallas)', 'Unidad', 'Estado', 'Encargado', 'Sucursal'], [
-                [o.name, o.esi_group_id.name or '', o.esi_batch_description if o.esi_batch_attribute_ids else o.product_id.display_name, o.esi_display_total_qty, o.uom_id.name,
-                 labels.get(o.state, o.state), o.esi_responsible_id.name or '', o.company_id.name] for o in orders]
+            headers = ['OF', 'Grupo', 'Producto / características', 'Cantidad total (tallas)',
+                'Unidad', 'Estado OF', 'Operación actual', 'Estado operación', 'Operaciones completadas',
+                'Responsable', 'Sucursal']
+            rows = []
+            for o in orders:
+                operation, operation_state, advance = self._esi_operation_summary(o)
+                rows.append([o.name, o.esi_group_id.name or '',
+                    o.esi_batch_description if o.esi_batch_attribute_ids else o.product_id.display_name,
+                    o.esi_display_total_qty, o.uom_id.name, labels.get(o.state, o.state),
+                    operation, operation_state, advance, o.esi_responsible_id.name or '', o.company_id.name])
+            return title, headers, rows
         rows = []
-        if self.kind == 'outputs':
+        if self.kind == 'operations':
+            state_labels = dict(self.env['mrp.workorder']._fields['state']._description_selection(self.env))
+            for order in orders:
+                for wo in order.workorder_ids:
+                    rows.append([order.name, order.product_id.display_name,
+                        wo.operation_id.name or wo.workcenter_id.name,
+                        wo.workcenter_id.name, wo.qty_production,
+                        state_labels.get(wo.state, wo.state), wo.duration_expected, wo.duration])
+            headers = ['OF', 'Producto', 'Operación', 'Centro de trabajo', 'Cantidad',
+                'Estado', 'Minutos previstos', 'Minutos reales']
+        elif self.kind == 'outputs':
             for order in orders:
                 for move in order.move_finished_ids.filtered(lambda m: m.state != 'cancel'):
                     rows.append([order.name, order.esi_group_id.name or '', move.product_id.display_name,

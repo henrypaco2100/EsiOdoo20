@@ -59,9 +59,26 @@ class Production(models.Model):
         if self.state in ('done', 'cancel'):
             return []
         moves = self.move_raw_ids.filtered(lambda m: m.state not in ('done', 'cancel') and m.product_id.is_storable)
+        # Draft MOs have not generated stock moves. Estimate the requirements
+        # from the size-specific shared recipe, without confirming the order.
+        draft_demand = defaultdict(float)
+        if self.state == 'draft' and self.esi_variant_line_mode:
+            bom = self.esi_plan_bom_id
+            if not bom or not self.esi_output_line_ids:
+                raise UserError(_('Seleccione una receta y las cantidades por talla, y guarde la orden antes de comprar.'))
+            for output in self.esi_output_line_ids.filtered(lambda l: l.quantity > 0):
+                product = output.product_id
+                factor = product.uom_id._compute_quantity(output.quantity, bom.uom_id, round=False) / bom.product_qty
+                for component in bom.bom_line_ids:
+                    if component._skip_bom_line(product) or not component.product_id.is_storable:
+                        continue
+                    draft_demand[component.product_id.id] += component.uom_id._compute_quantity(component.product_qty * factor, component.product_id.uom_id, round=False)
+        elif self.state == 'draft' and not moves:
+            raise UserError(_('Configure los componentes y guarde la orden antes de solicitar la compra.'))
         if any(m.location_id != self.location_src_id for m in moves):
             raise UserError(_('Los componentes tienen ubicaciones de origen diferentes. Revise el abastecimiento por ubicación antes de solicitar la compra.'))
         demand, reserved, pending = defaultdict(float), defaultdict(float), defaultdict(float)
+        demand.update(draft_demand)
         for move in moves:
             product = move.product_id
             demand[product.id] += move.uom_id._compute_quantity(move.product_uom_qty, product.uom_id, round=False)
@@ -72,7 +89,10 @@ class Production(models.Model):
         for line in purchases:
             pending[line.product_id.id] += line.uom_id._compute_quantity(max(0, line.product_qty - line.qty_received), line.product_id.uom_id, round=False)
         rows = []
-        for product in moves.product_id:
+        products = moves.product_id
+        if draft_demand:
+            products |= self.env['product.product'].browse(list(draft_demand))
+        for product in products:
             free = max(0, product.with_company(self.company_id).with_context(location=self.location_src_id.id).free_qty)
             shortage = max(0, demand[product.id] - reserved[product.id] - free - pending[product.id])
             rows.append({'product': product, 'required': demand[product.id], 'reserved': reserved[product.id],
@@ -84,8 +104,8 @@ class Production(models.Model):
         self.check_access('write')
         if not self.env.user.has_group('purchase.group_purchase_user') or not self.env.user.has_group('mrp.group_mrp_user'):
             raise UserError(_('Se requieren permisos de Compras y Fabricación.'))
-        if self.state not in ('confirmed', 'progress'):
-            raise UserError(_('Confirme y guarde la orden antes de solicitar materiales.'))
+        if self.state not in ('draft', 'confirmed', 'progress'):
+            raise UserError(_('La orden está cerrada y no admite solicitudes.'))
         rows = self._esi_purchase_shortages()
         lines = []
         for row in rows:
@@ -131,8 +151,8 @@ class MaterialPurchase(models.TransientModel):
         # requests under PostgreSQL repeatable-read, before buying twice.
         mo.write({'esi_purchase_revision': mo.esi_purchase_revision + 1})
         mo.flush_recordset(['esi_purchase_revision'])
-        if mo.state not in ('confirmed', 'progress'):
-            raise UserError(_('La orden debe estar confirmada o en progreso.'))
+        if mo.state not in ('draft', 'confirmed', 'progress'):
+            raise UserError(_('La orden está cerrada y no admite solicitudes.'))
         warehouse = mo.warehouse_id
         if not warehouse or warehouse.company_id != mo.company_id or mo.location_src_id != warehouse.lot_stock_id:
             raise UserError(_('Este asistente requiere el stock principal del almacén como origen. Para ubicaciones especiales use las rutas de abastecimiento.'))

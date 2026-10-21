@@ -11,4 +11,4 @@
  'license': 'LGPL-3',
  'maintainer': 'ESI',
  'name': 'Informes de producción',
- 'version': '20.0.9.0.0'}
+ 'version': '20.0.10.0.0'}

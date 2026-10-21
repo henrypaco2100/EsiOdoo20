@@ -4,10 +4,9 @@
     <field name="inherit_id" ref="mrp.mrp_production_form_view"/><field name="priority">40</field>
     <field name="arch" type="xml">
       <xpath expr="//header" position="inside">
-        <button name="action_esi_material_purchase" type="object" string="Comprar faltantes" invisible="state not in ('confirmed', 'progress')" groups="purchase.group_purchase_user"/>
-        <button name="action_esi_material_purchases" type="object" string="Compras de materiales" groups="purchase.group_purchase_user"/>
+        <button name="action_esi_material_purchase" type="object" string="Comprar faltantes" invisible="state in ('done', 'cancel')" groups="purchase.group_purchase_user"/>
       </xpath>
-      <xpath expr="//div[@name='qty']" position="attributes"><attribute name="invisible" add="esi_size_batch or esi_variant_line_mode" separator=" or "/></xpath>
+      <!-- Campo qty nativo conservado para todas las OF. -->
       <xpath expr="//field[@name='move_raw_ids']/list" position="inside">
         <field name="esi_cost_currency_id" column_invisible="True"/>
         <field name="esi_estimated_unit_cost" optional="show" groups="mrp.group_mrp_manager"/>

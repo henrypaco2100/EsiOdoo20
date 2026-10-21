@@ -11,12 +11,7 @@
                 <field name="esi_group_id" readonly="1"/>
                 <field name="esi_analytic_account_id"/>
             </field>
-            <xpath expr="//label[@for='product_qty']" position="before">
-                <field name="esi_display_total_qty" string="Cantidad total a fabricar" invisible="not (esi_size_batch or esi_variant_line_mode)" class="fw-bold"/>
-            </xpath>
-            <xpath expr="//label[@for='product_qty']" position="attributes">
-                <attribute name="invisible">esi_size_batch or esi_variant_line_mode</attribute>
-            </xpath>
+            <!-- Mantener visible el campo nativo: ahora es el total del lote. -->
             <xpath expr="//notebook" position="before">
                 <field name="esi_size_batch" invisible="1"/>
                 <field name="esi_batch_attribute_ids" invisible="1"/>
@@ -37,8 +32,7 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
         <field name="arch" type="xml">
-            <field name="product_qty" position="attributes"><attribute name="column_invisible">True</attribute></field>
-            <field name="product_qty" position="after"><field name="esi_display_total_qty" string="Cantidad total a fabricar"/></field>
+            <field name="product_qty" position="attributes"><attribute name="string">Cantidad total a fabricar</attribute></field>
         </field>
     </record>
 </odoo>

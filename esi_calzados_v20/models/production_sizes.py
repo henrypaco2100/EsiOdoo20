@@ -40,6 +40,39 @@ class Production(models.Model):
             mo.esi_total_output_qty = total if moves else mo.product_qty
             mo.esi_size_grid = json.dumps({'header': headers, 'matrix': [planned, actual]})
 
+    def _esi_primary_output_qty(self):
+        """Quantity of the reference SKU, NOT the total number of shoes.
+
+        One native MO uses product_qty for all sizes. The stock move of the
+        reference SKU must nevertheless contain only its own allocation.
+        """
+        self.ensure_one()
+        if not self.esi_size_batch or not self.bom_id:
+            return self.product_qty
+        bom = self.bom_id
+        if bom.product_id != self.product_id or bom.product_qty <= 0:
+            raise UserError(_('La receta temporal de tallas no coincide con la variante de referencia.'))
+        other = sum(line.uom_id._compute_quantity(line.product_qty, self.uom_id, round=False)
+                    for line in bom.byproduct_ids)
+        primary = self.uom_id._compute_quantity(bom.product_qty, self.uom_id, round=False) - other
+        if primary <= 0:
+            raise UserError(_('La distribución de tallas no permite obtener una cantidad principal positiva.'))
+        return primary * (self.product_qty / self.uom_id._compute_quantity(bom.product_qty, self.uom_id, round=False))
+
+    def _get_moves_finished_values(self):
+        """Odoo 20 main finished move is normally product_qty.
+
+        With a multivariant batch that value represents ALL sizes, so narrow
+        just the main stock move; byproduct moves preserve their native BoM
+        ratios and cost-share logic. No manual stock move is duplicated.
+        """
+        values = super()._get_moves_finished_values()
+        if len(self) == 1 and self.esi_size_batch:
+            for value in values:
+                if value.get('product_id') == self.product_id.id and not value.get('byproduct_id'):
+                    value['product_uom_qty'] = self._esi_primary_output_qty()
+        return values
+
     def _get_backorder_mo_vals(self):
         vals = super()._get_backorder_mo_vals()
         # Scalar metadata is copied; totals are always recomputed from this OF's moves.
@@ -80,6 +113,6 @@ class Workorder(models.Model):
         # planned workload to ALL sizes only for scheduling, not stock valuation.
         total_qty = mo.uom_id._compute_quantity(mo.esi_total_output_qty, self.uom_id, round=False)
         primary_qty = mo.uom_id._compute_quantity(mo.product_qty, self.uom_id, round=False)
-        workload = total_qty * self.qty_to_produce / primary_qty
+        workload = self.qty_to_produce
         cycles = math.ceil(workload / capacity) if capacity else 0
         return setup + cleanup + cycles * self.operation_id.time_cycle * ratio * 100.0 / center.time_efficiency
