@@ -161,18 +161,20 @@ class MaterialPurchase(models.TransientModel):
             if not row or line.product_id.uom_id.is_zero(row['shortage']):
                 continue
             supplier = line.supplier_id
-            supplier.check_access('read')
-            if not supplier or (supplier.company_id and supplier.company_id != mo.company_id):
-                raise UserError(_('Seleccione un proveedor válido para cada material.'))
+            if supplier:
+                supplier.check_access('read')
+                if supplier.company_id and supplier.company_id != mo.company_id:
+                    raise UserError(_('El proveedor de %s pertenece a otra sucursal.', line.product_id.display_name))
             if not line.product_id.purchase_ok:
                 raise UserError(_('Active Compras en el producto %s.', line.product_id.display_name))
-            grouped[supplier.id].append(row)
+            grouped[supplier.id or False].append(row)
         if not grouped:
             raise UserError(_('No hay materiales seleccionados pendientes de compra.'))
         orders = self.env['purchase.order']
         for partner_id, rows in grouped.items():
             order = self.env['purchase.order'].with_company(mo.company_id).create({
                 'partner_id': partner_id, 'company_id': mo.company_id.id,
+                'esi_material_request': True,
                 'origin': mo.name, 'picking_type_id': warehouse.in_type_id.id})
             for row in rows:
                 product = row['product']

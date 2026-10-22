@@ -22,3 +22,5 @@ from . import output_grid
 from . import material_budget
 
 from . import workcenter_route
+
+from . import purchase_material_request

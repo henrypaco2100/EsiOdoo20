@@ -25,8 +25,8 @@
     <field name="name">esi.material.purchase.form</field><field name="model">esi.material.purchase</field>
     <field name="arch" type="xml">
       <form string="Comprar materiales faltantes">
-        <group><field name="production_id"/><field name="company_id"/></group>
-        <div class="alert alert-info">Revise los proveedores. Se creará una solicitud en borrador por proveedor, solo por el faltante actualizado al confirmar. Las cantidades están en la unidad de inventario. Se descuentan las compras pendientes vinculadas a esta OF; las compras generales y recepciones futuras no vinculadas deben revisarse aparte.</div>
+        <group><field name="production_id" string="Orden de fabricación"/><field name="company_id" string="Sucursal / Compañía"/></group>
+        <div class="alert alert-info">El proveedor es opcional. Los materiales sin proveedor se agrupan en una sola solicitud en borrador; se crea otra por cada proveedor indicado. Puede asignar el proveedor después, antes de enviar o confirmar la compra. Solo se solicita el faltante actualizado al crear. Las cantidades están en la unidad de inventario. Se descuentan las compras pendientes vinculadas a esta OF; las compras generales y recepciones futuras no vinculadas deben revisarse aparte.</div>
         <field name="line_ids"><list editable="bottom" create="0" delete="0">
           <field name="selected"/><field name="product_id"/><field name="uom_id"/>
           <field name="required_qty"/><field name="reserved_qty"/><field name="free_qty"/>

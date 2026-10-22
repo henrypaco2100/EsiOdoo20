@@ -9,3 +9,5 @@ from . import test_components
 from . import test_output_grid
 
 from . import test_workcenter_route
+
+from . import test_material_request
