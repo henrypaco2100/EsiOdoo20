@@ -9,3 +9,5 @@ access_esi_variant_grid_stock,variant.grid.stock,model_esi_variant_grid,stock.gr
 access_esi_output_user,esi.production.output.line.user,model_esi_production_output_line,mrp.group_mrp_user,crud,
 access_esi_material_purchase,esi.material.purchase,model_esi_material_purchase,purchase.group_purchase_user,crud,
 access_esi_material_purchase_line,esi.material.purchase.line,model_esi_material_purchase_line,purchase.group_purchase_user,crud,
+access_esi_bom_center_user,esi.bom.center.user,model_esi_bom_center,mrp.group_mrp_user,r,
+access_esi_bom_center_manager,esi.bom.center.manager,model_esi_bom_center,mrp.group_mrp_manager,crud,

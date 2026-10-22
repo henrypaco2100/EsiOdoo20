@@ -17,4 +17,10 @@
     <field name="operation">crud</field>
     <field name="domain">[('company_id', 'in', company_ids)]</field>
   </record>
+  <record id="branch_esi_bom_center" model="ir.access">
+    <field name="name">Recorrido: compañías autorizadas</field>
+    <field name="model_id" ref="model_esi_bom_center"/>
+    <field name="operation">crud</field>
+    <field name="domain">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+  </record>
 </odoo>

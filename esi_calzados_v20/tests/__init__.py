@@ -7,3 +7,5 @@ from . import test_output_lines
 from . import test_components
 
 from . import test_output_grid
+
+from . import test_workcenter_route

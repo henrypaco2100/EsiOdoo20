@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Odoo 20 desactiva la creación desde la lista con js_class=list_no_create.
+         Retirar esa clase solo en account.journal devuelve el botón Nuevo.
+         Los ACL del modelo siguen controlando a quién se le permite crear. -->
+    <record id="view_account_journal_list_esi_create" model="ir.ui.view">
+        <field name="name">account.journal.list.esi.sucursales.create</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_tree"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="js_class"/>
+                <attribute name="create">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!-- Odoo 20 Community: la vista Kanban estándar define
+         on_create="account_accountant.action_journal_create_wizard".
+         Esa acción no está disponible si account_accountant (Enterprise) no está
+         instalado. Al quitar on_create y desactivar quick_create, Nuevo abre
+         directamente el formulario estándar de account.journal. -->
+    <record id="view_account_journal_kanban_esi_create" model="ir.ui.view">
+        <field name="name">account.journal.kanban.esi.sucursales.create</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_view_kanban"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="on_create"/>
+                <attribute name="quick_create">false</attribute>
+                <attribute name="create">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!-- El diario pertenece a la compañía actual al crearlo; es seleccionable
+         si el usuario habilitó varias compañías y no cambia tras guardar. -->
+    <record id="view_account_journal_form_esi_company" model="ir.ui.view">
+        <field name="name">account.journal.form.esi.sucursales.company</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id' and @groups='base.group_multi_company']" position="attributes">
+                <attribute name="readonly">id</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

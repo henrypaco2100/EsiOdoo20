@@ -20,3 +20,5 @@ from . import recipe_grid
 from . import output_grid
 
 from . import material_budget
+
+from . import workcenter_route

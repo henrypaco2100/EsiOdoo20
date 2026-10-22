@@ -76,3 +76,81 @@ class TestBranchIsolation(TransactionCase):
         order = model.new({})
         self.assertEqual(set(order.esi_branch_company_ids.ids), set((self.a | self.b).ids))
         self.assertTrue(order.esi_show_branch)
+
+    def test_journal_list_shows_native_create_button(self):
+        """Odoo 20's stock list_no_create class must not suppress Nuevo."""
+        base_view = self.env.ref('account.view_account_journal_tree')
+        arch, _view = self.env['account.journal']._get_view(
+            view_id=base_view.id, view_type='list',
+        )
+        self.assertEqual(arch.tag, 'list')
+        self.assertNotEqual(arch.get('js_class'), 'list_no_create')
+        self.assertNotEqual(arch.get('create'), '0')
+
+    def test_journal_kanban_create_opens_standard_form(self):
+        """Community must not invoke the missing Enterprise action."""
+        base_view = self.env.ref('account.account_journal_view_kanban')
+        arch, _view = self.env['account.journal']._get_view(
+            view_id=base_view.id, view_type='kanban',
+        )
+        self.assertEqual(arch.tag, 'kanban')
+        self.assertFalse(arch.get('on_create'))
+        self.assertEqual(arch.get('quick_create'), 'false')
+        self.assertNotEqual(arch.get('create'), '0')
+
+    def test_journal_new_defaults_to_active_company(self):
+        """The standard form must respect the active parent or branch."""
+        editor = new_test_user(
+            self.env,
+            login='esi_branch_journal_default_company',
+            groups='base.group_user,esi_sucursales_v20.group_esi_journal_editor',
+            company_id=self.root.id,
+            company_ids=[Command.set((self.root | self.a | self.b).ids)],
+        )
+        for company in self.root | self.a | self.b:
+            model = self.env['account.journal'].with_user(editor).with_context(
+                allowed_company_ids=company.ids,
+            )
+            form_record = model.new({'type': 'general'})
+            self.assertEqual(form_record.company_id, company)
+
+    def test_journal_can_be_created_in_parent_and_active_branch(self):
+        """A delegated journal editor must be able to create in their current company."""
+        editor = new_test_user(
+            self.env,
+            login='esi_branch_journal_editor',
+            groups='base.group_user,esi_sucursales_v20.group_esi_journal_editor',
+            company_id=self.root.id,
+            company_ids=[Command.set((self.root | self.a | self.b).ids)],
+        )
+        for idx, company in enumerate((self.root, self.a, self.b)):
+            journal_model = self.env['account.journal'].with_user(editor).with_context(
+                allowed_company_ids=company.ids,
+            )
+            journal = journal_model.create({
+                'name': f'ESI journal test {idx}',
+                'code': f'EJ{idx}',
+                'type': 'general',
+                'company_id': company.id,
+            })
+            self.assertEqual(journal.company_id, company)
+            self.assertTrue(journal_model.search([('id', '=', journal.id)]))
+
+    def test_journal_editor_cannot_create_outside_authorized_companies(self):
+        editor = new_test_user(
+            self.env,
+            login='esi_branch_restricted_journal_editor',
+            groups='base.group_user,esi_sucursales_v20.group_esi_journal_editor',
+            company_id=self.a.id,
+            company_ids=[Command.set(self.a.ids)],
+        )
+        model = self.env['account.journal'].with_user(editor).with_context(
+            allowed_company_ids=self.a.ids,
+        )
+        with self.assertRaises(AccessError):
+            model.create({
+                'name': 'Forbidden sibling journal',
+                'code': 'EJB',
+                'type': 'general',
+                'company_id': self.b.id,
+            })

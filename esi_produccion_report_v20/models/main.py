@@ -17,14 +17,14 @@ class Report(models.TransientModel):
     group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', '=', company_id)]")
     production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', '=', company_id)]")
     kind = fields.Selection([('detail', 'Ficha completa de una orden'), ('summary', 'Resumen de órdenes'), ('outputs', 'Productos terminados por talla'),
-        ('operations', 'Seguimiento de operaciones'), ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
+        ('operations', 'Seguimiento de centros y operaciones'), ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
 
     state_filter = fields.Selection([('all', 'Todos'), ('open', 'Pendientes y en progreso'), ('done', 'Terminadas')], default='all', required=True, string='Estado de fabricación')
 
     def _esi_operation_summary(self, order):
         workorders = order.workorder_ids.sorted(lambda w: (w.sequence if 'sequence' in w._fields else 0, w.id))
         if not workorders:
-            return ('Sin operaciones', '—', '0/0')
+            return ('Sin etapas', '—', '0/0')
         usable = workorders.filtered(lambda w: w.state != 'cancel')
         current = usable.filtered(lambda w: w.state == 'progress')
         if not current:
@@ -51,7 +51,7 @@ class Report(models.TransientModel):
         operation, state, progress = self._esi_operation_summary(order)
         labels = dict(order._fields['state']._description_selection(self.env))
         html = '<h2>%s</h2><p><b>%s</b> · %s</p>' % (escape(order.name), escape(order.company_id.name), escape(labels.get(order.state, order.state)))
-        html += '<div class="alert alert-info"><b>Operación actual:</b> %s · %s<br/><b>Avance:</b> %s operaciones terminadas<br/><b>Cantidad planificada:</b> %s %s</div>' % (escape(operation), escape(state), escape(progress), order.esi_display_total_qty, escape(order.uom_id.name))
+        html += '<div class="alert alert-info"><b>Centro / etapa actual:</b> %s · %s<br/><b>Avance:</b> %s etapas terminadas<br/><b>Cantidad planificada:</b> %s %s</div>' % (escape(operation), escape(state), escape(progress), order.esi_display_total_qty, escape(order.uom_id.name))
         sections = {}
         for section, item, qty, unit, status, note in rows:
             sections.setdefault(section, []).append([item, qty, unit, status, note])
@@ -117,7 +117,7 @@ class Report(models.TransientModel):
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
         if self.kind == 'summary':
             headers = ['OF', 'Grupo', 'Producto / características', 'Cantidad total (tallas)',
-                'Unidad', 'Estado OF', 'Operación actual', 'Estado operación', 'Operaciones completadas',
+                'Unidad', 'Estado OF', 'Centro / etapa actual', 'Estado etapa', 'Etapas completadas',
                 'Responsable', 'Sucursal']
             rows = []
             for o in orders:
@@ -131,12 +131,12 @@ class Report(models.TransientModel):
         if self.kind == 'detail':
             order = self.production_id
             operation, operation_state, advance = self._esi_operation_summary(order)
-            rows.append(['Resumen', order.product_id.product_tmpl_id.display_name, order.esi_display_total_qty, order.uom_id.name, labels.get(order.state, order.state), 'Operación actual: %s (%s), avance %s' % (operation, operation_state, advance)])
+            rows.append(['Resumen', order.product_id.product_tmpl_id.display_name, order.esi_display_total_qty, order.uom_id.name, labels.get(order.state, order.state), 'Centro / etapa actual: %s (%s), avance %s' % (operation, operation_state, advance)])
             rows.append(['Resumen', 'Responsable', '', '', '', order.esi_responsible_id.name or order.user_id.name or 'Sin asignar'])
             rows.append(['Resumen', 'Origen / grupo', '', '', '', '%s / %s' % (order.origin or '—', order.esi_group_id.name or '—')])
             wo_labels = dict(self.env['mrp.workorder']._fields['state']._description_selection(self.env))
-            for wo in order.workorder_ids.sorted(lambda w: (w.operation_id.sequence, w.id)):
-                rows.append(['Operaciones', wo.name, wo.qty_production, wo.uom_id.name, wo_labels.get(wo.state, wo.state), '%s · previsto %.2f min · real %.2f min' % (wo.workcenter_id.name, wo.duration_expected, wo.duration)])
+            for wo in order.workorder_ids.sorted(lambda w: (w.sequence, w.id)):
+                rows.append(['Centros y operaciones', wo.name, wo.qty_production, wo.uom_id.name, wo_labels.get(wo.state, wo.state), '%s · previsto %.2f min · real %.2f min' % (wo.workcenter_id.name, wo.duration_expected, wo.duration)])
             for move in order.move_finished_ids.filtered(lambda m: m.state != 'cancel'):
                 rows.append(['Tallas / productos terminados', move.product_id.display_name, move.product_uom_qty, move.uom_id.name, 'En inventario' if move.state == 'done' else 'Pendiente', 'Registrado: %.2f' % (move.quantity if move.picked or move.state == 'done' else 0)])
             for move in order.move_raw_ids.filtered(lambda m: m.state != 'cancel'):

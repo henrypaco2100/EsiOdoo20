@@ -1,0 +1,3 @@
+id,name,model_id,group_id/id,operation,domain
+access_esi_journal_system,ESI - Configuración permite administrar diarios,account.journal,base.group_system,cru,
+access_esi_journal_editor,ESI - Gestión delegada de diarios,account.journal,esi_sucursales_v20.group_esi_journal_editor,cru,
