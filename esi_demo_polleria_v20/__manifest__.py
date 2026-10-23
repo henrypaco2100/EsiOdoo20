@@ -1,6 +1,6 @@
 {
  'name': 'ESI | Demo Pollería a la Brasa',
- 'version': '20.0.1.0.0',
+ 'version': '20.0.1.0.1',
  'category': 'Sales/Point of Sale',
  'summary': 'Catálogo de demostración de pollería boliviana para POS, ventas, compras e inventario',
  'author': 'ESI - Especialistas en Sistemas Integrados',

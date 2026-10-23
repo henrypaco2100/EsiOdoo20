@@ -1,5 +1,5 @@
 """Install isolated demo catalog using the public ORM; no existing POS settings changed."""
-import base64
+from odoo.tools.binary import BinaryBytes
 import logging
 from pathlib import Path
 
@@ -55,7 +55,7 @@ PRODUCTS = [
 
 def _image(name):
     path = ROOT / 'static' / 'description' / 'products' / (name + '.png')
-    return base64.b64encode(path.read_bytes()) if path.exists() else False
+    return BinaryBytes(path.read_bytes(), filename=path.name) if path.exists() else False
 
 
 def post_init_hook(env):

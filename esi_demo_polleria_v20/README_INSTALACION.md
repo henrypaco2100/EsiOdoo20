@@ -26,3 +26,7 @@ Las imágenes incluidas son **ilustraciones originales de referencia con rótulo
 
 ## Desinstalación
 No se recomienda desinstalar si se registraron operaciones con los productos. Mantener una base de DEMOSTRACIÓN independiente.
+
+## Corrección 20.0.1.0.1
+Se corrigió la carga de imágenes para Odoo 20 mediante `odoo.tools.binary.BinaryBytes`. Soluciona el error `product.template.image_1920: use BinaryValue instead of bytes`.
+Si una instalación anterior falló, sustituir completamente la carpeta del módulo por esta versión y volver a intentar la instalación. No es necesario eliminar registros del negocio.
