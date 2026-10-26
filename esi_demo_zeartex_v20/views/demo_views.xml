@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_esi_zeartex_demo_form" model="ir.ui.view">
+    <field name="name">esi.zeartex.demo.form</field>
+    <field name="model">esi.zeartex.demo</field>
+    <field name="arch" type="xml">
+      <form string="Demo Importadora Zeartex SRL" create="0" delete="0">
+        <header>
+          <button name="action_load_catalog" type="object" string="1. Cargar catálogo seguro" class="btn-primary"/>
+          <button name="action_create_drafts" type="object" string="2. Crear cotizaciones en borrador"/>
+          <button name="action_create_pos" type="object" string="3. Configurar POS Zeartex"/>
+          <button name="action_load_stock" type="object" string="4. Cargar stock de prueba (afecta valoración)" confirm="Esto creará movimientos de inventario valorizados para Zeartex. Úselo únicamente en una base de pruebas. ¿Confirmar?"/>
+        </header>
+        <sheet>
+          <group><field name="name" readonly="1"/><field name="company_id" options="{'no_create': True}"/></group>
+          <group string="Importante"><div class="alert alert-info" role="alert">DEMO: no se crean inventarios valorizados ni facturas publicadas automáticamente.</div></group>
+          <group string="Estado de carga"><field name="product_count" readonly="1"/><field name="supplier_count" readonly="1"/><field name="customer_count" readonly="1"/></group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="esi_zeartex_demo_singleton" model="esi.zeartex.demo">
+    <field name="name">Zeartex SRL - Asistente DEMO</field>
+    <field name="company_id" ref="base.main_company"/>
+  </record>
+  <record id="esi_zeartex_demo_singleton" model="esi.zeartex.demo">
+    <field name="name">Zeartex SRL - Asistente DEMO</field>
+    <field name="company_id" ref="base.main_company"/>
+  </record>
+  <record id="action_esi_zeartex_demo" model="ir.actions.act_window">
+    <field name="name">Cargar DEMO Zeartex</field><field name="res_model">esi.zeartex.demo</field><field name="view_mode">form</field><field name="res_id" ref="esi_zeartex_demo_singleton"/>
+  </record>
+  <menuitem id="menu_esi_zeartex_root" name="ESI Demo Zeartex" sequence="80" groups="base.group_system" web_icon="esi_demo_zeartex_v20,static/description/icon.png"/>
+  <menuitem id="menu_esi_zeartex_loader" name="Cargar demostración" parent="menu_esi_zeartex_root" action="action_esi_zeartex_demo" sequence="1"/>
+</odoo>
