@@ -23,10 +23,6 @@
     <field name="name">Zeartex SRL - Asistente DEMO</field>
     <field name="company_id" ref="base.main_company"/>
   </record>
-  <record id="esi_zeartex_demo_singleton" model="esi.zeartex.demo">
-    <field name="name">Zeartex SRL - Asistente DEMO</field>
-    <field name="company_id" ref="base.main_company"/>
-  </record>
   <record id="action_esi_zeartex_demo" model="ir.actions.act_window">
     <field name="name">Cargar DEMO Zeartex</field><field name="res_model">esi.zeartex.demo</field><field name="view_mode">form</field><field name="res_id" ref="esi_zeartex_demo_singleton"/>
   </record>
