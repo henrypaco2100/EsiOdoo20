@@ -13,7 +13,7 @@ class AgroDemoWizard(models.TransientModel):
         company=self.company_id
         if company not in self.env.companies:
             raise UserError(_('Active la compañía en su selector de compañías.'))
-        env=self.env.with_company(company)
+        env=self.with_company(company).env
         Partner=env['res.partner'].sudo()
         def partner(name,supplier=False):
             p=Partner.search([('name','=',name)],limit=1)

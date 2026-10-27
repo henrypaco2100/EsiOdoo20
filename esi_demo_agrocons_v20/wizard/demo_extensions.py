@@ -7,7 +7,7 @@ class AgroDemoWizard(models.TransientModel):
     def action_load(self):
         result = super().action_load()
         self.ensure_one()
-        env = self.env.with_company(self.company_id)
+        env = self.with_company(self.company_id).env
         company = self.company_id
         campaign = env['esi.agro.campaign'].search([('name','=','Verano 2025/2026'),('company_id','=',company.id)],limit=1)
         if not campaign:

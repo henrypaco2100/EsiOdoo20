@@ -34,3 +34,7 @@ El costo unitario de soya estimado se calcula en la ficha agrícola, pero **no s
 
 ## Compatibilidad
 API de `ir.access.csv` de Odoo 20. Verificación estática incluida en `tests/test_package.py`. La validación total requiere instalación en una instancia ejecutable de la misma versión de Odoo 20 con las apps dependientes.
+
+
+## Corrección 20.0.2.0.1
+Se corrigió la carga demo: `with_company()` se aplica al recordset del asistente, y no al objeto `Environment`, en ambos asistentes. No cambia movimientos de inventario ni contabilidad.
