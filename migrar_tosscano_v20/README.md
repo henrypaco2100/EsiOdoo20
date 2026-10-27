@@ -1,54 +1,39 @@
-# Migración Tosscano v20 — primera etapa
+# Migración Tosscano v20 — 20.0.2.0.0
 
-Versión 20.0.1.0.0. Este módulo es una herramienta de preparación y carga controlada de materias primas. No es todavía una migración integral ejecutable de inventarios, recetas y contabilidad.
+## Uso
 
-## Configuración acordada
+1. Actualizar este módulo en Odoo (reiniciar el servicio antes de actualizar). Si es la primera instalación, instalarlo desde Aplicaciones.
+2. Abrir **Migración Tosscano → Importar Tosscano**. Seleccionar TOSSCANO GRUP, FABRICA CALZADO, CBBA y SCZ, y el almacén de cada sucursal. Activar esas cuatro compañías. El usuario necesita administración de Inventario y Contabilidad, además de Ajustes. Los importes fuente están en BOB.
+3. Pulsar **1. Importar datos**. No exige revisar filas ni asignar unidades una por una.
+4. Pulsar **2. Importar saldos**. El resultado indica qué se cargó y qué no se pudo aplicar. Los casos pendientes pueden corregirse manualmente en productos y luego repetir el botón: no duplica saldos ya aplicados.
 
-- Matriz: TOSSCANO GRUP.
-- Sucursales directas: FABRICA CALZADO, CBBA y SCZ; un almacén seleccionado por sucursal.
-- Saldo autorizado: RESUMEN/Kardex. Corte: 23/10/2026.
-- Productos terminados: compartidos, sin compañía. Pendientes de catálogo correcto.
-- Materias primas: compañía FABRICA CALZADO.
-- Plan contable: preparado para la matriz, con acceso por jerarquía nativa; no se replica por sucursal.
+## Datos incluidos
 
-## Qué funciona en esta versión
+- 348 materias primas/artículos de catálogo: lista oficial corregida con la fotografía y materiales adicionales de Kardex. Exclusivos de FABRICA CALZADO. Componentes activos excepto herramientas. El duplicado idéntico de HILO CAFÉ #20 se consolida.
+- Categorías nativas **Familia → Subfamilia**. No se añaden campos Familia/Subfamilia al producto. Las columnas técnicas de la versión anterior se conservan únicamente para compatibilidad con su registro histórico; ya no son un paso del flujo.
+- 13 unidades normalizadas: UNIDAD, PAR, METRO, M2, PIE2, GRAMO, KG, LITRO, ROLLO, CONO, BOTE, LATA, PAQUETE. Reutiliza unidades físicas nativas. Convierte PIE2 con 0,09290304 m². Un cono/rollo/lata/bote/paquete se crea como unidad independiente, sin inventar capacidad. METROS/M/metro, uni/unidad, ft2/pie2, gr/gramo se normalizan.
+- 68 plantillas de terminados y 357 variantes por talla, compartidas entre sucursales. Provienen de las tres hojas de inventario disponibles, pues el archivo llamado lista productos terminado contiene el mismo libro que las recetas. No se afirma que este catálogo provisional cubra productos ausentes de esas hojas.
+- Atributos Talla, Color y Modelo. Forro, Material y Acabado se incluyen cuando aparecen explícitos en la descripción. No se inventa material para productos cuya descripción no lo especifica. Modelo toma el código de familia/modelo del origen.
+- Se conserva una plantilla por código de origen y versión; el color es un valor de atributo en esa plantilla y las tallas son sus variantes. No se unifican todos los colores en una plantilla ni se generan combinaciones de colores/tallas inexistentes. Las versiones Planta Piloto con código reutilizado se separan con sufijo PILOTO.
+- Terminados categorizados por línea MILITAR/ESCOLAR/INDUSTRIAL/OTROS y subcategoría modelo. Los materiales adicionales de Kardex recuperan familia y subfamilia de su hoja CATALOGO MP; todos quedan categorizados. Las categorías pueden corregirse manualmente.
+- 280 cuentas del archivo con su jerarquía en la matriz. Conserva la clasificación y estado activo del archivo, que incluye 26 observaciones pendientes de criterio contable. No configura impuestos, diarios, conciliaciones iniciales ni contrapartidas de categorías. Si una cuenta ya existe con código y tipo compatible, la vincula sin sobrescribirla; inconsistencias se listan.
 
-1. Aplicación «Migración Tosscano», visible para administradores.
-2. Configuración explícita de compañías y almacenes existentes. Valida jerarquía y compañía del almacén. No crea entidades por coincidencia de nombre.
-3. «Preparar datos de origen» carga una zona de revisión persistente y repetible sin duplicar filas:
-   - 297 filas de materias primas.
-   - 280 cuentas contables.
-   - 342 saldos de RESUMEN/Kardex de materiales.
-   - 484 saldos no nulos de terminados por sucursal/talla.
-   - 12 recetas, con sus 292 componentes y observaciones.
-   - 1 incidencia de catálogo terminado ausente.
-4. Correcciones de códigos, medidas y colores de la fotografía del 27/10/2026, aplicadas a filas concretas de catálogo. Conserva valor original y propuesta. No cambia globalmente los códigos ambiguos en Kardex o recetas.
-5. Importación individual o múltiple de materias primas revisadas: crea producto almacenable exclusivo de fábrica y categorías Familia → Subfamilia; usa los campos Tipo y Medida de ESI Calzados. La opción Componentes se decide por fila; las herramientas no se consideran consumibles automáticamente.
-6. Bloquea códigos duplicados, coincidencias con productos existentes, unidades no seleccionadas y filas sin revisar. No sobrescribe registros existentes. Una segunda ejecución de filas importadas no vuelve a crearlas.
-7. Conserva vínculo al producto creado y bloquea cambios de las filas ya importadas. Serializa ejecuciones concurrentes de este importador.
+## Saldos y costos
 
-No importa costos todavía: el costo de catálogo es una referencia y no sustituye el costo de apertura del Kardex. Crear productos no carga stock ni valoración. El usuario debe validar que la unidad seleccionada representa la unidad del saldo, sin inventar conversiones de conos, rollos, latas o botes.
+- Materias primas: fuente RESUMEN/Kardex, corte 23/10/2026. Terminados: hojas por almacén, 6.402 pares en total (Fábrica 3.840, CBBA 2.141, SCZ 421).
+- Usa ajustes nativos de inventario, en la ubicación principal del almacén. No modifica manualmente valoración, movimientos ni asientos. Los movimientos tienen la fecha real de ejecución; el 23/10/2026 queda como referencia del origen.
+- Para materiales usa el costo unitario de Kardex cuando está disponible; al crear el catálogo conserva el costo de catálogo como referencia inicial. Para terminados no se inventa costo histórico a partir de una receta estimada. **Los saldos positivos sin costo quedan pendientes**: completar el costo de cada producto en la sucursal y repetir Importar saldos. Tampoco se cambia el costo si hay movimientos/existencias previas.
+- Omite productos con movimientos, existencias, reservas o conteos previos, en vez de reemplazar su stock de producción. Repetir no aplica dos veces una apertura. No sobrescribe saldos ya importados para corregirlos: las correcciones posteriores son ajustes nativos manuales.
+- Ocho filas con códigos corregidos ambiguos tienen cantidad cero en RESUMEN y no generan ajustes. El HILO CAFÉ #20 duplicado no se suma dos veces. La evidencia completa sigue incluida en data/source.json y direct.json.
 
-## Instalación y uso
+## Recetas
 
-1. Probar en una copia de la base de producción con respaldo. Este paquete no se ha instalado en un servidor Odoo durante su elaboración.
-2. Requiere los módulos ESI existentes, en especial `esi_calzados_v20` 20.0.11.2.0 o posterior con `esi_material_type`, `esi_measure`, `esi_component_ok` y `esi_manufacture_ok`. Este ZIP contiene únicamente el nuevo módulo; no reemplaza ESI Calzados ni Sucursales.
-3. Copiar `migrar_tosscano_v20` al directorio de addons, reiniciar Odoo, actualizar lista de aplicaciones e instalar «Migración Tosscano v20».
-4. Activar matriz y las tres sucursales en el selector de compañías. Crear un registro de migración, seleccionar compañías y sus almacenes, guardar y pulsar «Preparar datos de origen».
-5. Abrir «Revisar datos». Se muestran materias primas inicialmente; quitar ese filtro para revisar cuentas, saldos y recetas. Abrir una materia prima, revisar descripción/código/categorías, elegir unidad de inventario y marcar «Datos y unidad revisados». Importar únicamente filas revisadas.
-6. Las categorías se buscan por nombre y padre exactos. Si ya existen categorías equivalentes con otro nombre, corregir Familia/Subfamilia antes de importar. La configuración contable de las categorías debe revisarse antes de valorar existencias.
+El botón intenta crear recetas compartidas por talla únicamente cuando todos los componentes tienen correspondencia y unidad compatibles. Las 12 fichas disponibles aún contienen códigos faltantes, conversiones de envases sin capacidad, bolsa/numeración mezcladas y consumos talla 40; se listan como pendientes y **no se crean recetas incompletas**. La importación del catálogo y del plan no queda bloqueada por estas incidencias. No se inventan tiempos por centro a partir de costos de mano de obra.
 
-## Pendientes concretos
+## Compatibilidad y validación
 
-- La copia disponible de `lista productos terminado.xlsx` tiene exactamente el mismo SHA-256 que `FICHAS DE COSTO MILITAR APROBADO.xlsx`: `a065ce6332f30898c0d3d1fe04d56bd59dce7c3fe535846f8b4f4226b03021f4`. Ambos son el libro de recetas. Se reconoce que el primer nombre debe corresponder al catálogo, pero hay que recibir nuevamente sus bytes correctos. No se deduce un catálogo definitivo de las hojas de stock.
-- HIL-EST-20-CAF permanece en dos filas del origen: se bloquea su importación hasta definir si consolidar. No inventar códigos para superar el bloqueo.
-- Las correcciones de la foto no autorizan a fusionar saldos de códigos reutilizados. Las referencias ambiguas quedan intactas en la evidencia del Kardex para resolver su correspondencia.
-- Recetas: seis códigos ausentes, dos líneas sin código, conversiones de 16 códigos, bolsa/numeración con un mismo código y componentes talla 40. Las recetas se conservan completas en revisión; no se crean LdM incompletas ni consumos de talla 40 para todas las tallas.
-- Las etapas/costos de mano de obra de las fichas no son duraciones por centro. No se inventan tiempos de fabricación.
-- Plan contable: requiere revisión de las 26 observaciones anteriores y comparación con cuentas existentes; todavía no hay botón para crear cuentas.
-- Inventario: se ha elegido RESUMEN/Kardex para materiales. Los saldos terminados provienen de sus tres hojas de inventario y necesitan confirmación de correspondencia/costo. Todavía no hay botón para aplicar ajustes. El corte 23/10/2026 es fecha de referencia, no una afirmación de retrodatación de movimientos o asientos.
-- Productos terminados, recetas, cuentas y saldos están en preparación, no importados. No se envió ningún cambio al servidor de producción.
+Requiere esi_calzados_v20 20.0.11.2.0 o posterior, esi_sucursales_v20, Inventario y Contabilidad. Este ZIP contiene únicamente migrar_tosscano_v20. No reemplaza los otros módulos.
 
-## Validación
+Validación local: 18 pruebas de integridad de datos/código, Python y XML comprobados. La instalación y ejecución completas en una base Odoo 20 están pendientes de prueba. No se accedió al servidor de producción. Probar primero en una copia: no se presenta como una migración ya ejecutada ni financieramente conciliada.
 
-Nueve pruebas locales de integridad de datos superadas: claves únicas, cantidades, correcciones por fila, evidencia, duplicado conservado, Kardex seleccionado y recetas conservadas. Python/XML/manifiesto/ACL comprobados estáticamente. Incluye tres pruebas de integración Odoo (carga repetida, producto exclusivo sin stock, rechazo de fila sin revisar); están pendientes de ejecución en Odoo 20. No se afirma validación de instalación ni de comportamiento completo en servidor.
+Las referencias de datos importados usan un espacio persistente propio para que desinstalar la herramienta no intente eliminar cuentas o productos importados. No borrar esos identificadores externos manualmente. No hay asistente de reversión de ajustes ya aplicados.
