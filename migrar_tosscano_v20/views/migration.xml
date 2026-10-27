@@ -1,0 +1,55 @@
+<odoo>
+  <record id="migration_form" model="ir.ui.view">
+    <field name="name">tosscano.migration.form</field><field name="model">tosscano.migration</field>
+    <field name="arch" type="xml">
+      <form string="Migración Tosscano" duplicate="0" delete="0">
+        <header><button name="action_load" type="object" string="Preparar datos de origen" class="btn-primary" invisible="loaded"/><button name="action_lines" type="object" string="Revisar datos" invisible="not loaded"/></header>
+        <sheet>
+          <div class="alert alert-info">Primera etapa: revisión de catálogo, cuentas, recetas y saldos. Preparar datos no modifica inventarios, contabilidad ni recetas. La importación disponible en esta versión crea únicamente materias primas revisadas y sus categorías.</div>
+          <group><field name="name"/><field name="cutoff"/><field name="loaded" invisible="1"/><field name="root_id" readonly="loaded"/></group>
+          <group string="Sucursales y almacenes" col="2">
+            <group><field name="factory_id" domain="[('parent_id', '=', root_id)]" readonly="loaded"/><field name="warehouse_factory_id" domain="[('company_id', '=', factory_id)]" readonly="loaded"/></group>
+            <group><field name="cbba_id" domain="[('parent_id', '=', root_id)]" readonly="loaded"/><field name="warehouse_cbba_id" domain="[('company_id', '=', cbba_id)]" readonly="loaded"/></group>
+            <group><field name="scz_id" domain="[('parent_id', '=', root_id)]" readonly="loaded"/><field name="warehouse_scz_id" domain="[('company_id', '=', scz_id)]" readonly="loaded"/></group>
+          </group>
+          <p>Los productos terminados serán compartidos. Las materias primas se crean exclusivamente en FABRICA CALZADO. El plan contable se prepara para la matriz. No se crean compañías ni almacenes automáticamente.</p>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="migration_list" model="ir.ui.view"><field name="name">tosscano.migration.list</field><field name="model">tosscano.migration</field><field name="arch" type="xml"><list delete="0"><field name="name"/><field name="cutoff"/><field name="root_id"/><field name="factory_id"/><field name="loaded"/></list></field></record>
+  <record id="line_list" model="ir.ui.view"><field name="name">tosscano.migration.line.list</field><field name="model">tosscano.migration.line</field><field name="arch" type="xml">
+    <list create="0" delete="0" decoration-success="state == 'done'">
+      <header><button name="action_import_material" type="object" string="Importar materias primas revisadas" confirm="Se crearán los productos seleccionados y sus categorías. No se cargarán costos ni saldos. Las filas deben estar revisadas y tener una unidad validada."/></header>
+      <field name="kind"/><field name="code"/><field name="name"/><field name="family" optional="show"/><field name="subfamily" optional="show"/><field name="source_uom"/><field name="uom_id"/><field name="branch" optional="hide"/><field name="quantity" optional="hide"/><field name="reviewed"/><field name="state"/><field name="product_id" optional="hide"/>
+    </list>
+  </field></record>
+  <record id="line_form" model="ir.ui.view"><field name="name">tosscano.migration.line.form</field><field name="model">tosscano.migration.line</field><field name="arch" type="xml">
+    <form create="0" delete="0" duplicate="0">
+      <header><button name="action_import_material" type="object" string="Importar materia prima" class="btn-primary" invisible="kind != 'material' or state == 'done'" confirm="Crear este producto y sus categorías sin saldos ni valoración?"/><field name="state" widget="statusbar"/></header>
+      <sheet>
+        <group><field name="migration_id"/><field name="kind"/><field name="source_key"/><field name="code" readonly="state == 'done' or kind != 'material'"/><field name="name" readonly="state == 'done' or kind != 'material'"/><field name="branch"/><field name="product_id"/></group>
+        <group string="Catálogo de materias primas" invisible="kind != 'material'">
+          <group><field name="family" readonly="state == 'done'"/><field name="subfamily" readonly="state == 'done'"/><field name="material_type" readonly="state == 'done'"/><field name="measure" readonly="state == 'done'"/></group>
+          <group><field name="source_uom"/><field name="uom_id" readonly="state == 'done'"/><field name="component" readonly="state == 'done'"/><field name="unit_cost"/><field name="reviewed" readonly="state == 'done'"/></group>
+        </group>
+        <group invisible="kind != 'stock'"><field name="quantity"/><field name="source_uom"/></group>
+        <group string="Revisión"><field name="issue" nolabel="1"/></group>
+        <notebook><page string="Datos de origen"><field name="source_json" nolabel="1"/></page></notebook>
+      </sheet>
+    </form>
+  </field></record>
+  <record id="line_search" model="ir.ui.view"><field name="name">tosscano.migration.line.search</field><field name="model">tosscano.migration.line</field><field name="arch" type="xml"><search>
+    <field name="code"/><field name="name"/><field name="branch"/>
+    <filter name="materials" string="Materias primas" domain="[('kind', '=', 'material')]"/>
+    <filter name="accounts" string="Plan contable" domain="[('kind', '=', 'account')]"/>
+    <filter name="stock" string="Saldos" domain="[('kind', '=', 'stock')]"/>
+    <filter name="recipes" string="Recetas" domain="[('kind', '=', 'recipe')]"/>
+    <filter name="catalog" string="Catálogo terminado" domain="[('kind', '=', 'catalog')]"/>
+    <separator/><filter name="pending" string="Pendientes" domain="[('state', '=', 'pending')]"/>
+    <group><filter name="group_kind" string="Tipo de dato" context="{'group_by': 'kind'}"/><filter name="group_branch" string="Sucursal" context="{'group_by': 'branch'}"/></group>
+  </search></field></record>
+  <record id="migration_action" model="ir.actions.act_window"><field name="name">Migración Tosscano</field><field name="res_model">tosscano.migration</field><field name="view_mode">list,form</field></record>
+  <menuitem id="migration_root" name="Migración Tosscano" groups="base.group_system" sequence="90"/>
+  <menuitem id="migration_menu" name="Preparar migración" parent="migration_root" action="migration_action"/>
+</odoo>
