@@ -1,0 +1,11 @@
+id,name,model_id,group_id/id,operation,domain
+access_esi_agro_field,Agrícola field,esi.agro.field,base.group_user,crud,
+access_esi_agro_campaign,Agrícola campaign,esi.agro.campaign,base.group_user,crud,
+access_esi_agro_equipment,Agrícola equipment,esi.agro.equipment,base.group_user,crud,
+access_esi_agro_plan,Agrícola plan,esi.agro.plan,base.group_user,crud,
+access_esi_agro_work,Agrícola work,esi.agro.work,base.group_user,crud,
+access_esi_agro_work_input,Agrícola work.input,esi.agro.work.input,base.group_user,crud,
+access_esi_agro_harvest,Agrícola harvest,esi.agro.harvest,base.group_user,crud,
+access_esi_agro_transport,Agrícola transport,esi.agro.transport,base.group_user,crud,
+access_esi_agro_demo_wizard,Agrícola demo.wizard,esi.agro.demo.wizard,base.group_system,crud,
+access_esi_agro_maintenance,Mantenimiento agrícola,esi.agro.maintenance,base.group_user,crud,

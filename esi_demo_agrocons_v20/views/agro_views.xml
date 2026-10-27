@@ -1,0 +1,186 @@
+<odoo>
+<record id="view_agro_field_list" model="ir.ui.view"><field name="name">esi.agro.field.list</field><field name="model">esi.agro.field</field><field name="arch" type="xml"><list string="Parcelas">
+<field name="name"/>
+<field name="code"/>
+<field name="hectares"/>
+<field name="tenure"/>
+</list></field></record>
+<record id="view_agro_field_form" model="ir.ui.view"><field name="name">esi.agro.field.form</field><field name="model">esi.agro.field</field><field name="arch" type="xml"><form string="Parcelas"><sheet><group>
+<field name="name"/>
+<field name="code"/>
+<field name="company_id"/>
+<field name="hectares"/>
+<field name="tenure"/>
+<field name="owner_id"/>
+<field name="note"/>
+</group>
+</sheet></form></field></record>
+<record id="action_agro_field" model="ir.actions.act_window"><field name="name">Parcelas</field><field name="res_model">esi.agro.field</field><field name="view_mode">list,form</field></record>
+<record id="view_agro_campaign_list" model="ir.ui.view"><field name="name">esi.agro.campaign.list</field><field name="model">esi.agro.campaign</field><field name="arch" type="xml"><list string="Campañas">
+<field name="name"/>
+<field name="season"/>
+<field name="date_start"/>
+<field name="state"/>
+</list></field></record>
+<record id="view_agro_campaign_form" model="ir.ui.view"><field name="name">esi.agro.campaign.form</field><field name="model">esi.agro.campaign</field><field name="arch" type="xml"><form string="Campañas"><sheet><group>
+<field name="name"/>
+<field name="company_id"/>
+<field name="season"/>
+<field name="date_start"/>
+<field name="date_end"/>
+<field name="state"/>
+<field name="note"/>
+</group>
+</sheet></form></field></record>
+<record id="action_agro_campaign" model="ir.actions.act_window"><field name="name">Campañas</field><field name="res_model">esi.agro.campaign</field><field name="view_mode">list,form</field></record>
+<record id="view_agro_equipment_list" model="ir.ui.view"><field name="name">esi.agro.equipment.list</field><field name="model">esi.agro.equipment</field><field name="arch" type="xml"><list string="Maquinaria">
+<field name="name"/>
+<field name="kind"/>
+<field name="ownership"/>
+<field name="hourly_cost"/>
+</list></field></record>
+<record id="view_agro_equipment_form" model="ir.ui.view"><field name="name">esi.agro.equipment.form</field><field name="model">esi.agro.equipment</field><field name="arch" type="xml"><form string="Maquinaria"><sheet><group>
+<field name="name"/>
+<field name="company_id"/>
+<field name="kind"/>
+<field name="ownership"/>
+<field name="hourly_cost"/>
+<field name="license_plate"/>
+<field name="partner_id"/>
+<field name="note"/>
+</group>
+</sheet></form></field></record>
+<record id="action_agro_equipment" model="ir.actions.act_window"><field name="name">Maquinaria</field><field name="res_model">esi.agro.equipment</field><field name="view_mode">list,form</field></record>
+<record id="view_agro_plan_list" model="ir.ui.view"><field name="name">esi.agro.plan.list</field><field name="model">esi.agro.plan</field><field name="arch" type="xml"><list string="Planes de siembra">
+<field name="name"/>
+<field name="field_id"/>
+<field name="campaign_id"/>
+<field name="hectares"/>
+<field name="budget_total"/>
+<field name="work_cost"/>
+<field name="harvested_tons"/>
+<field name="state"/>
+</list></field></record>
+<record id="view_agro_plan_form" model="ir.ui.view"><field name="name">esi.agro.plan.form</field><field name="model">esi.agro.plan</field><field name="arch" type="xml"><form string="Planes de siembra"><sheet><group>
+<field name="name"/>
+<field name="company_id"/>
+<field name="field_id"/>
+<field name="campaign_id"/>
+<field name="crop"/>
+<field name="variety"/>
+<field name="hectares"/>
+<field name="planned_date"/>
+<field name="actual_date"/>
+<field name="budget_per_ha"/>
+<field name="budget_total"/>
+<field name="work_cost"/>
+<field name="harvested_tons"/>
+<field name="cost_per_ha"/>
+<field name="cost_per_ton"/>
+<field name="state"/>
+</group>
+<notebook><page string="Labores"><field name="work_ids"><list><field name="date"/><field name="name"/><field name="kind"/><field name="total_cost"/></list></field></page><page string="Cosechas"><field name="harvest_ids"><list><field name="date"/><field name="name"/><field name="net_tons"/></list></field></page></notebook>
+</sheet></form></field></record>
+<record id="action_agro_plan" model="ir.actions.act_window"><field name="name">Planes de siembra</field><field name="res_model">esi.agro.plan</field><field name="view_mode">list,form</field></record>
+<record id="view_agro_work_list" model="ir.ui.view"><field name="name">esi.agro.work.list</field><field name="model">esi.agro.work</field><field name="arch" type="xml"><list string="Bitácora de labores">
+<field name="date"/>
+<field name="name"/>
+<field name="plan_id"/>
+<field name="kind"/>
+<field name="hectares"/>
+<field name="total_cost"/>
+<field name="state"/>
+</list></field></record>
+<record id="view_agro_work_form" model="ir.ui.view"><field name="name">esi.agro.work.form</field><field name="model">esi.agro.work</field><field name="arch" type="xml"><form string="Bitácora de labores"><sheet><group>
+<field name="name"/>
+<field name="company_id"/>
+<field name="date"/>
+<field name="plan_id"/>
+<field name="kind"/>
+<field name="hectares"/>
+<field name="hours"/>
+<field name="equipment_id"/>
+<field name="employee_name"/>
+<field name="contractor_id"/>
+<field name="service_cost"/>
+<field name="equipment_cost"/>
+<field name="input_cost"/>
+<field name="total_cost"/>
+<field name="purchase_order_id"/>
+<field name="state"/>
+<field name="note"/>
+</group>
+<notebook><page string="Consumos previstos"><field name="input_ids"><list editable="bottom"><field name="product_id"/><field name="quantity"/><field name="unit_cost"/></list></field></page></notebook>
+</sheet></form></field></record>
+<record id="action_agro_work" model="ir.actions.act_window"><field name="name">Bitácora de labores</field><field name="res_model">esi.agro.work</field><field name="view_mode">list,form</field></record>
+<record id="view_agro_harvest_list" model="ir.ui.view"><field name="name">esi.agro.harvest.list</field><field name="model">esi.agro.harvest</field><field name="arch" type="xml"><list string="Cosechas y pesaje">
+<field name="date"/>
+<field name="name"/>
+<field name="plan_id"/>
+<field name="hectares"/>
+<field name="net_tons"/>
+<field name="humidity"/>
+<field name="yield_t_ha"/>
+</list></field></record>
+<record id="view_agro_harvest_form" model="ir.ui.view"><field name="name">esi.agro.harvest.form</field><field name="model">esi.agro.harvest</field><field name="arch" type="xml"><form string="Cosechas y pesaje"><sheet><group>
+<field name="name"/>
+<field name="company_id"/>
+<field name="plan_id"/>
+<field name="date"/>
+<field name="equipment_id"/>
+<field name="operator"/>
+<field name="hours"/>
+<field name="hectares"/>
+<field name="gross_kg"/>
+<field name="tare_kg"/>
+<field name="net_kg"/>
+<field name="net_tons"/>
+<field name="yield_t_ha"/>
+<field name="humidity"/>
+<field name="impurities"/>
+<field name="discount_pct"/>
+<field name="commercial_kg"/>
+<field name="lot_id"/>
+<field name="picking_id"/>
+<field name="note"/>
+</group>
+</sheet></form></field></record>
+<record id="action_agro_harvest" model="ir.actions.act_window"><field name="name">Cosechas y pesaje</field><field name="res_model">esi.agro.harvest</field><field name="view_mode">list,form</field></record>
+<record id="view_agro_transport_list" model="ir.ui.view"><field name="name">esi.agro.transport.list</field><field name="model">esi.agro.transport</field><field name="arch" type="xml"><list string="Transporte">
+<field name="date"/>
+<field name="name"/>
+<field name="harvest_id"/>
+<field name="tons"/>
+<field name="cost"/>
+<field name="destination"/>
+</list></field></record>
+<record id="view_agro_transport_form" model="ir.ui.view"><field name="name">esi.agro.transport.form</field><field name="model">esi.agro.transport</field><field name="arch" type="xml"><form string="Transporte"><sheet><group>
+<field name="name"/>
+<field name="company_id"/>
+<field name="date"/>
+<field name="harvest_id"/>
+<field name="partner_id"/>
+<field name="truck"/>
+<field name="tons"/>
+<field name="cost"/>
+<field name="destination"/>
+<field name="note"/>
+</group>
+</sheet></form></field></record>
+<record id="action_agro_transport" model="ir.actions.act_window"><field name="name">Transporte</field><field name="res_model">esi.agro.transport</field><field name="view_mode">list,form</field></record>
+<menuitem id="menu_esi_agro_root" name="Gestión Agrícola ESI" sequence="26" web_icon="esi_demo_agrocons_v20,static/description/icon.png"/>
+<menuitem id="menu_esi_agro_operations" name="Producción agrícola" parent="menu_esi_agro_root" sequence="10"/>
+<menuitem id="menu_esi_agro_inventory" name="Recursos y logística" parent="menu_esi_agro_root" sequence="20"/>
+<menuitem id="menu_esi_agro_reports" name="Consultas e informes" parent="menu_esi_agro_root" sequence="30"/>
+<menuitem id="menu_esi_agro_settings" name="Configuración" parent="menu_esi_agro_root" sequence="90" groups="base.group_system"/>
+<menuitem id="menu_agro_field" name="Campos y parcelas" parent="menu_esi_agro_operations" action="action_agro_field" sequence="1"/>
+<menuitem id="menu_agro_campaign" name="Campañas" parent="menu_esi_agro_operations" action="action_agro_campaign" sequence="2"/>
+<menuitem id="menu_agro_plan" name="Planes de siembra" parent="menu_esi_agro_operations" action="action_agro_plan" sequence="3"/>
+<menuitem id="menu_agro_work" name="Bitácora de labores" parent="menu_esi_agro_operations" action="action_agro_work" sequence="4"/>
+<menuitem id="menu_agro_harvest" name="Cosechas y pesajes" parent="menu_esi_agro_operations" action="action_agro_harvest" sequence="5"/>
+<menuitem id="menu_agro_equipment" name="Maquinaria y equipos" parent="menu_esi_agro_inventory" action="action_agro_equipment" sequence="10"/>
+<menuitem id="menu_agro_transport" name="Transportes" parent="menu_esi_agro_inventory" action="action_agro_transport" sequence="20"/>
+<menuitem id="menu_agro_costs" name="Costos por parcela" parent="menu_esi_agro_reports" action="action_agro_plan" sequence="10"/>
+<menuitem id="menu_agro_production" name="Rendimiento y cosechas" parent="menu_esi_agro_reports" action="action_agro_harvest" sequence="20"/>
+
+</odoo>

@@ -1,0 +1,67 @@
+<odoo>
+  <record id="view_agro_plan_extensions" model="ir.ui.view">
+    <field name="name">esi.agro.plan.form.extensions</field>
+    <field name="model">esi.agro.plan</field>
+    <field name="inherit_id" ref="esi_demo_agrocons_v20.view_agro_plan_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet" position="before"><header><button name="action_check_inputs" type="object" string="Verificar faltantes" class="btn-secondary"/></header></xpath>
+      <xpath expr="//field[@name='cost_per_ton']" position="after">
+        <field name="planned_yield"/><field name="rent_cost"/><field name="transport_cost" readonly="1"/>
+        <field name="real_total_cost" readonly="1"/><field name="budget_variance" readonly="1"/>
+        <field name="alert_notes" readonly="1"/>
+      </xpath>
+    </field>
+  </record>
+  <record id="view_agro_field_extensions" model="ir.ui.view">
+    <field name="name">esi.agro.field.form.extensions</field><field name="model">esi.agro.field</field>
+    <field name="inherit_id" ref="esi_demo_agrocons_v20.view_agro_field_form"/>
+    <field name="arch" type="xml"><xpath expr="//field[@name='owner_id']" position="after">
+      <field name="rent_rate_ha"/><field name="rent_contract"/><field name="rent_until"/>
+    </xpath></field>
+  </record>
+  <record id="view_agro_equipment_extensions" model="ir.ui.view">
+    <field name="name">esi.agro.equipment.form.extensions</field><field name="model">esi.agro.equipment</field>
+    <field name="inherit_id" ref="esi_demo_agrocons_v20.view_agro_equipment_form"/>
+    <field name="arch" type="xml"><xpath expr="//field[@name='license_plate']" position="after">
+      <field name="fuel_total" readonly="1"/><field name="next_service_date"/>
+    </xpath><xpath expr="//sheet" position="inside"><notebook><page string="Mantenimiento">
+      <field name="maintenance_ids"><list editable="bottom"><field name="date"/><field name="name"/><field name="cost"/><field name="next_date"/></list></field>
+    </page></notebook></xpath></field>
+  </record>
+  <record id="view_agro_work_extensions" model="ir.ui.view">
+    <field name="name">esi.agro.work.form.extensions</field><field name="model">esi.agro.work</field>
+    <field name="inherit_id" ref="esi_demo_agrocons_v20.view_agro_work_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet" position="before"><header>
+        <button name="action_record" type="object" string="Registrar bitácora" invisible="state != 'draft'"/>
+        <button name="action_consume_inputs" type="object" string="Validar consumo en inventario" class="btn-primary" invisible="state != 'recorded' or stock_consumed" groups="stock.group_stock_manager"/>
+      </header></xpath>
+      <xpath expr="//field[@name='equipment_id']" position="after"><field name="execution_date"/><field name="fuel_liters"/><field name="fuel_product_id"/><field name="stock_consumed" readonly="1"/></xpath>
+      <xpath expr="//notebook" position="inside"><page string="Movimientos reales"><field name="stock_move_ids" readonly="1"><list><field name="product_id"/><field name="product_uom_qty"/><field name="state"/></list></field></page></xpath>
+    </field>
+  </record>
+  <record id="view_agro_harvest_extensions" model="ir.ui.view">
+    <field name="name">esi.agro.harvest.form.extensions</field><field name="model">esi.agro.harvest</field>
+    <field name="inherit_id" ref="esi_demo_agrocons_v20.view_agro_harvest_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet" position="before"><header><button name="action_receive_grain" type="object" string="Ingresar grano al inventario" class="btn-primary" groups="stock.group_stock_manager" invisible="stock_received"/></header></xpath>
+      <xpath expr="//field[@name='lot_id']" position="before"><field name="product_id"/><field name="warehouse_id"/><field name="estimated_unit_cost" readonly="1"/><field name="stock_received" readonly="1"/></xpath>
+      <xpath expr="//sheet" position="inside"><notebook><page string="Movimientos de grano"><field name="stock_move_ids" readonly="1"><list><field name="product_id"/><field name="product_uom_qty"/><field name="state"/></list></field></page></notebook></xpath>
+    </field>
+  </record>
+  <record id="view_agro_maintenance_list" model="ir.ui.view"><field name="name">esi.agro.maintenance.list</field><field name="model">esi.agro.maintenance</field><field name="arch" type="xml"><list><field name="date"/><field name="name"/><field name="equipment_id"/><field name="cost"/><field name="next_date"/></list></field></record>
+  <record id="view_agro_maintenance_form" model="ir.ui.view"><field name="name">esi.agro.maintenance.form</field><field name="model">esi.agro.maintenance</field><field name="arch" type="xml"><form><sheet><group><field name="name"/><field name="company_id"/><field name="equipment_id"/><field name="date"/><field name="hours_meter"/><field name="cost"/><field name="currency_id" invisible="1"/><field name="vendor_id"/><field name="next_date"/><field name="description"/></group></sheet></form></field></record>
+  <record id="action_agro_maintenance" model="ir.actions.act_window"><field name="name">Mantenimiento agrícola</field><field name="res_model">esi.agro.maintenance</field><field name="view_mode">list,form</field></record>
+  <menuitem id="menu_agro_maintenance" name="Mantenimiento" parent="menu_esi_agro_inventory" action="action_agro_maintenance" sequence="16"/>
+  <record id="view_agro_cost_pivot" model="ir.ui.view"><field name="name">esi.agro.cost.pivot</field><field name="model">esi.agro.plan</field><field name="arch" type="xml"><pivot string="Costos agrícolas"><field name="campaign_id" type="row"/><field name="field_id" type="row"/><field name="budget_total" type="measure"/><field name="work_cost" type="measure"/><field name="harvested_tons" type="measure"/></pivot></field></record>
+  <record id="view_agro_yield_graph" model="ir.ui.view"><field name="name">esi.agro.harvest.graph</field><field name="model">esi.agro.harvest</field><field name="arch" type="xml"><graph string="Toneladas cosechadas" type="bar"><field name="plan_id"/><field name="net_tons" type="measure"/></graph></field></record>
+  <record id="action_agro_cost_pivot" model="ir.actions.act_window"><field name="name">Análisis de presupuesto y costos</field><field name="res_model">esi.agro.plan</field><field name="view_mode">pivot,list,form</field></record>
+  <record id="action_agro_yield_graph" model="ir.actions.act_window"><field name="name">Rendimiento de cosecha</field><field name="res_model">esi.agro.harvest</field><field name="view_mode">graph,list,form</field></record>
+  <menuitem id="menu_agro_cost_pivot" name="Presupuesto vs costos" parent="menu_esi_agro_reports" action="action_agro_cost_pivot" sequence="3"/>
+  <menuitem id="menu_agro_yield_graph" name="Producción en toneladas" parent="menu_esi_agro_reports" action="action_agro_yield_graph" sequence="4"/>
+  <record id="view_agro_calendar" model="ir.ui.view"><field name="name">esi.agro.work.calendar</field><field name="model">esi.agro.work</field><field name="arch" type="xml"><calendar string="Calendario de labores" date_start="date" color="plan_id"><field name="name"/><field name="plan_id"/><field name="equipment_id"/></calendar></field></record>
+  <record id="action_agro_calendar" model="ir.actions.act_window"><field name="name">Calendario de labores</field><field name="res_model">esi.agro.work</field><field name="view_mode">calendar,list,form</field></record>
+  <menuitem id="menu_agro_calendar" name="Calendario de labores" parent="menu_esi_agro_operations" action="action_agro_calendar" sequence="6"/>
+  <record id="action_agro_customers" model="ir.actions.act_window"><field name="name">Ventas vinculadas a planes agrícolas</field><field name="res_model">sale.order</field><field name="view_mode">list,form</field><field name="domain">[('esi_agro_plan_id', '!=', False)]</field></record>
+  <menuitem id="menu_agro_customers" name="Ventas y cobros (Ventas)" parent="menu_esi_agro_reports" action="action_agro_customers" sequence="20"/>
+</odoo>
