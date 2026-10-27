@@ -18,7 +18,7 @@ class AgroDemoWizard(models.TransientModel):
         def partner(name,supplier=False):
             p=Partner.search([('name','=',name)],limit=1)
             if not p:
-                p=Partner.create({'name':name,'company_type':'company','comment':'DEMO ficticia Familia Agrocons - ESI'})
+                p=Partner.create({'name':name,'comment':'DEMO ficticia Familia Agrocons - ESI'})
             return p
         proveedor=partner('DEMO - Agroinsumos Oriente SRL')
         partner('DEMO - Servicio Agrícola del Norte')
@@ -26,8 +26,12 @@ class AgroDemoWizard(models.TransientModel):
         category=env['product.category'].sudo().search([('name','=','DEMO | Agrocons - Insumos')],limit=1)
         if not category: category=env['product.category'].sudo().create({'name':'DEMO | Agrocons - Insumos'})
         # AVCO solo sobre la categoría propia de la DEMO; nunca en categorías ajenas.
-        if 'property_cost_method' in category._fields:
+        if 'cost_method' in category._fields:
+            category.with_company(company).write({'cost_method':'average'})
+        elif 'property_cost_method' in category._fields:
             category.with_company(company).write({'property_cost_method':'average'})
+        else:
+            raise UserError(_('No se encontró un campo de método de costo compatible para configurar AVCO en la categoría agrícola. No se crearon datos.'))
         # Se crean fichas reales de productos; no se alteran existencias ni valoraciones.
         goods=[('SEM-001','Semilla de soya certificada (kg)',12,False,True),('FER-001','Fertilizante agrícola (kg)',8,False,True),('INO-001','Inoculante para soya (unidad)',45,False,True),('HER-001','Herbicida agrícola (litro)',65,False,True),('FUN-001','Fungicida agrícola (litro)',92,False,True),('INS-001','Insecticida agrícola (litro)',78,False,True),('DIE-001','Diésel agrícola (litro)',7,False,True),('REP-001','Repuestos agrícolas varios (unidad)',125,False,True),('SOY-001','Soya en grano cosechada (kg)',2.5,True,False)]
         Product=env['product.product'].sudo()
@@ -68,5 +72,5 @@ class AgroDemoWizard(models.TransientModel):
         plan=Plan.search([('campaign_id','=',camp.id)],limit=1)
         if plan and not po.search([('partner_ref','=','DEMO-AGC-RFQ-001'),('company_id','=',company.id)],limit=1):
             seed=Product.search([('default_code','=','DEMO-AGC-SEM-001')],limit=1)
-            po.create({'partner_id':proveedor.id,'company_id':company.id,'partner_ref':'DEMO-AGC-RFQ-001','esi_agro_plan_id':plan.id,'order_line':[(0,0,{'name':seed.display_name,'product_id':seed.id,'product_qty':2000,'price_unit':12,'product_uom_id':seed.uom_id.id})]})
+            po.create({'partner_id':proveedor.id,'company_id':company.id,'partner_ref':'DEMO-AGC-RFQ-001','esi_agro_plan_id':plan.id,'order_line':[(0,0,{'name':seed.display_name,'product_id':seed.id,'product_qty':2000,'price_unit':12,'uom_id':seed.uom_id.id})]})
         return {'type':'ir.actions.client','tag':'display_notification','params':{'title':_('Demo agrícola cargada'),'message':_('Parcelas, campañas, productos, maquinaria y una solicitud de compra en borrador. No se modificó stock.'),'type':'success','sticky':False}}

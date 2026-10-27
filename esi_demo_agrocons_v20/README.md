@@ -38,3 +38,10 @@ API de `ir.access.csv` de Odoo 20. Verificación estática incluida en `tests/te
 
 ## Corrección 20.0.2.0.1
 Se corrigió la carga demo: `with_company()` se aplica al recordset del asistente, y no al objeto `Environment`, en ambos asistentes. No cambia movimientos de inventario ni contabilidad.
+
+
+## Corrección de asistente 20.0.2.0.2
+- Evita el campo eliminado `company_type` en `res.partner`; no fuerza la clasificación jurídica de contactos ficticios.
+- Utiliza `uom_id` en líneas de compra de Odoo 20.
+- Selecciona el campo disponible para configurar AVCO en la categoría agrícola y detiene la carga si no puede establecerlo.
+- No confirma inventarios ni facturas al pulsar Cargar DEMO.
