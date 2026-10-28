@@ -10,7 +10,7 @@
     <field name="margin_right">8</field>
   </record>
   <record id="action_pdf" model="ir.actions.report">
-    <field name="name">Kardex físico</field>
+    <field name="name">Kardex físico y valorado</field>
     <field name="model">esi.kardex.report</field>
     <field name="report_type">qweb-pdf</field>
     <field name="report_name">esi_kardex_v20.document</field>

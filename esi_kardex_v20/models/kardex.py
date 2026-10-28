@@ -8,6 +8,8 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools import BinaryBytes
 from .balances import build_ledger
+from collections import defaultdict
+from .valuation import movement_unit_value, reconcile_values
 
 
 class Kardex(models.TransientModel):
@@ -16,6 +18,7 @@ class Kardex(models.TransientModel):
 
     company_id = fields.Many2one('res.company', string='Compañía', required=True,
                                  default=lambda self: self.env.company)
+    show_valuation = fields.Boolean(string='Mostrar valoración', default=True)
     period = fields.Selection([('month', 'Este mes'), ('today', 'Hoy'), ('previous', 'Mes anterior'), ('30days', 'Últimos 30 días'), ('custom', 'Elegir fechas')], string='Período', default='month', required=True)
     date_from = fields.Date(string='Desde', required=True,
                             default=lambda self: fields.Date.context_today(self).replace(day=1))
@@ -102,7 +105,7 @@ class Kardex(models.TransientModel):
 
     @api.onchange('company_id', 'date_from', 'date_to', 'warehouse_ids', 'location_ids',
                   'category_ids', 'product_ids', 'lot_ids', 'uom_ids', 'own_only',
-                  'group_warehouse', 'group_category', 'separate_variants', 'report_mode', 'show_locations')
+                  'group_warehouse', 'group_category', 'separate_variants', 'report_mode', 'show_locations', 'show_valuation')
     def _onchange_filters(self):
         self.preview = False
         self.export_file = False
@@ -202,8 +205,26 @@ class Kardex(models.TransientModel):
         lines = self.env['stock.move.line'].with_context(active_test=False).search(domain, order='date,id', limit=100001)
         if len(lines) > 100000:
             raise UserError(_('La consulta supera 100.000 líneas históricas. Filtre por productos, categorías o almacenes; no se mostrarán saldos truncados.'))
+        if self.show_valuation and not self.own_only:
+            raise UserError(_('Para valorar, active Excluir existencias de terceros. Puede consultar cantidades de consignación desmarcando Mostrar valoración.'))
+        if self.show_valuation and len(lines) > 3000:
+            raise UserError(_('La valoración supera 3.000 líneas históricas. Filtre por producto/categoría o consulte solo cantidades. No se truncará el saldo.'))
+        cost_cache = {}
+        def native_cost(product, at):
+            key = (product.id, at)
+            if key not in cost_cache:
+                # Native Odoo 20 valuation includes product.value cost updates.
+                # Isolate the selected company: active siblings must not sum.
+                scoped = product.with_company(self.company_id).with_context(
+                    allowed_company_ids=self.company_id.ids, to_date=at,
+                    warehouse_id=False, location=False, lot_id=False,
+                    owner_id=False, from_date=False)
+                cost_cache[key] = scoped.avg_cost
+            return cost_cache[key]
         location_scope = {loc: scope for scope, (_, ids) in scopes.items() for loc in ids}
         events, metadata = [], {}
+        opening_qty, closing_qty = defaultdict(lambda: defaultdict(float)), defaultdict(lambda: defaultdict(float))
+        products_by_id = {}
         for line in lines:
             source = location_scope.get(line.location_id.id)
             destination = location_scope.get(line.location_dest_id.id)
@@ -213,13 +234,25 @@ class Kardex(models.TransientModel):
             entity = product if self.separate_variants else product.product_tmpl_id
             # Stored native quantity in the product's unit; no cost/valuation calls.
             quantity = line.quantity_product_uom
+            unit_value = 0.0
+            if self.show_valuation:
+                move = line.move_id
+                valued_quantity = move._get_valued_qty(signed=True)
+                unit_value = movement_unit_value(move.value, valued_quantity, lambda: native_cost(product, line.date))
+                products_by_id[product.id] = product
             for scope in {source, destination} - {None}:
                 key = (scope, entity.id)
                 metadata[key] = (scopes[scope][0], entity, product.uom_id, product.categ_id)
                 events.append({'key': key, 'date': line.date, 'id': line.id,
                     'incoming': quantity if destination == scope else 0.0,
                     'outgoing': quantity if source == scope else 0.0,
+                    'unit_value': unit_value,
                     'line': line})
+                if self.show_valuation:
+                    delta = quantity if destination == scope else -quantity
+                    closing_qty[key][product.id] += delta
+                    if line.date < start:
+                        opening_qty[key][product.id] += delta
         balances = build_ledger(events, start, end)
         headers = ['Almacén', 'Categoría', 'Producto', 'Referencia', 'UdM']
         if self.details:
@@ -229,7 +262,15 @@ class Kardex(models.TransientModel):
         headers += ['Saldo inicial', 'Entrada', 'Salida', 'Saldo']
         for uom in self.uom_ids:
             headers += [f'{label} ({uom.display_name})' for label in ['Inicial', 'Entrada', 'Salida', 'Saldo']]
+        if self.show_valuation:
+            headers += ['Moneda', 'Costo unitario movimiento', 'Valor inicial', 'Valor entrada', 'Valor salida', 'Ajuste de valoración', 'Valor saldo']
         rows = []
+        monetary = {}
+        if self.show_valuation:
+            for key, balance in balances.items():
+                initial = sum(q * native_cost(products_by_id[p], start - timedelta(microseconds=1)) for p,q in opening_qty[key].items())
+                closing = sum(q * native_cost(products_by_id[p], end - timedelta(microseconds=1)) for p,q in closing_qty[key].items())
+                monetary[key] = reconcile_values(balance['lines'],initial,closing,self.company_id.currency_id.name)
 
         def make_row(key, quantities, event=None, label=''):
             warehouse, entity, unit, category = metadata[key]
@@ -249,6 +290,16 @@ class Kardex(models.TransientModel):
                     row += [unit._compute_quantity(q, uom, round=False) for q in quantities]
                 else:
                     row += ['', '', '', '']
+            if self.show_valuation:
+                initial, vin, vout, adjustment, closing = monetary[key]
+                if event:
+                    row += event['money']
+                elif label == 'SALDO INICIAL':
+                    row += [self.company_id.currency_id.name,'',initial,0.0,0.0,0.0,initial]
+                elif label == 'AJUSTE DE VALORACIÓN AL CORTE':
+                    row += [self.company_id.currency_id.name,'',0.0,0.0,0.0,adjustment,closing]
+                else:
+                    row += [self.company_id.currency_id.name,'',initial,vin,vout,adjustment,closing]
             return row
 
         def sort_key(key):
@@ -261,10 +312,12 @@ class Kardex(models.TransientModel):
                 rows.append(make_row(key, (balance['opening'], 0.0, 0.0, balance['opening']), label='SALDO INICIAL'))
                 for event in balance['lines']:
                     rows.append(make_row(key, (0.0, event['incoming'], event['outgoing'], event['balance']), event))
+                if self.show_valuation and abs(monetary[key][3]) > 0.000001:
+                    rows.append(make_row(key,(0.0,0.0,0.0,balance['closing']),label='AJUSTE DE VALORACIÓN AL CORTE'))
                 rows.append(make_row(key, (balance['opening'], balance['incoming'], balance['outgoing'], balance['closing']), label='RESUMEN DEL PRODUCTO'))
             else:
                 rows.append(make_row(key, (balance['opening'], balance['incoming'], balance['outgoing'], balance['closing'])))
-        title = f'Kardex físico — {self.company_id.display_name} — {self.date_from} / {self.date_to}'
+        title = f'Kardex físico y valorado — {self.company_id.display_name} — {self.date_from} / {self.date_to}' if self.show_valuation else f'Kardex físico — {self.company_id.display_name} — {self.date_from} / {self.date_to}'
         return title, headers, rows
 
     def _html(self, title, headers, rows):
@@ -273,7 +326,8 @@ class Kardex(models.TransientModel):
         body = ''.join('<tr>' + ''.join('<td>%s</td>' % cell(v) for v in row) + '</tr>' for row in rows)
         if not rows:
             body = '<tr><td colspan="%d">Sin movimientos que coincidan con los filtros.</td></tr>' % len(headers)
-        return ('<h3>%s</h3><p>%s</p><p>Solo consulta · Cantidades en UdM indicada · Sin importes de valoración. '
+        return ('<h3>%s</h3><p>%s</p><p>Solo consulta · Cantidades en UdM indicada. Valoración: valores nativos de movimientos; '
+                'saldos asignados al costo medio nativo de la compañía en cada corte. Ajuste separado para conciliar cambios de valor. '
                 'Ubicaciones internas; tránsito excluido. Traslados dentro del mismo ámbito no alteran el saldo. '
                 'Columnas vacías: UdM no compatible. No sumar cantidades de productos con unidades diferentes.</p>'
                 '<table class="table table-sm table-striped" style="font-size:9px"><thead><tr>%s</tr></thead><tbody>%s</tbody></table>') % (
@@ -294,7 +348,7 @@ class Kardex(models.TransientModel):
         title, headers, rows = self._report_data()
         output = io.BytesIO()
         book = xlsxwriter.Workbook(output, {'in_memory': True, 'strings_to_formulas': False, 'strings_to_urls': False})
-        sheet = book.add_worksheet('Kardex físico')
+        sheet = book.add_worksheet('Kardex')
         filters = book.add_worksheet('Filtros aplicados')
         filters.set_column(0, 0, 110)
         for index, text in enumerate((self.filter_summary or '').splitlines()):
@@ -302,7 +356,7 @@ class Kardex(models.TransientModel):
         bold = book.add_format({'bold': True, 'bg_color': '#072955', 'font_color': '#FFFFFF'})
         number = book.add_format({'num_format': '#,##0.000000'})
         sheet.write(0, 0, title)
-        sheet.write(1, 0, 'Solo cantidades; sin valoración. UdM incompatibles: columnas vacías. Tránsito excluido.')
+        sheet.write(1, 0, 'Valores nativos; saldos al costo medio nativo del corte. Ajustes separados. No modifica inventario ni contabilidad.')
         sheet.write_row(3, 0, headers, bold)
         for i, row in enumerate(rows, 4):
             for j, value in enumerate(row):

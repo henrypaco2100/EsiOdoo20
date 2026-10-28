@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_size_inventory,Inventario por talla,model_esi_shoe_inventory_report,stock.group_stock_user,crud,

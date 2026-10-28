@@ -1,0 +1,5 @@
+<odoo>
+  <record id="paper_matrix" model="report.paperformat"><field name="name">Kardex por talla A3</field><field name="format">A3</field><field name="orientation">Landscape</field><field name="margin_top">15</field><field name="margin_bottom">15</field><field name="margin_left">8</field><field name="margin_right">8</field></record>
+  <record id="report_inventory" model="ir.actions.report"><field name="name">Kardex por talla</field><field name="model">esi.shoe.inventory.report</field><field name="report_type">qweb-pdf</field><field name="report_name">esi_inventario_calzados_v20.document</field><field name="paperformat_id" ref="paper_matrix"/></record>
+  <template id="document"><t t-call="web.html_container"><t t-foreach="docs" t-as="o"><t t-call="web.external_layout"><div class="page"><div t-out="body"/></div></t></t></t></template>
+</odoo>

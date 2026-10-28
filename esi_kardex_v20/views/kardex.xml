@@ -4,7 +4,7 @@
     <field name="name">esi.kardex.report.form</field>
     <field name="model">esi.kardex.report</field>
     <field name="arch" type="xml">
-      <form string="Kardex físico">
+      <form string="Kardex físico y valorado" class="o_esi_kardex_wide">
         <header>
           <button name="action_preview" string="Consultar Kardex" type="object" class="btn-primary"/>
           <button name="action_pdf" string="Descargar PDF" type="object"/>
@@ -14,7 +14,7 @@
         <sheet>
           <field name="allowed_location_ids" invisible="1"/>
           <field name="details" invisible="1"/>
-          <div class="alert alert-info" role="alert">Elige un período y pulsa Consultar Kardex. Los campos vacíos incluyen todos los registros accesibles. Este informe muestra cantidades; no modifica existencias ni valoración.</div>
+          <div class="alert alert-info" role="alert">Elige un período y pulsa Consultar Kardex. Los campos vacíos incluyen todos los registros accesibles. Este informe muestra cantidades y valoración nativa; no modifica existencias, costos ni asientos.</div>
           <notebook>
             <page string="1. Período y productos" name="main_filters">
               <group>
@@ -44,14 +44,14 @@
                   <field name="group_warehouse"/>
                   <field name="group_category"/>
                   <field name="separate_variants"/>
-                  <field name="show_locations" invisible="report_mode != 'detail'"/>
+                  <field name="show_valuation"/><field name="show_locations" invisible="report_mode != 'detail'"/>
                   <field name="uom_ids" widget="many2many_tags" options="{'no_create': True}" placeholder="Opcional: Caja, Paquete u otra UdM configurada"/>
                 </group>
               </group>
               <p class="text-muted">Al separar almacenes verás sus saldos individuales; al desmarcar se consolidan. Las unidades adicionales se convierten solo si comparten la misma referencia. PDF: máximo una unidad adicional; Excel: varias.</p>
             </page>
           </notebook>
-          <group string="Resumen de tu consulta"><field name="filter_summary" nolabel="1" readonly="1"/></group>
+          <separator string="Resumen de tu consulta"/><div class="o_esi_filter_summary"><field name="filter_summary" nolabel="1" readonly="1" class="w-100"/></div>
           <separator string="Resultado"/>
           <p class="text-muted" invisible="preview">Pulsa Consultar Kardex para generar el resultado. Al cambiar filtros, se limpia la vista anterior para evitar confusiones.</p>
           <div style="overflow-x:auto"><field name="preview" widget="html" nolabel="1"/></div>
@@ -60,10 +60,10 @@
     </field>
   </record>
   <record id="action_kardex" model="ir.actions.act_window">
-    <field name="name">Kardex físico</field>
+    <field name="name">Kardex físico y valorado</field>
     <field name="res_model">esi.kardex.report</field>
     <field name="view_mode">form</field>
     <field name="view_id" ref="view_kardex_form"/>
   </record>
-  <menuitem id="menu_kardex" name="Kardex físico" parent="stock.menu_warehouse_report" action="action_kardex" sequence="90" groups="stock.group_stock_manager"/>
+  <menuitem id="menu_kardex" name="Kardex físico y valorado" parent="stock.menu_warehouse_report" action="action_kardex" sequence="90" groups="stock.group_stock_manager"/>
 </odoo>
