@@ -22,7 +22,7 @@ class DirectDataTests(unittest.TestCase):
     def test_variant_combinations_unique(self):
         codes=[r['code']+'-T'+str(s) for r in D['finished'] for s in r['sizes']]
         self.assertEqual(len(codes),len(set(codes)))
-        self.assertEqual(len(codes),357)
+        self.assertEqual(len(codes),352)
     def test_pilot_separated(self):
         r=[v for v in D['finished'] if v['key'].startswith('pt:M-L-01-03-00')]
         self.assertEqual(len(r),2)

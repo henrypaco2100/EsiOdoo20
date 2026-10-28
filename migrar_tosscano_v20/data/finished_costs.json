@@ -1,0 +1,270 @@
+{
+  "revision": "2026-10-28",
+  "currency": "BOB",
+  "aliases": {
+    "M-W-01-010": "M-W-01-10",
+    "M-BT-01-010": "M-BT-01-10"
+  },
+  "prices": {
+    "M-L-01-05-00": 152,
+    "M-L-01-02-00": 152,
+    "M-L-01-02-01": 152,
+    "M-L-02-02-00": 152,
+    "M-L-01-03-01": 152,
+    "M-L-01-03-00": 152,
+    "M-L-01-01-00": 152,
+    "M-L-02-01-00": 152,
+    "M-L-01-04-00": 152,
+    "M-TAR-02-04": 194,
+    "M-RG-01-03": 193.52,
+    "M-RG-01-01": 193.52,
+    "M-TDP-01-03": 193.52,
+    "M-TDP-01-08": 193.52,
+    "M-TAR-01-02": 194,
+    "M-TCS-01-01": 194,
+    "M-W-01-09": 148.33,
+    "M-W-01-10": 148.33,
+    "I-CL-01-06-0A": 165,
+    "I-CL-01-06-0D": 165,
+    "I-CT-01-07": 266.4,
+    "I-CL-01-01": 165,
+    "M-L-03-03": 153.52,
+    "TK-CL-03A-012": 291.4,
+    "M-PC-01-03": 181.13,
+    "M-PC-01-01": 181.13,
+    "M-P-01-03": 195.63,
+    "M-P-01-08": 195.63,
+    "M-P-01-02": 195.63,
+    "M-P-01-01": 195.63,
+    "M-BT-02-09": 160.26,
+    "M-BT-01-09": 160.26,
+    "M-BT-01-10": 160.26,
+    "I-B-01-06": 234.41,
+    "M-RG-01-04": 194,
+    "M-RG-01-08": 194,
+    "M-TDP-01-04": 194,
+    "ES-V-01-01": 70,
+    "ES-V-02-01": 70,
+    "ES-V-03-01": 70,
+    "ES-V-04-01": 70,
+    "ES-M-03-01": 70,
+    "EL-V-01-01": 100,
+    "EL-V-01-11": 100,
+    "EL-V-01-06": 100,
+    "EL-V-02-06": 100,
+    "C-PLY-01-11": 90,
+    "C-PLY-01-12": 90,
+    "C-PLY-01-08": 90,
+    "C-CLK-01-01": 100,
+    "M-BT-04-01": 420,
+    "M-TAR-01-03": 194,
+    "M-TAR-01-04": 194,
+    "M-TDP-01-02": 194,
+    "ES-V-04-01-01": 90,
+    "ES-V-03-01-01": 90,
+    "ES-M-04-01": 90,
+    "E-V-06-07": 100,
+    "E-V-12-01": 100,
+    "I-CL-08-06-0A": 165,
+    "I-CL-03-06-0A": 165,
+    "I-CL-02-06-0A": 165,
+    "I-CL-06-06-0A": 165,
+    "I-CH-01-06-0A": 235
+  },
+  "sources": {
+    "M-L-01-05-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D4"
+    ],
+    "M-L-01-02-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D5",
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D13"
+    ],
+    "M-L-01-02-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D6"
+    ],
+    "M-L-02-02-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D7"
+    ],
+    "M-L-01-03-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D8"
+    ],
+    "M-L-01-03-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D9",
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D14"
+    ],
+    "M-L-01-01-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D10"
+    ],
+    "M-L-02-01-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D11"
+    ],
+    "M-L-01-04-00": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D12"
+    ],
+    "M-TAR-02-04": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D15"
+    ],
+    "M-RG-01-03": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D16"
+    ],
+    "M-RG-01-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D17"
+    ],
+    "M-TDP-01-03": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D18"
+    ],
+    "M-TDP-01-08": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D19"
+    ],
+    "M-TAR-01-02": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D20"
+    ],
+    "M-TCS-01-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D21"
+    ],
+    "M-W-01-09": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D22"
+    ],
+    "M-W-01-10": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D23"
+    ],
+    "I-CL-01-06-0A": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D24"
+    ],
+    "I-CL-01-06-0D": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D25"
+    ],
+    "I-CT-01-07": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D26"
+    ],
+    "I-CL-01-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D27"
+    ],
+    "M-L-03-03": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D28"
+    ],
+    "TK-CL-03A-012": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D29"
+    ],
+    "M-PC-01-03": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D30"
+    ],
+    "M-PC-01-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D31"
+    ],
+    "M-P-01-03": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D32"
+    ],
+    "M-P-01-08": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D33"
+    ],
+    "M-P-01-02": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D34"
+    ],
+    "M-P-01-01": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D35"
+    ],
+    "M-BT-02-09": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D36"
+    ],
+    "M-BT-01-09": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D37"
+    ],
+    "M-BT-01-10": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D38"
+    ],
+    "I-B-01-06": [
+      "INVENTARIO FABRICA.xlsx / Hoja1 / D39"
+    ],
+    "M-RG-01-04": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G14"
+    ],
+    "M-RG-01-08": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G15"
+    ],
+    "M-TDP-01-04": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G16"
+    ],
+    "ES-V-01-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G17"
+    ],
+    "ES-V-02-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G18"
+    ],
+    "ES-V-03-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G19"
+    ],
+    "ES-V-04-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G20"
+    ],
+    "ES-M-03-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G21"
+    ],
+    "EL-V-01-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G22"
+    ],
+    "EL-V-01-11": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G23"
+    ],
+    "EL-V-01-06": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G24"
+    ],
+    "EL-V-02-06": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G25"
+    ],
+    "C-PLY-01-11": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G26"
+    ],
+    "C-PLY-01-12": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G27"
+    ],
+    "C-PLY-01-08": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G28"
+    ],
+    "C-CLK-01-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G29"
+    ],
+    "M-BT-04-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G30"
+    ],
+    "M-TAR-01-03": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G31"
+    ],
+    "M-TAR-01-04": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G32"
+    ],
+    "M-TDP-01-02": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G33"
+    ],
+    "ES-V-04-01-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G34"
+    ],
+    "ES-V-03-01-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G35"
+    ],
+    "ES-M-04-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G36"
+    ],
+    "E-V-06-07": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G37"
+    ],
+    "E-V-12-01": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G38"
+    ],
+    "I-CL-08-06-0A": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G39"
+    ],
+    "I-CL-03-06-0A": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G40"
+    ],
+    "I-CL-02-06-0A": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G41"
+    ],
+    "I-CL-06-06-0A": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G42"
+    ],
+    "I-CH-01-06-0A": [
+      "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G43"
+    ]
+  }
+}

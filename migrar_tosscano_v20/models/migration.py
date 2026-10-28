@@ -141,7 +141,7 @@ class MigrationLine(models.Model):
                 'name': line.name, 'default_code': line.code, 'type': 'consu', 'is_storable': True,
                 'company_id': migration.factory_id.id, 'uom_id': line.uom_id.id,
                 'categ_id': category.id, 'purchase_ok': True, 'sale_ok': False,
-                'esi_component_ok': line.component, 'esi_manufacture_ok': False,
+                'esi_component_ok': True, 'esi_manufacture_ok': False,
                 'esi_measure': line.measure, 'esi_material_type': line.material_type,
             })
             line.write({'product_id': template.product_variant_id.id, 'state': 'done'})

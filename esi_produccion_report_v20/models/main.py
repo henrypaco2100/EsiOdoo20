@@ -16,27 +16,46 @@ class Report(models.TransientModel):
     date_basis = fields.Selection([('date_start', 'Inicio de fabricación'), ('date_finished', 'Finalización (solo terminadas)')], default='date_start', required=True, string='Fecha utilizada')
     group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', '=', company_id)]")
     production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', '=', company_id)]")
-    kind = fields.Selection([('detail', 'Ficha completa de una orden'), ('summary', 'Resumen de órdenes'), ('outputs', 'Productos terminados por talla'),
+    kind = fields.Selection([('detail', 'Ficha completa de una orden'), ('summary', 'Resumen de órdenes'), ('centers', 'Órdenes por centro de trabajo actual'), ('outputs', 'Productos terminados por talla'),
         ('operations', 'Seguimiento de centros y operaciones'), ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
+
+    workcenter_id = fields.Many2one('mrp.workcenter', string='Centro de trabajo actual', domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
 
     state_filter = fields.Selection([('all', 'Todos'), ('open', 'Pendientes y en progreso'), ('done', 'Terminadas')], default='all', required=True, string='Estado de fabricación')
 
-    def _esi_operation_summary(self, order):
+    def _esi_current_workorders(self, order):
         workorders = order.workorder_ids.sorted(lambda w: (w.sequence if 'sequence' in w._fields else 0, w.id))
-        if not workorders:
-            return ('Sin etapas', '—', '0/0')
+        if order.state in ('done', 'cancel'):
+            return workorders[:0]
         usable = workorders.filtered(lambda w: w.state != 'cancel')
         current = usable.filtered(lambda w: w.state == 'progress')
         if not current:
             current = usable.filtered(lambda w: w.state == 'ready')
         if not current:
             current = usable.filtered(lambda w: w.state not in ('done', 'cancel'))[:1]
+        return current
+
+    def _esi_operation_summary(self, order):
+        workorders = order.workorder_ids
+        if not workorders:
+            return ('Sin centro asignado', '—', '0/0')
+        usable = workorders.filtered(lambda w: w.state != 'cancel')
+        current = self._esi_current_workorders(order)
         labels = dict(workorders._fields['state']._description_selection(self.env))
-        names = ' / '.join(w.name for w in current) if current else ('Finalizadas' if usable else 'Canceladas')
-        states = ' / '.join(dict.fromkeys(labels.get(w.state, w.state) for w in current)) if current else ('Hecho' if usable else 'Cancelado')
+        # Show the actual workcenter, not the operation's descriptive name.
+        names = ' / '.join(dict.fromkeys(w.workcenter_id.name or 'Sin centro asignado' for w in current))
+        if not names:
+            names = 'Sin centro activo'
+        states = ' / '.join(dict.fromkeys(labels.get(w.state, w.state) for w in current)) if current else ('Cancelado' if order.state == 'cancel' or not usable else 'Hecho')
         return names, states, '%s/%s' % (len(usable.filtered(lambda w: w.state == 'done')), len(usable))
 
-    @api.onchange('production_id', 'kind', 'date_from', 'date_to', 'date_basis', 'group_id', 'state_filter')
+    @api.onchange('company_id')
+    def _onchange_center_company(self):
+        if self.workcenter_id.company_id and self.workcenter_id.company_id != self.company_id:
+            self.workcenter_id = False
+        self.preview = False
+
+    @api.onchange('production_id', 'kind', 'date_from', 'date_to', 'date_basis', 'group_id', 'state_filter', 'workcenter_id')
     def _onchange_report_filters(self):
         self.preview = False
         if self.kind == 'detail' and not self.production_id:
@@ -115,9 +134,20 @@ class Report(models.TransientModel):
             raise UserError(_('El reporte supera 10.000 órdenes. Reduzca el período.'))
         title = ('Fabricación · %s · %s' % (self.company_id.name, self.production_id.name)) if self.production_id else title + ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
-        if self.kind == 'summary':
+        if self.workcenter_id and self.kind != 'piecework':
+            self.workcenter_id.check_access('read')
+            if self.workcenter_id.company_id and self.workcenter_id.company_id != self.company_id:
+                raise UserError(_('El centro de trabajo pertenece a otra sucursal.'))
+            orders = orders.filtered(lambda o: self.workcenter_id in self._esi_current_workorders(o).workcenter_id)
+            if self.production_id and not orders:
+                raise UserError(_('La orden seleccionada no se encuentra actualmente en ese centro de trabajo.'))
+            title += ' · Centro actual: ' + self.workcenter_id.name
+        if self.kind == 'centers':
+            orders = orders.sorted(lambda o: (self._esi_operation_summary(o)[0], o.name or '', o.id))
+            title += ' · Órdenes por centro actual'
+        if self.kind in ('summary', 'centers'):
             headers = ['OF', 'Grupo', 'Producto / características', 'Cantidad total (tallas)',
-                'Unidad', 'Estado OF', 'Centro / etapa actual', 'Estado etapa', 'Etapas completadas',
+                'Unidad', 'Estado OF', 'Centro de trabajo actual', 'Estado etapa', 'Etapas completadas',
                 'Responsable', 'Sucursal']
             rows = []
             for o in orders:

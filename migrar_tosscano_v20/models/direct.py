@@ -5,6 +5,8 @@ from odoo import fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools import file_open
 
+FINISHED_ALIASES = {'M-W-01-010': 'M-W-01-10', 'M-BT-01-010': 'M-BT-01-10'}
+
 
 class DirectMigration(models.Model):
     _inherit = 'tosscano.migration'
@@ -12,7 +14,7 @@ class DirectMigration(models.Model):
     data_imported = fields.Boolean(readonly=True, copy=False)
     stock_imported = fields.Boolean(readonly=True, copy=False)
     import_log = fields.Text(string='Resultado de importación', readonly=True, copy=False)
-    valuation_pending_log = fields.Text(string='Saldos cargados sin costo de apertura', readonly=True, copy=False)
+    valuation_pending_log = fields.Text(string='Historial de saldos cargados sin costo', readonly=True, copy=False)
     product_count = fields.Integer(string='Productos/variantes vinculados', readonly=True, copy=False)
 
     def _source(self):
@@ -35,7 +37,34 @@ class DirectMigration(models.Model):
         return 'import_' + hashlib.sha256(scope.encode()).hexdigest()
 
     def _ref(self, key):
+        record = self._exact_ref(key)
+        if record:
+            return record
+        # Keep old product, recipe and balance identities. Never import an old
+        # opening balance a second time just because its code was corrected.
+        for old, official in FINISHED_ALIASES.items():
+            token = 'pt:' + official
+            if key.endswith(token) or token + ':' in key:
+                legacy = key.replace(token, 'pt:' + old, 1)
+                record = self._exact_ref(legacy)
+                if record:
+                    return record
+        return record
+
+    def _exact_ref(self, key):
         return self.env.ref('tosscano_import_data.' + self._xmlname(key), raise_if_not_found=False)
+
+    def _finished_conflict(self, row):
+        for old, official in FINISHED_ALIASES.items():
+            if row['code'] != official:
+                continue
+            previous = self._exact_ref('pt:' + old)
+            current = self._exact_ref('pt:' + official)
+            if previous and current and previous != current:
+                return ('Código %s: ya existen dos plantillas vinculadas (%s y %s). '
+                        'No se fusionan ni se recargan saldos; requieren consolidación de sus existencias/documentos.'
+                        % (official, previous.id, current.id))
+        return False
 
     def _bind(self, key, record):
         self.env['ir.model.data'].create({'module': 'tosscano_import_data',
@@ -102,6 +131,8 @@ class DirectMigration(models.Model):
     def _material(self, row):
         product = self._ref(row['key'])
         if product:
+            if not product.esi_component_ok:
+                product.product_tmpl_id.write({'esi_component_ok': True})
             return product
         company = self.factory_id
         uom = self._uom(row['uom'])
@@ -109,18 +140,22 @@ class DirectMigration(models.Model):
         if existing:
             if len(existing) != 1 or existing.uom_id != uom or not existing.is_storable:
                 raise UserError(_('Código existente incompatible: %s', row['code']))
-            # Reuse without rewriting costs, names or categories of existing stock.
+            # Enable components without changing stock, prices or categories.
+            if not existing.esi_component_ok:
+                existing.product_tmpl_id.write({'esi_component_ok': True})
             return self._bind(row['key'], existing)
         template = self.env['product.template'].with_company(company).create({
             'name': row['name'], 'default_code': row['code'], 'type': 'consu', 'is_storable': True,
             'company_id': company.id, 'uom_id': uom.id, 'categ_id': self._category(row.get('family') or 'MATERIAS PRIMAS', row.get('subfamily') or 'OTROS MATERIALES').id,
-            'purchase_ok': True, 'sale_ok': False, 'esi_component_ok': row.get('family') != 'HERRAMIENTAS',
+            'purchase_ok': True, 'sale_ok': False, 'esi_component_ok': True,
             'esi_manufacture_ok': False, 'esi_measure': str(row.get('measure') or ''), 'esi_material_type': str(row.get('type') or ''),
             'standard_price': float(row.get('cost') or 0),
         })
         return self._bind(row['key'], template.product_variant_id)
 
     def _finished(self, row):
+        if self._finished_conflict(row):
+            return False
         template = self._ref(row['key'])
         if not template:
             if self.env['product.product'].with_context(active_test=False).search_count([('default_code', '=like', row['code'] + '-T%')]):
@@ -142,11 +177,28 @@ class DirectMigration(models.Model):
                 'attribute_line_ids': lines,
             })
             self._bind(row['key'], template)
+        else:
+            # Aliases may contribute sizes absent in the original factory row.
+            line = template.attribute_line_ids.filtered(lambda l: l.attribute_id.name == 'Talla')
+            if len(line) != 1:
+                raise UserError(_('La plantilla %s debe tener un único atributo Talla.', template.display_name))
+            required = self._attribute_line('Talla', row['sizes'], True)[2]['value_ids'][0][2]
+            missing = set(required) - set(line.value_ids.ids)
+            if missing:
+                line.write({'value_ids': [(4, value_id) for value_id in sorted(missing)]})
+        if not template.esi_manufacture_ok:
+            template.write({'esi_manufacture_ok': True})
         for product in template.product_variant_ids:
             size = product.product_template_attribute_value_ids.filtered(lambda v: v.attribute_id.name == 'Talla').name
             key = row['key'] + ':' + size
+            expected = row['code'] + '-T' + size
+            if product.default_code != expected:
+                occupied = self.env['product.product'].with_context(active_test=False).search_count([
+                    ('default_code', '=', expected), ('id', '!=', product.id)])
+                if occupied:
+                    raise UserError(_('Código %s ocupado por otro producto; no se duplicó.', expected))
+                product.default_code = expected
             if not self._ref(key):
-                product.default_code = row['code'] + '-T' + size
                 self._bind(key, product)
         return template
 
@@ -192,9 +244,14 @@ class DirectMigration(models.Model):
         for row in data['materials']:
             self._material(row)
         for row in data['finished']:
-            self._finished(row)
+            conflict = self._finished_conflict(row)
+            if conflict:
+                notes.append(conflict)
+            else:
+                self._finished(row)
         self._accounts(data['accounts'], notes)
         self._configure_category_accounting()
+        notes.extend(self._apply_finished_costs(data))
         self._recipes(data, notes)
         self.write({'data_imported': True, 'loaded': True,
                     'product_count': len(data['materials']) + sum(len(r['sizes']) for r in data['finished']),
@@ -203,7 +260,7 @@ class DirectMigration(models.Model):
                     '%s materias primas; %s plantillas de calzado.' % (len(data['materials']), len(data['finished'])),
                     'Terminados obtenidos de las hojas de existencias; no del archivo de recetas duplicado.',
                     'Modelos separados por código/color; variantes Talla y Color. Las descripciones originales se conservan.',
-                    'No hay costos de apertura de terminados: complete su costo en cada sucursal antes de importar esos saldos.'] + notes)})
+                    'Costos unitarios de terminados incluidos en BOB, por talla y compañía.'] + notes)})
         return True
 
     def _recipes(self, data, notes):
@@ -234,6 +291,8 @@ class DirectMigration(models.Model):
                 notes.append('LdM '+recipe['code']+' no creada: '+', '.join(sorted(set(errors))))
                 continue
             for row in data['finished']:
+                if self._finished_conflict(row):
+                    continue
                 if not row['code'].startswith(recipe['code']+'-'):
                     continue
                 key='bom:'+row['key']
@@ -261,6 +320,12 @@ class DirectMigration(models.Model):
         applied_quantities=defaultdict(float)
         applied=0
         for (branch,key), rows in groups.items():
+            finished_row = next((r for r in data.get('finished', []) if key.startswith(r['key'] + ':')), None)
+            if finished_row and self._finished_conflict(finished_row):
+                message = self._finished_conflict(finished_row)
+                if message not in notes:
+                    notes.append(message)
+                continue
             mark='balance:'+branch+':'+key
             if self._ref(mark):continue
             product=self._ref(key)
@@ -314,3 +379,94 @@ class DirectMigration(models.Model):
                     ('\nHay saldos de terminados cargados sin costo. Consulte Saldos cargados sin costo de apertura.' if self.valuation_pending_log else '')+
                     '\nFecha de movimientos: fecha de ejecución nativa. Corte de origen: 23/10/2026. No se reescriben fechas.'})
         return True
+
+    def _apply_finished_costs(self, data):
+        """Native cost write, once per product/company/source-price revision.
+
+        Existing quantities and dated documents are never changed. Odoo creates
+        its native product.value adjustment at the execution date when needed.
+        """
+        if not self.env.user.has_group('account.group_account_manager') or not self.env.user.has_group('stock.group_stock_manager'):
+            raise UserError(_('Se requieren permisos de administrador de Contabilidad e Inventario.'))
+        notes = []
+        applied = 0
+        seen = set()
+        companies = self.root_id | self.factory_id | self.cbba_id | self.scz_id
+        for row in data['finished']:
+            templates = self.env['product.template']
+            template = self._ref(row['key'])
+            if template:
+                templates |= template
+            # Also value old duplicates if both were imported before the alias
+            # was confirmed; do not merge or delete their operational records.
+            for old, official in FINISHED_ALIASES.items():
+                if row['code'] == official:
+                    old_template = self._exact_ref('pt:' + old)
+                    if old_template:
+                        templates |= old_template
+            if not templates:
+                notes.append('Costo pendiente, producto no importado: ' + row['code'])
+                continue
+            cost = float(row['cost'])
+            if cost <= 0:
+                raise UserError(_('Costo de terminado no válido: %s', row['code']))
+            for product in templates.with_context(active_test=False).product_variant_ids:
+                for company in companies:
+                    identity = (product.id, company.id)
+                    if identity in seen:
+                        continue
+                    seen.add(identity)
+                    mark = 'finished-cost:20261028:%s:%s:%.8f' % (company.id, product.id, cost)
+                    if self._ref(mark):
+                        continue
+                    scoped = product.with_company(company)
+                    if abs(scoped.standard_price - cost) > 0.0000001:
+                        scoped.write({'standard_price': cost})
+                        applied += 1
+                    self._bind(mark, product)
+        notes.append('Costos de terminados: %s actualizaciones por variante/compañía; sin recargar cantidades. '
+                     'Las repeticiones no sobrescriben el promedio posterior. Ajuste de valoración nativo a fecha de ejecución.' % applied)
+        return notes
+
+    def action_update_finished_costs(self):
+        self._lock()
+        data = self._source()
+        notes = []
+        for row in data['finished']:
+            conflict = self._finished_conflict(row)
+            if conflict:
+                notes.append(conflict)
+            elif self._ref(row['key']):
+                self._finished(row)
+        notes.extend(self._apply_finished_costs(data))
+        self.import_log = (self.import_log or '') + '\n\nCÓDIGOS Y COSTOS DE TERMINADOS\n' + '\n'.join(notes)
+        return True
+
+    def action_fix_product_flags(self):
+        self._lock()
+        data = self._source()
+        material_templates = self.env['product.template']
+        finished_templates = self.env['product.template']
+        for row in data['materials']:
+            product = self._ref(row['key'])
+            if product:
+                material_templates |= product.product_tmpl_id
+        # Support products imported by the original row-based version too.
+        material_templates |= self.line_ids.filtered(
+            lambda line: line.kind == 'material' and line.product_id).product_id.product_tmpl_id
+        for row in data['finished']:
+            template = self._ref(row['key'])
+            if template:
+                finished_templates |= template
+        if not material_templates and not finished_templates:
+            raise UserError(_('Todavía no hay productos vinculados. Primero pulse Importar datos.'))
+        changed_materials = material_templates.filtered(lambda p: not p.esi_component_ok)
+        changed_finished = finished_templates.filtered(lambda p: not p.esi_manufacture_ok)
+        changed_materials.write({'esi_component_ok': True})
+        changed_finished.write({'esi_manufacture_ok': True})
+        message = _('%s materias primas marcadas como Componentes; %s terminados marcados como Fabricar.',
+                    len(changed_materials), len(changed_finished))
+        self.import_log = (self.import_log or '') + '\n' + message
+        return {'type': 'ir.actions.client', 'tag': 'display_notification',
+                'params': {'title': _('Productos actualizados'), 'message': message,
+                           'type': 'success', 'sticky': True}}

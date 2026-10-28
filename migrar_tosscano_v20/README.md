@@ -1,43 +1,60 @@
-# Migración Tosscano v20 — 20.0.3.1.0
+# Migración Tosscano v20 — 20.0.4.0.0
 
-## Uso
+## Actualizar una base ya importada
 
-1. Actualizar este módulo en Odoo (reiniciar el servicio antes de actualizar). Si es la primera instalación, instalarlo desde Aplicaciones.
-2. Abrir **Migración Tosscano → Importar Tosscano**. Seleccionar TOSSCANO GRUP, FABRICA CALZADO, CBBA y SCZ, y el almacén de cada sucursal. Activar esas cuatro compañías. El usuario necesita administración de Inventario y Contabilidad, además de Ajustes. Los importes fuente están en BOB.
-3. Pulsar **1. Importar datos**. No exige revisar filas ni asignar unidades una por una.
-4. Pulsar **2. Importar saldos**. El resultado indica qué se cargó y qué no se pudo aplicar. Los casos pendientes pueden corregirse manualmente y luego repetir el botón: no duplica saldos ya aplicados. Los terminados sin costo ahora se cargan con valor cero y advertencia.
+1. Sustituir la carpeta `migrar_tosscano_v20`, reiniciar Odoo y actualizar el módulo desde Aplicaciones. No desinstalarlo.
+2. Abrir el registro de migración existente; activar matriz, Fábrica, CBBA y SCZ.
+3. Pulsar **Actualizar códigos y costos de terminados**. Aplica los PU confirmados a todas las tallas vinculadas en las tres sucursales y matriz. No es necesario volver a importar cantidades.
+4. Solo si quedaron saldos sin cargar anteriormente, pulsar **2. Importar saldos**. Los marcadores persistentes impiden duplicar aperturas.
 
-## Datos incluidos
+Actualizar el módulo no ejecuta automáticamente la importación ni cambia costos en la base. La acción explícita utiliza el registro y compañías elegidos. Requiere administrador de Ajustes, Inventario y Contabilidad.
 
-- 348 materias primas/artículos de catálogo: lista oficial corregida con la fotografía y materiales adicionales de Kardex. Exclusivos de FABRICA CALZADO. Componentes activos excepto herramientas. El duplicado idéntico de HILO CAFÉ #20 se consolida.
-- Categorías nativas **Familia → Subfamilia**. No se añaden campos Familia/Subfamilia al producto. Las columnas técnicas de la versión anterior se conservan únicamente para compatibilidad con su registro histórico; ya no son un paso del flujo.
-- 13 unidades normalizadas: UNIDAD, PAR, METRO, M2, PIE2, GRAMO, KG, LITRO, ROLLO, CONO, BOTE, LATA, PAQUETE. Reutiliza unidades físicas nativas. Convierte PIE2 con 0,09290304 m². Un cono/rollo/lata/bote/paquete se crea como unidad independiente, sin inventar capacidad. METROS/M/metro, uni/unidad, ft2/pie2, gr/gramo se normalizan.
-- 68 plantillas de terminados y 357 variantes por talla, compartidas entre sucursales. Provienen de las tres hojas de inventario disponibles, pues el archivo llamado lista productos terminado contiene el mismo libro que las recetas. No se afirma que este catálogo provisional cubra productos ausentes de esas hojas.
-- Atributos Talla, Color y Modelo. Forro, Material y Acabado se incluyen cuando aparecen explícitos en la descripción. No se inventa material para productos cuya descripción no lo especifica. Modelo toma el código de familia/modelo del origen.
-- Se conserva una plantilla por código de origen y versión; el color es un valor de atributo en esa plantilla y las tallas son sus variantes. No se unifican todos los colores en una plantilla ni se generan combinaciones de colores/tallas inexistentes. Las versiones Planta Piloto con código reutilizado se separan con sufijo PILOTO.
-- Terminados categorizados por línea MILITAR/ESCOLAR/INDUSTRIAL/OTROS y subcategoría modelo. Los materiales adicionales de Kardex recuperan familia y subfamilia de su hoja CATALOGO MP; todos quedan categorizados. Las categorías pueden corregirse manualmente.
-- 280 cuentas del archivo con su jerarquía en la matriz. Conserva la clasificación y estado activo del archivo, que incluye 26 observaciones pendientes de criterio contable. Configura las cuentas de categorías y diarios de valoración; no configura impuestos ni conciliaciones iniciales. Si una cuenta ya existe con código y tipo compatible, la vincula sin sobrescribirla; inconsistencias se listan.
+## Base nueva
 
-## Saldos y costos
+Seleccionar TOSSCANO GRUP, sus tres sucursales directas FABRICA CALZADO, CBBA, SCZ y un almacén por sucursal. Todas deben usar BOB. Pulsar **1. Importar datos** y después **2. Importar saldos**. Los PU confirmados se aplican automáticamente al importar datos y antes de cargar cada saldo nuevo. No se crean empresas ni almacenes.
 
-- Materias primas: fuente RESUMEN/Kardex, corte 23/10/2026. Terminados: hojas por almacén, 6.402 pares en total (Fábrica 3.840, CBBA 2.141, SCZ 421).
-- Usa ajustes nativos de inventario, en la ubicación principal del almacén. No modifica manualmente valoración, movimientos ni asientos. Los movimientos tienen la fecha real de ejecución; el 23/10/2026 queda como referencia del origen.
-- Para materiales usa el costo unitario de Kardex cuando está disponible; al crear el catálogo conserva el costo de catálogo como referencia inicial. Para terminados no se inventa costo histórico a partir de una receta estimada. **Los terminados con costo cero se cargan por talla y almacén**, conservando una advertencia histórica de valoración pendiente. Las materias primas sin costo válido siguen pendientes. Tampoco se cambia el costo si hay movimientos/existencias previas.
-- Omite productos con movimientos, existencias, reservas o conteos previos, en vez de reemplazar su stock de producción. Repetir no aplica dos veces una apertura. No sobrescribe saldos ya importados para corregirlos: las correcciones posteriores son ajustes nativos manuales.
-- Ocho filas con códigos corregidos ambiguos tienen cantidad cero en RESUMEN y no generan ajustes. El HILO CAFÉ #20 duplicado no se suma dos veces. La evidencia completa sigue incluida en data/source.json y direct.json.
+## Costos y códigos confirmados
+
+- Los 30 costos antes pendientes están completos; se suman a los 34 códigos con PU en INVENTARIO FABRICA.xlsx. Se conserva la procedencia por celda en `data/finished_costs.json`.
+- Códigos oficiales **M-W-01-10** y **M-BT-01-10**, equivalentes a los anteriores terminados en 010. No se normalizan otros códigos por semejanza.
+- Nueva carga: 66 plantillas y 352 variantes, después de unificar las dos equivalencias. Planta Piloto permanece separada: su costo es 152 según la fuente, igual al producto normal.
+- Cantidades fuente: Fábrica 3.840, CBBA 2.141, SCZ 421; total 6.402 pares. Valor fuente total **Bs 972.235,64**, desglosado en COSTOS_APERTURA.md. No equivale a saldo contable ya cargado.
+- Los importes son **costos unitarios por par**, no precios de venta. No se modifica `list_price`. No se toman importes de recetas como costos de apertura.
+- `standard_price` se escribe por variante con `with_company`. Odoo genera su ajuste nativo de valoración, con cantidad actual y fecha de ejecución. No se cambia SQL de valoración, no se retrofechan movimientos y no se recalcula el costo histórico de ventas ya realizadas.
+- La acción tiene un marcador por producto, compañía y precio de esta revisión. Repetir no vuelve a revalorizar ni sobrescribe el promedio que pudiera cambiar después por compras/fabricación. Un nuevo PU distinto sí constituye una nueva revisión.
+- Los informes y costos de componentes que lean el costo nativo obtienen el valor de su compañía. No se reemplazan informes nativos ni sus datos históricos.
+
+### Compatibilidad con códigos ya importados
+
+Si solo existe una plantilla vinculada (010 o 10), se reutiliza; se añaden las tallas que falten y sus referencias pasan al código oficial. Los identificadores técnicos antiguos se conservan como equivalencias internas, incluso para LdM y marcadores de saldos: no se duplica una apertura por el cambio de código.
+
+Si una versión anterior ya creó **las dos plantillas distintas**, se informa de sus IDs y se omite su consolidación y carga adicional de cantidades. Los PU sí se actualizan en ambas. No se eliminan productos ni se trasladan automáticamente movimientos, reservas, recetas o documentos contabilizados. Este caso requiere una consolidación específica sobre la base y no queda resuelto por renombrar productos. Si otro producto ajeno ocupa una referencia oficial, la transacción se detiene con un mensaje, sin crear una referencia duplicada.
+
+El historial de cargas antiguas sin costo se conserva como evidencia; no es un indicador del costo actual. El resultado de la nueva acción describe la actualización aplicada.
+
+## Datos y reglas que se conservan
+
+- 348 materiales/artículos del catálogo, solo en Fábrica, todos con **Componentes** activo. Terminados universales con **Fabricar** activo.
+- Categorías nativas Familia → Subfamilia. Tipo y Medida son campos propios; Familia/Subfamilia no se crean como campos del producto.
+- 13 unidades: UNIDAD, PAR, METRO, LITRO, KG, GRAMO, M2, PIE2, ROLLO, CONO, BOTE, LATA, PAQUETE. PIE2 equivale a 0,09290304 m². PAR representa un par. No se inventan capacidades de envases.
+- Atributos Talla, Modelo y Color; Forro, Acabado y Material solo cuando figuran explícitamente en la descripción. No se crean combinaciones inexistentes de color/talla.
+- 280 cuentas de origen con jerarquía en matriz, incluidas sus observaciones y estado. Categorías AVCO y cuentas por compañía, descritas debajo.
+- Stock de materiales desde RESUMEN/Kardex; terminado desde las tres hojas de sucursal. Ajustes nativos a fecha de ejecución con referencia al corte 23/10/2026.
+- No se sobrescriben cantidades de productos con movimientos/existencias/conteos/reservas previas. Se preservan los marcadores de aperturas aplicadas.
+- El HILO CAFÉ #20 idéntico se consolida y su saldo no se suma dos veces. Las ocho filas ambiguas con cantidad cero siguen documentadas.
+- `data/source.json` conserva evidencia original, incluidos códigos antiguos: no es la fuente operativa de los costos nuevos. `direct.json` contiene los datos normalizados actuales.
 
 ## Recetas
 
-El botón intenta crear recetas compartidas por talla únicamente cuando todos los componentes tienen correspondencia y unidad compatibles. Las 12 fichas disponibles aún contienen códigos faltantes, conversiones de envases sin capacidad, bolsa/numeración mezcladas y consumos talla 40; se listan como pendientes y **no se crean recetas incompletas**. La importación del catálogo y del plan no queda bloqueada por estas incidencias. No se inventan tiempos por centro a partir de costos de mano de obra.
+Las 12 fichas se conservan. La importación solo crea una receta cuando TODOS los componentes tienen correspondencia única y unidad compatible. Persisten las incidencias anteriores: códigos de materiales ausentes, conversiones de envases sin capacidad, bolsa/numeración mezcladas y componentes de talla 40. La actualización de PU no resuelve esas incidencias ni crea recetas incompletas. El resultado enumera las recetas pendientes. Los importes de mano de obra no se convierten en minutos inventados.
 
-## Compatibilidad y validación
+## Compatibilidad y pruebas
 
-Requiere esi_calzados_v20 20.0.11.2.0 o posterior, esi_sucursales_v20, Inventario y Contabilidad. Este ZIP contiene únicamente migrar_tosscano_v20. No reemplaza los otros módulos.
+Requiere esi_calzados_v20 20.0.11.2.0 o posterior y esi_sucursales_v20. El ZIP contiene únicamente migrar_tosscano_v20 actualizado; no reemplaza los módulos de calzados, sucursales ni reportes existentes.
 
-Validación local: 32 pruebas de integridad de datos/código, Python y XML comprobados. La instalación y ejecución completas en una base Odoo 20 están pendientes de prueba. No se accedió al servidor de producción. Probar primero en una copia: no se presenta como una migración ya ejecutada ni financieramente conciliada.
+41 pruebas locales aprobadas: conservación de cantidades, cobertura de costos, referencias/categorías/unidades, equivalencias, marcadores de saldos, cambios nativos de costo por compañía y repetición después de cambiar AVCO. Las pruebas de ejecución usan dobles ORM, no una instancia real de Odoo. Python/XML y estructura del ZIP verificados. No se accedió ni instaló nada en el servidor. La instalación y conciliación contable deben verificarse en una copia de la base.
 
-Las referencias de datos importados usan un espacio persistente propio para que desinstalar la herramienta no intente eliminar cuentas o productos importados. No borrar esos identificadores externos manualmente. No hay asistente de reversión de ajustes ya aplicados.
-
+Las referencias persistentes pertenecen a `tosscano_import_data`. No eliminarlas manualmente. La herramienta no revierte automáticamente ajustes ya aplicados.
 
 ## AVCO y cuentas (versión 20.0.3.0.0)
 
@@ -66,17 +83,6 @@ Las cuentas específicas de ingresos/gastos configuradas directamente en un prod
 Si ya hay existencias, cambiar de costo estándar a AVCO invoca la lógica nativa de recalcular valoración y costo según el cierre y movimientos existentes. Repetir la configuración con el mismo método evita volver a escribir ese campo. Revisar el resultado en una copia de la base antes de producción.
 
 Referencia oficial: https://www.odoo.com/documentation/20.0/applications/finance/accounting/get_started/inventory_valuation.html
-Comprobado además contra el código nativo local de Odoo 20. Las 32 pruebas locales no sustituyen pruebas de facturas, ajustes, devoluciones y fabricación en una instancia Odoo.
+Comprobado además contra el código nativo local de Odoo 20. Las pruebas locales no sustituyen pruebas de facturas, ajustes, devoluciones y fabricación en una instancia Odoo.
 
 
-## Corrección de saldos terminados — 20.0.3.1.0
-
-La versión anterior omitía todos los saldos positivos de terminados cuyo costo era cero. Esta versión permite aplicar sus cantidades con costo cero mediante el ajuste nativo, sin sustituirlo por un costo estimado de receta.
-
-Para recuperar saldos omitidos: actualizar el módulo (reiniciar Odoo antes), abrir el registro existente y pulsar **2. Importar saldos**. No repetir Importar datos. Se conservan los marcadores de cargas anteriores y no se vuelven a cargar. Los materiales previamente importados permanecen intactos. La pantalla informa las cantidades de terminados aplicadas por sucursal en esta ejecución.
-
-Origen esperado completo: Fábrica 3.840 pares, CBBA 2.141 y SCZ 421; total 6.402. Son totales de origen, no garantía de que se apliquen todos si hay movimientos/existencias previas, referencias faltantes u otras incompatibilidades. Esos casos se detallan en el resultado.
-
-Los productos con costo positivo en la sucursal conservan ese costo. Si no hay costo, la cantidad aumenta pero la valoración inicial será cero. **La carga de cantidades no completa el saldo contable de apertura**: posteriormente hay que regularizar la valoración mediante las herramientas nativas con los costos reales. Repetir Importar saldos no revaloriza ni vuelve a introducir las cantidades ya cargadas. La advertencia guardada documenta el estado al importar; no se borra automáticamente al modificar costos.
-
-Validación: 32 pruebas locales, incluidas ocho que ejecutan el método real de importación con modelos simulados: terminado sin costo, costo existente, sucursales, agregación de filas, repetición, movimientos previos, materiales sin costo y costo negativo. No se ejecutaron en una instancia Odoo ni sustituyen una conciliación de inventario/contabilidad.

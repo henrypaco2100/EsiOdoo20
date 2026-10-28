@@ -5026,6 +5026,10 @@
         41,
         42,
         44
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D4"
       ]
     },
     {
@@ -5048,6 +5052,11 @@
         44,
         45,
         46
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D5",
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D13"
       ]
     },
     {
@@ -5069,6 +5078,10 @@
         43,
         44,
         45
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D6"
       ]
     },
     {
@@ -5084,6 +5097,10 @@
         41,
         42,
         46
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D7"
       ]
     },
     {
@@ -5104,6 +5121,10 @@
         43,
         44,
         46
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D8"
       ]
     },
     {
@@ -5126,6 +5147,11 @@
         44,
         45,
         46
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D9",
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D14"
       ]
     },
     {
@@ -5144,6 +5170,10 @@
         41,
         42,
         43
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D10"
       ]
     },
     {
@@ -5155,6 +5185,10 @@
       "color": "NEGRO",
       "sizes": [
         44
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D11"
       ]
     },
     {
@@ -5178,6 +5212,10 @@
         44,
         45,
         46
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D12"
       ]
     },
     {
@@ -5193,6 +5231,11 @@
         40,
         41,
         42
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D5",
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D13"
       ]
     },
     {
@@ -5206,6 +5249,11 @@
         36,
         37,
         40
+      ],
+      "cost": 152,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D9",
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D14"
       ]
     },
     {
@@ -5218,6 +5266,10 @@
       "sizes": [
         35,
         36
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D15"
       ]
     },
     {
@@ -5238,6 +5290,10 @@
         42,
         43,
         46
+      ],
+      "cost": 193.52,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D16"
       ]
     },
     {
@@ -5256,6 +5312,10 @@
         42,
         43,
         44
+      ],
+      "cost": 193.52,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D17"
       ]
     },
     {
@@ -5274,6 +5334,10 @@
         42,
         43,
         44
+      ],
+      "cost": 193.52,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D18"
       ]
     },
     {
@@ -5288,6 +5352,10 @@
         40,
         41,
         44
+      ],
+      "cost": 193.52,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D19"
       ]
     },
     {
@@ -5303,6 +5371,10 @@
         40,
         41,
         42
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D20"
       ]
     },
     {
@@ -5314,6 +5386,10 @@
       "color": "NEGRO",
       "sizes": [
         40
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D21"
       ]
     },
     {
@@ -5334,17 +5410,23 @@
         42,
         43,
         44
+      ],
+      "cost": 148.33,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D22"
       ]
     },
     {
-      "key": "pt:M-W-01-010",
-      "code": "M-W-01-010",
+      "key": "pt:M-W-01-10",
+      "code": "M-W-01-10",
       "name": "WALCOBER LUSTRABLE NEGRO",
       "family": "MILITAR",
       "subfamily": "M-W-01",
       "color": "NEGRO",
       "sizes": [
         35,
+        36,
+        37,
         38,
         39,
         40,
@@ -5354,6 +5436,10 @@
         44,
         45,
         46
+      ],
+      "cost": 148.33,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D23"
       ]
     },
     {
@@ -5373,6 +5459,10 @@
         42,
         43,
         44
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D24"
       ]
     },
     {
@@ -5390,6 +5480,10 @@
         43,
         44,
         45
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D25"
       ]
     },
     {
@@ -5401,6 +5495,10 @@
       "color": "WISKY",
       "sizes": [
         38
+      ],
+      "cost": 266.4,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D26"
       ]
     },
     {
@@ -5413,6 +5511,10 @@
       "sizes": [
         38,
         39
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D27"
       ]
     },
     {
@@ -5427,6 +5529,10 @@
         42,
         43,
         44
+      ],
+      "cost": 153.52,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D28"
       ]
     },
     {
@@ -5438,6 +5544,10 @@
       "color": null,
       "sizes": [
         41
+      ],
+      "cost": 291.4,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D29"
       ]
     },
     {
@@ -5458,6 +5568,10 @@
         44,
         45,
         46
+      ],
+      "cost": 181.13,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D30"
       ]
     },
     {
@@ -5478,6 +5592,10 @@
         42,
         43,
         44
+      ],
+      "cost": 181.13,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D31"
       ]
     },
     {
@@ -5498,6 +5616,10 @@
         42,
         43,
         44
+      ],
+      "cost": 195.63,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D32"
       ]
     },
     {
@@ -5518,6 +5640,10 @@
         42,
         43,
         44
+      ],
+      "cost": 195.63,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D33"
       ]
     },
     {
@@ -5535,6 +5661,10 @@
         40,
         42,
         44
+      ],
+      "cost": 195.63,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D34"
       ]
     },
     {
@@ -5555,6 +5685,10 @@
         42,
         43,
         44
+      ],
+      "cost": 195.63,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D35"
       ]
     },
     {
@@ -5572,6 +5706,10 @@
         39,
         42,
         44
+      ],
+      "cost": 160.26,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D36"
       ]
     },
     {
@@ -5592,11 +5730,15 @@
         42,
         43,
         44
+      ],
+      "cost": 160.26,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D37"
       ]
     },
     {
-      "key": "pt:M-BT-01-010",
-      "code": "M-BT-01-010",
+      "key": "pt:M-BT-01-10",
+      "code": "M-BT-01-10",
       "name": "BOTIN CON LIGA ANTIGUO LUSTRABLE NEGRO",
       "family": "MILITAR",
       "subfamily": "M-BT-01",
@@ -5604,7 +5746,12 @@
       "sizes": [
         36,
         37,
+        42,
         44
+      ],
+      "cost": 160.26,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D38"
       ]
     },
     {
@@ -5620,6 +5767,10 @@
         39,
         40,
         41
+      ],
+      "cost": 234.41,
+      "cost_sources": [
+        "INVENTARIO FABRICA.xlsx / Hoja1 / D39"
       ]
     },
     {
@@ -5631,6 +5782,10 @@
       "color": "BEIGE",
       "sizes": [
         35
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G14"
       ]
     },
     {
@@ -5643,6 +5798,10 @@
       "sizes": [
         43,
         44
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G15"
       ]
     },
     {
@@ -5657,22 +5816,10 @@
         38,
         39,
         43
-      ]
-    },
-    {
-      "key": "pt:M-W-01-10",
-      "code": "M-W-01-10",
-      "name": "WALCOBER LUSTRABLE NEGRO",
-      "family": "MILITAR",
-      "subfamily": "M-W-01",
-      "color": "NEGRO",
-      "sizes": [
-        35,
-        36,
-        37,
-        38,
-        40,
-        41
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G16"
       ]
     },
     {
@@ -5691,6 +5838,10 @@
         35,
         36,
         37
+      ],
+      "cost": 70,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G17"
       ]
     },
     {
@@ -5708,6 +5859,10 @@
         31,
         32,
         35
+      ],
+      "cost": 70,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G18"
       ]
     },
     {
@@ -5724,6 +5879,10 @@
         35,
         36,
         37
+      ],
+      "cost": 70,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G19"
       ]
     },
     {
@@ -5739,6 +5898,10 @@
         30,
         31,
         37
+      ],
+      "cost": 70,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G20"
       ]
     },
     {
@@ -5756,6 +5919,10 @@
         32,
         35,
         39
+      ],
+      "cost": 70,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G21"
       ]
     },
     {
@@ -5767,6 +5934,10 @@
       "color": "NEGRO",
       "sizes": [
         43
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G22"
       ]
     },
     {
@@ -5778,6 +5949,10 @@
       "color": null,
       "sizes": [
         43
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G23"
       ]
     },
     {
@@ -5790,6 +5965,10 @@
       "sizes": [
         42,
         43
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G24"
       ]
     },
     {
@@ -5801,6 +5980,10 @@
       "color": "CAFE",
       "sizes": [
         43
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G25"
       ]
     },
     {
@@ -5815,6 +5998,10 @@
         40,
         41,
         42
+      ],
+      "cost": 90,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G26"
       ]
     },
     {
@@ -5828,6 +6015,10 @@
         38,
         41,
         42
+      ],
+      "cost": 90,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G27"
       ]
     },
     {
@@ -5841,6 +6032,10 @@
         38,
         41,
         42
+      ],
+      "cost": 90,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G28"
       ]
     },
     {
@@ -5852,6 +6047,10 @@
       "color": "NEGRO",
       "sizes": [
         37
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G29"
       ]
     },
     {
@@ -5863,6 +6062,10 @@
       "color": "NEGRO",
       "sizes": [
         35
+      ],
+      "cost": 420,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G30"
       ]
     },
     {
@@ -5880,6 +6083,10 @@
         42,
         43,
         44
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G31"
       ]
     },
     {
@@ -5893,6 +6100,10 @@
         37,
         41,
         42
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G32"
       ]
     },
     {
@@ -5906,18 +6117,10 @@
         38,
         39,
         40
-      ]
-    },
-    {
-      "key": "pt:M-BT-01-10",
-      "code": "M-BT-01-10",
-      "name": "BOTIN CON LIGA ANTIGUO LUSTRABLE NEGRO",
-      "family": "MILITAR",
-      "subfamily": "M-BT-01",
-      "color": "NEGRO",
-      "sizes": [
-        37,
-        42
+      ],
+      "cost": 194,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G33"
       ]
     },
     {
@@ -5934,6 +6137,10 @@
         38,
         40,
         41
+      ],
+      "cost": 90,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G34"
       ]
     },
     {
@@ -5950,6 +6157,10 @@
         31,
         32,
         34
+      ],
+      "cost": 90,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G35"
       ]
     },
     {
@@ -5963,6 +6174,10 @@
         29,
         30,
         31
+      ],
+      "cost": 90,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G36"
       ]
     },
     {
@@ -5979,6 +6194,10 @@
         40,
         41,
         42
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G37"
       ]
     },
     {
@@ -5994,6 +6213,10 @@
         39,
         40,
         41
+      ],
+      "cost": 100,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G38"
       ]
     },
     {
@@ -6005,6 +6228,10 @@
       "color": "CAFE",
       "sizes": [
         39
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G39"
       ]
     },
     {
@@ -6016,6 +6243,10 @@
       "color": "CAFE",
       "sizes": [
         39
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G40"
       ]
     },
     {
@@ -6027,6 +6258,10 @@
       "color": "CAFE",
       "sizes": [
         39
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G41"
       ]
     },
     {
@@ -6038,6 +6273,10 @@
       "color": "CAFE",
       "sizes": [
         38
+      ],
+      "cost": 165,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G42"
       ]
     },
     {
@@ -6049,6 +6288,10 @@
       "color": "CAFE",
       "sizes": [
         38
+      ],
+      "cost": 235,
+      "cost_sources": [
+        "Tosscano_costos_faltantes_e_inconsistencias (1).xlsx / 30 costos faltantes / G43"
       ]
     }
   ],
@@ -8722,7 +8965,7 @@
       "product": "pt:M-L-01-05-00:36",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8730,7 +8973,7 @@
       "product": "pt:M-L-01-05-00:41",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8738,7 +8981,7 @@
       "product": "pt:M-L-01-05-00:42",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8746,7 +8989,7 @@
       "product": "pt:M-L-01-05-00:44",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8754,7 +8997,7 @@
       "product": "pt:M-L-01-02-00:35",
       "branch": "FABRICA CALZADO",
       "qty": 28.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8762,7 +9005,7 @@
       "product": "pt:M-L-01-02-00:36",
       "branch": "FABRICA CALZADO",
       "qty": 41.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8770,7 +9013,7 @@
       "product": "pt:M-L-01-02-00:37",
       "branch": "FABRICA CALZADO",
       "qty": 60.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8778,7 +9021,7 @@
       "product": "pt:M-L-01-02-00:38",
       "branch": "FABRICA CALZADO",
       "qty": 189.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8786,7 +9029,7 @@
       "product": "pt:M-L-01-02-00:39",
       "branch": "FABRICA CALZADO",
       "qty": 532.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8794,7 +9037,7 @@
       "product": "pt:M-L-01-02-00:40",
       "branch": "FABRICA CALZADO",
       "qty": 540.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8802,7 +9045,7 @@
       "product": "pt:M-L-01-02-00:41",
       "branch": "FABRICA CALZADO",
       "qty": 477.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8810,7 +9053,7 @@
       "product": "pt:M-L-01-02-00:42",
       "branch": "FABRICA CALZADO",
       "qty": 557.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8818,7 +9061,7 @@
       "product": "pt:M-L-01-02-00:43",
       "branch": "FABRICA CALZADO",
       "qty": 176.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8826,7 +9069,7 @@
       "product": "pt:M-L-01-02-00:44",
       "branch": "FABRICA CALZADO",
       "qty": 67.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8834,7 +9077,7 @@
       "product": "pt:M-L-01-02-00:45",
       "branch": "FABRICA CALZADO",
       "qty": 98.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8842,7 +9085,7 @@
       "product": "pt:M-L-01-02-00:46",
       "branch": "FABRICA CALZADO",
       "qty": 63.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8850,7 +9093,7 @@
       "product": "pt:M-L-01-02-01:36",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8858,7 +9101,7 @@
       "product": "pt:M-L-01-02-01:38",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8866,7 +9109,7 @@
       "product": "pt:M-L-01-02-01:40",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8874,7 +9117,7 @@
       "product": "pt:M-L-02-02-00:39",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8882,7 +9125,7 @@
       "product": "pt:M-L-02-02-00:40",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8890,7 +9133,7 @@
       "product": "pt:M-L-02-02-00:41",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8898,7 +9141,7 @@
       "product": "pt:M-L-02-02-00:42",
       "branch": "FABRICA CALZADO",
       "qty": 6.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8906,7 +9149,7 @@
       "product": "pt:M-L-02-02-00:46",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8914,7 +9157,7 @@
       "product": "pt:M-L-01-03-01:35",
       "branch": "FABRICA CALZADO",
       "qty": 12.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8922,7 +9165,7 @@
       "product": "pt:M-L-01-03-01:36",
       "branch": "FABRICA CALZADO",
       "qty": 23.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8930,7 +9173,7 @@
       "product": "pt:M-L-01-03-01:37",
       "branch": "FABRICA CALZADO",
       "qty": 6.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8938,7 +9181,7 @@
       "product": "pt:M-L-01-03-01:41",
       "branch": "FABRICA CALZADO",
       "qty": 7.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8946,7 +9189,7 @@
       "product": "pt:M-L-01-03-01:42",
       "branch": "FABRICA CALZADO",
       "qty": 13.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8954,7 +9197,7 @@
       "product": "pt:M-L-01-03-01:43",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8962,7 +9205,7 @@
       "product": "pt:M-L-01-03-01:44",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8970,7 +9213,7 @@
       "product": "pt:M-L-01-03-00:35",
       "branch": "FABRICA CALZADO",
       "qty": 15.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8978,7 +9221,7 @@
       "product": "pt:M-L-01-03-00:36",
       "branch": "FABRICA CALZADO",
       "qty": 8.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8986,7 +9229,7 @@
       "product": "pt:M-L-01-03-00:37",
       "branch": "FABRICA CALZADO",
       "qty": 9.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -8994,7 +9237,7 @@
       "product": "pt:M-L-01-03-00:38",
       "branch": "FABRICA CALZADO",
       "qty": 57.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9002,7 +9245,7 @@
       "product": "pt:M-L-01-03-00:39",
       "branch": "FABRICA CALZADO",
       "qty": 70.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9010,7 +9253,7 @@
       "product": "pt:M-L-01-03-00:40",
       "branch": "FABRICA CALZADO",
       "qty": 24.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9018,7 +9261,7 @@
       "product": "pt:M-L-01-03-00:41",
       "branch": "FABRICA CALZADO",
       "qty": 32.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9026,7 +9269,7 @@
       "product": "pt:M-L-01-03-00:42",
       "branch": "FABRICA CALZADO",
       "qty": 66.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9034,7 +9277,7 @@
       "product": "pt:M-L-01-03-00:43",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9042,7 +9285,7 @@
       "product": "pt:M-L-01-03-00:45",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9050,7 +9293,7 @@
       "product": "pt:M-L-01-03-00:46",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9058,7 +9301,7 @@
       "product": "pt:M-L-01-01-00:36",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9066,7 +9309,7 @@
       "product": "pt:M-L-01-01-00:39",
       "branch": "FABRICA CALZADO",
       "qty": 22.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9074,7 +9317,7 @@
       "product": "pt:M-L-02-01-00:44",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9082,7 +9325,7 @@
       "product": "pt:M-L-01-04-00:35",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9090,7 +9333,7 @@
       "product": "pt:M-L-01-04-00:36",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9098,7 +9341,7 @@
       "product": "pt:M-L-01-04-00:37",
       "branch": "FABRICA CALZADO",
       "qty": 10.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9106,7 +9349,7 @@
       "product": "pt:M-L-01-04-00:38",
       "branch": "FABRICA CALZADO",
       "qty": 11.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9114,7 +9357,7 @@
       "product": "pt:M-L-01-04-00:39",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9122,7 +9365,7 @@
       "product": "pt:M-L-01-04-00:40",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9130,7 +9373,7 @@
       "product": "pt:M-L-01-04-00:41",
       "branch": "FABRICA CALZADO",
       "qty": 9.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9138,7 +9381,7 @@
       "product": "pt:M-L-01-04-00:46",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9146,7 +9389,7 @@
       "product": "pt:M-L-01-02-00:PILOTO:38",
       "branch": "FABRICA CALZADO",
       "qty": 16.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9154,7 +9397,7 @@
       "product": "pt:M-L-01-02-00:PILOTO:39",
       "branch": "FABRICA CALZADO",
       "qty": 23.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9162,7 +9405,7 @@
       "product": "pt:M-L-01-02-00:PILOTO:40",
       "branch": "FABRICA CALZADO",
       "qty": 35.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9170,7 +9413,7 @@
       "product": "pt:M-L-01-02-00:PILOTO:41",
       "branch": "FABRICA CALZADO",
       "qty": 28.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9178,7 +9421,7 @@
       "product": "pt:M-L-01-02-00:PILOTO:42",
       "branch": "FABRICA CALZADO",
       "qty": 41.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9186,7 +9429,7 @@
       "product": "pt:M-L-01-03-00:PILOTO:40",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -9194,7 +9437,7 @@
       "product": "pt:M-TAR-02-04:36",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9202,7 +9445,7 @@
       "product": "pt:M-RG-01-03:39",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9210,7 +9453,7 @@
       "product": "pt:M-RG-01-03:40",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9218,7 +9461,7 @@
       "product": "pt:M-RG-01-03:41",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9226,7 +9469,7 @@
       "product": "pt:M-RG-01-03:42",
       "branch": "FABRICA CALZADO",
       "qty": 16.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9234,7 +9477,7 @@
       "product": "pt:M-RG-01-03:43",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9242,7 +9485,7 @@
       "product": "pt:M-RG-01-03:46",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9250,7 +9493,7 @@
       "product": "pt:M-RG-01-01:39",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9258,7 +9501,7 @@
       "product": "pt:M-RG-01-01:42",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9266,7 +9509,7 @@
       "product": "pt:M-TDP-01-03:42",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9274,7 +9517,7 @@
       "product": "pt:M-TDP-01-03:43",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9282,7 +9525,7 @@
       "product": "pt:M-TDP-01-03:44",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9290,7 +9533,7 @@
       "product": "pt:M-TDP-01-08:41",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -9298,7 +9541,7 @@
       "product": "pt:M-TAR-01-02:38",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9306,7 +9549,7 @@
       "product": "pt:M-TAR-01-02:39",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9314,7 +9557,7 @@
       "product": "pt:M-TAR-01-02:40",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9322,7 +9565,7 @@
       "product": "pt:M-TAR-01-02:41",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9330,7 +9573,7 @@
       "product": "pt:M-TAR-01-02:42",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9338,7 +9581,7 @@
       "product": "pt:M-TCS-01-01:40",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -9346,7 +9589,7 @@
       "product": "pt:M-W-01-09:35",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9354,7 +9597,7 @@
       "product": "pt:M-W-01-09:36",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9362,7 +9605,7 @@
       "product": "pt:M-W-01-09:37",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9370,7 +9613,7 @@
       "product": "pt:M-W-01-09:38",
       "branch": "FABRICA CALZADO",
       "qty": 8.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9378,7 +9621,7 @@
       "product": "pt:M-W-01-09:39",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9386,7 +9629,7 @@
       "product": "pt:M-W-01-09:41",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9394,87 +9637,87 @@
       "product": "pt:M-W-01-09:42",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:35",
-      "product": "pt:M-W-01-010:35",
+      "product": "pt:M-W-01-10:35",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:38",
-      "product": "pt:M-W-01-010:38",
+      "product": "pt:M-W-01-10:38",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:39",
-      "product": "pt:M-W-01-010:39",
+      "product": "pt:M-W-01-10:39",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:40",
-      "product": "pt:M-W-01-010:40",
+      "product": "pt:M-W-01-10:40",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:41",
-      "product": "pt:M-W-01-010:41",
+      "product": "pt:M-W-01-10:41",
       "branch": "FABRICA CALZADO",
       "qty": 6.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:42",
-      "product": "pt:M-W-01-010:42",
+      "product": "pt:M-W-01-10:42",
       "branch": "FABRICA CALZADO",
       "qty": 8.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:43",
-      "product": "pt:M-W-01-010:43",
+      "product": "pt:M-W-01-10:43",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:44",
-      "product": "pt:M-W-01-010:44",
+      "product": "pt:M-W-01-10:44",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:45",
-      "product": "pt:M-W-01-010:45",
+      "product": "pt:M-W-01-10:45",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:23:46",
-      "product": "pt:M-W-01-010:46",
+      "product": "pt:M-W-01-10:46",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -9482,7 +9725,7 @@
       "product": "pt:I-CL-01-06-0A:36",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9490,7 +9733,7 @@
       "product": "pt:I-CL-01-06-0A:37",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9498,7 +9741,7 @@
       "product": "pt:I-CL-01-06-0A:38",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9506,7 +9749,7 @@
       "product": "pt:I-CL-01-06-0A:41",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9514,7 +9757,7 @@
       "product": "pt:I-CL-01-06-0A:42",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9522,7 +9765,7 @@
       "product": "pt:I-CL-01-06-0A:43",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9530,7 +9773,7 @@
       "product": "pt:I-CL-01-06-0D:39",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9538,7 +9781,7 @@
       "product": "pt:I-CL-01-06-0D:40",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9546,7 +9789,7 @@
       "product": "pt:I-CL-01-06-0D:41",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9554,7 +9797,7 @@
       "product": "pt:I-CL-01-06-0D:42",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9562,7 +9805,7 @@
       "product": "pt:I-CL-01-06-0D:43",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9570,7 +9813,7 @@
       "product": "pt:I-CL-01-06-0D:44",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9578,7 +9821,7 @@
       "product": "pt:I-CL-01-06-0D:45",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9586,7 +9829,7 @@
       "product": "pt:I-CT-01-07:38",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 266.4,
       "uom": "PAR"
     },
     {
@@ -9594,7 +9837,7 @@
       "product": "pt:I-CL-01-01:38",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9602,7 +9845,7 @@
       "product": "pt:I-CL-01-01:39",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -9610,7 +9853,7 @@
       "product": "pt:M-L-03-03:40",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 153.52,
       "uom": "PAR"
     },
     {
@@ -9618,7 +9861,7 @@
       "product": "pt:TK-CL-03A-012:41",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 291.4,
       "uom": "PAR"
     },
     {
@@ -9626,7 +9869,7 @@
       "product": "pt:M-PC-01-03:36",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9634,7 +9877,7 @@
       "product": "pt:M-PC-01-03:37",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9642,7 +9885,7 @@
       "product": "pt:M-PC-01-03:38",
       "branch": "FABRICA CALZADO",
       "qty": 13.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9650,7 +9893,7 @@
       "product": "pt:M-PC-01-03:39",
       "branch": "FABRICA CALZADO",
       "qty": 7.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9658,7 +9901,7 @@
       "product": "pt:M-PC-01-03:43",
       "branch": "FABRICA CALZADO",
       "qty": 9.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9666,7 +9909,7 @@
       "product": "pt:M-PC-01-03:44",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9674,7 +9917,7 @@
       "product": "pt:M-PC-01-03:45",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9682,7 +9925,7 @@
       "product": "pt:M-PC-01-03:46",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9690,7 +9933,7 @@
       "product": "pt:M-PC-01-01:35",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9698,7 +9941,7 @@
       "product": "pt:M-PC-01-01:36",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9706,7 +9949,7 @@
       "product": "pt:M-PC-01-01:37",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9714,7 +9957,7 @@
       "product": "pt:M-PC-01-01:38",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9722,7 +9965,7 @@
       "product": "pt:M-PC-01-01:39",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9730,7 +9973,7 @@
       "product": "pt:M-PC-01-01:42",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9738,7 +9981,7 @@
       "product": "pt:M-PC-01-01:43",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9746,7 +9989,7 @@
       "product": "pt:M-PC-01-01:44",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -9754,7 +9997,7 @@
       "product": "pt:M-P-01-03:35",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9762,7 +10005,7 @@
       "product": "pt:M-P-01-03:36",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9770,7 +10013,7 @@
       "product": "pt:M-P-01-03:37",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9778,7 +10021,7 @@
       "product": "pt:M-P-01-03:38",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9786,7 +10029,7 @@
       "product": "pt:M-P-01-03:39",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9794,7 +10037,7 @@
       "product": "pt:M-P-01-03:40",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9802,7 +10045,7 @@
       "product": "pt:M-P-01-03:41",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9810,7 +10053,7 @@
       "product": "pt:M-P-01-03:42",
       "branch": "FABRICA CALZADO",
       "qty": 13.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9818,7 +10061,7 @@
       "product": "pt:M-P-01-03:43",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9826,7 +10069,7 @@
       "product": "pt:M-P-01-03:44",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9834,7 +10077,7 @@
       "product": "pt:M-P-01-08:35",
       "branch": "FABRICA CALZADO",
       "qty": 8.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9842,7 +10085,7 @@
       "product": "pt:M-P-01-08:37",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9850,7 +10093,7 @@
       "product": "pt:M-P-01-08:38",
       "branch": "FABRICA CALZADO",
       "qty": 8.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9858,7 +10101,7 @@
       "product": "pt:M-P-01-08:39",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9866,7 +10109,7 @@
       "product": "pt:M-P-01-08:40",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9874,7 +10117,7 @@
       "product": "pt:M-P-01-08:41",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9882,7 +10125,7 @@
       "product": "pt:M-P-01-08:42",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9890,7 +10133,7 @@
       "product": "pt:M-P-01-08:43",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9898,7 +10141,7 @@
       "product": "pt:M-P-01-08:44",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9906,7 +10149,7 @@
       "product": "pt:M-P-01-02:42",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9914,7 +10157,7 @@
       "product": "pt:M-P-01-01:35",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9922,7 +10165,7 @@
       "product": "pt:M-P-01-01:36",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9930,7 +10173,7 @@
       "product": "pt:M-P-01-01:37",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9938,7 +10181,7 @@
       "product": "pt:M-P-01-01:38",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9946,7 +10189,7 @@
       "product": "pt:M-P-01-01:39",
       "branch": "FABRICA CALZADO",
       "qty": 7.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9954,7 +10197,7 @@
       "product": "pt:M-P-01-01:40",
       "branch": "FABRICA CALZADO",
       "qty": 10.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9962,7 +10205,7 @@
       "product": "pt:M-P-01-01:41",
       "branch": "FABRICA CALZADO",
       "qty": 6.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9970,7 +10213,7 @@
       "product": "pt:M-P-01-01:42",
       "branch": "FABRICA CALZADO",
       "qty": 9.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9978,7 +10221,7 @@
       "product": "pt:M-P-01-01:43",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9986,7 +10229,7 @@
       "product": "pt:M-P-01-01:44",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -9994,7 +10237,7 @@
       "product": "pt:M-BT-02-09:35",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10002,7 +10245,7 @@
       "product": "pt:M-BT-02-09:36",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10010,7 +10253,7 @@
       "product": "pt:M-BT-02-09:37",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10018,7 +10261,7 @@
       "product": "pt:M-BT-02-09:38",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10026,7 +10269,7 @@
       "product": "pt:M-BT-02-09:39",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10034,7 +10277,7 @@
       "product": "pt:M-BT-02-09:42",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10042,7 +10285,7 @@
       "product": "pt:M-BT-02-09:44",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10050,7 +10293,7 @@
       "product": "pt:M-BT-01-09:35",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10058,7 +10301,7 @@
       "product": "pt:M-BT-01-09:36",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10066,7 +10309,7 @@
       "product": "pt:M-BT-01-09:37",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10074,7 +10317,7 @@
       "product": "pt:M-BT-01-09:38",
       "branch": "FABRICA CALZADO",
       "qty": 6.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10082,7 +10325,7 @@
       "product": "pt:M-BT-01-09:39",
       "branch": "FABRICA CALZADO",
       "qty": 7.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10090,7 +10333,7 @@
       "product": "pt:M-BT-01-09:40",
       "branch": "FABRICA CALZADO",
       "qty": 9.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10098,7 +10341,7 @@
       "product": "pt:M-BT-01-09:41",
       "branch": "FABRICA CALZADO",
       "qty": 9.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10106,7 +10349,7 @@
       "product": "pt:M-BT-01-09:42",
       "branch": "FABRICA CALZADO",
       "qty": 8.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10114,7 +10357,7 @@
       "product": "pt:M-BT-01-09:43",
       "branch": "FABRICA CALZADO",
       "qty": 4.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10122,31 +10365,31 @@
       "product": "pt:M-BT-01-09:44",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:38:36",
-      "product": "pt:M-BT-01-010:36",
+      "product": "pt:M-BT-01-10:36",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:38:37",
-      "product": "pt:M-BT-01-010:37",
+      "product": "pt:M-BT-01-10:37",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
       "key": "stockpt:FABRICA CALZADO:38:44",
-      "product": "pt:M-BT-01-010:44",
+      "product": "pt:M-BT-01-10:44",
       "branch": "FABRICA CALZADO",
       "qty": 5.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -10154,7 +10397,7 @@
       "product": "pt:I-B-01-06:37",
       "branch": "FABRICA CALZADO",
       "qty": 1.0,
-      "cost": null,
+      "cost": 234.41,
       "uom": "PAR"
     },
     {
@@ -10162,7 +10405,7 @@
       "product": "pt:I-B-01-06:38",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 234.41,
       "uom": "PAR"
     },
     {
@@ -10170,7 +10413,7 @@
       "product": "pt:I-B-01-06:39",
       "branch": "FABRICA CALZADO",
       "qty": 3.0,
-      "cost": null,
+      "cost": 234.41,
       "uom": "PAR"
     },
     {
@@ -10178,7 +10421,7 @@
       "product": "pt:I-B-01-06:40",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 234.41,
       "uom": "PAR"
     },
     {
@@ -10186,7 +10429,7 @@
       "product": "pt:I-B-01-06:41",
       "branch": "FABRICA CALZADO",
       "qty": 2.0,
-      "cost": null,
+      "cost": 234.41,
       "uom": "PAR"
     },
     {
@@ -10194,7 +10437,7 @@
       "product": "pt:M-L-01-02-00:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10202,7 +10445,7 @@
       "product": "pt:M-L-01-02-00:36",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10210,7 +10453,7 @@
       "product": "pt:M-L-01-02-00:37",
       "branch": "CBBA",
       "qty": 14.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10218,7 +10461,7 @@
       "product": "pt:M-L-01-02-00:38",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10226,7 +10469,7 @@
       "product": "pt:M-L-01-02-00:39",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10234,7 +10477,7 @@
       "product": "pt:M-L-01-02-00:41",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10242,7 +10485,7 @@
       "product": "pt:M-L-01-02-00:42",
       "branch": "CBBA",
       "qty": 6.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10250,7 +10493,7 @@
       "product": "pt:M-L-01-02-00:44",
       "branch": "CBBA",
       "qty": 8.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10258,7 +10501,7 @@
       "product": "pt:M-L-01-02-00:46",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10266,7 +10509,7 @@
       "product": "pt:M-L-01-03-01:36",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10274,7 +10517,7 @@
       "product": "pt:M-L-01-03-01:37",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10282,7 +10525,7 @@
       "product": "pt:M-L-01-03-01:38",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10290,7 +10533,7 @@
       "product": "pt:M-L-01-03-01:39",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10298,7 +10541,7 @@
       "product": "pt:M-L-01-03-01:41",
       "branch": "CBBA",
       "qty": 16.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10306,7 +10549,7 @@
       "product": "pt:M-L-01-03-01:42",
       "branch": "CBBA",
       "qty": 36.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10314,7 +10557,7 @@
       "product": "pt:M-L-01-03-01:43",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10322,7 +10565,7 @@
       "product": "pt:M-L-01-03-01:46",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10330,7 +10573,7 @@
       "product": "pt:M-L-01-03-00:PILOTO:36",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10338,7 +10581,7 @@
       "product": "pt:M-L-01-03-00:PILOTO:37",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10346,7 +10589,7 @@
       "product": "pt:M-L-01-01-00:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10354,7 +10597,7 @@
       "product": "pt:M-L-01-01-00:37",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10362,7 +10605,7 @@
       "product": "pt:M-L-01-01-00:39",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10370,7 +10613,7 @@
       "product": "pt:M-L-01-01-00:43",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10378,7 +10621,7 @@
       "product": "pt:M-L-01-04-00:34",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10386,7 +10629,7 @@
       "product": "pt:M-L-01-04-00:36",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10394,7 +10637,7 @@
       "product": "pt:M-L-01-04-00:37",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10402,7 +10645,7 @@
       "product": "pt:M-L-01-04-00:38",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10410,7 +10653,7 @@
       "product": "pt:M-L-01-04-00:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10418,7 +10661,7 @@
       "product": "pt:M-L-01-04-00:42",
       "branch": "CBBA",
       "qty": 18.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10426,7 +10669,7 @@
       "product": "pt:M-L-01-04-00:43",
       "branch": "CBBA",
       "qty": 21.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10434,7 +10677,7 @@
       "product": "pt:M-L-01-04-00:44",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10442,7 +10685,7 @@
       "product": "pt:M-L-01-02-01:35",
       "branch": "CBBA",
       "qty": 19.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10450,7 +10693,7 @@
       "product": "pt:M-L-01-02-01:36",
       "branch": "CBBA",
       "qty": 38.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10458,7 +10701,7 @@
       "product": "pt:M-L-01-02-01:37",
       "branch": "CBBA",
       "qty": 36.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10466,7 +10709,7 @@
       "product": "pt:M-L-01-02-01:38",
       "branch": "CBBA",
       "qty": 134.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10474,7 +10717,7 @@
       "product": "pt:M-L-01-02-01:39",
       "branch": "CBBA",
       "qty": 334.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10482,7 +10725,7 @@
       "product": "pt:M-L-01-02-01:40",
       "branch": "CBBA",
       "qty": 289.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10490,7 +10733,7 @@
       "product": "pt:M-L-01-02-01:41",
       "branch": "CBBA",
       "qty": 291.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10498,7 +10741,7 @@
       "product": "pt:M-L-01-02-01:42",
       "branch": "CBBA",
       "qty": 297.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10506,7 +10749,7 @@
       "product": "pt:M-L-01-02-01:43",
       "branch": "CBBA",
       "qty": 110.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10514,7 +10757,7 @@
       "product": "pt:M-L-01-02-01:44",
       "branch": "CBBA",
       "qty": 24.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10522,7 +10765,7 @@
       "product": "pt:M-L-01-02-01:45",
       "branch": "CBBA",
       "qty": 11.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -10530,7 +10773,7 @@
       "product": "pt:M-TAR-02-04:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -10538,7 +10781,7 @@
       "product": "pt:M-RG-01-04:35",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -10546,7 +10789,7 @@
       "product": "pt:M-RG-01-03:40",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10554,7 +10797,7 @@
       "product": "pt:M-RG-01-03:42",
       "branch": "CBBA",
       "qty": 7.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10562,7 +10805,7 @@
       "product": "pt:M-RG-01-08:43",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -10570,7 +10813,7 @@
       "product": "pt:M-RG-01-08:44",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -10578,7 +10821,7 @@
       "product": "pt:M-RG-01-01:39",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10586,7 +10829,7 @@
       "product": "pt:M-RG-01-01:40",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10594,7 +10837,7 @@
       "product": "pt:M-RG-01-01:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10602,7 +10845,7 @@
       "product": "pt:M-RG-01-01:44",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10610,7 +10853,7 @@
       "product": "pt:M-TDP-01-03:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10618,7 +10861,7 @@
       "product": "pt:M-TDP-01-03:36",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10626,7 +10869,7 @@
       "product": "pt:M-TDP-01-03:37",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10634,7 +10877,7 @@
       "product": "pt:M-TDP-01-03:38",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10642,7 +10885,7 @@
       "product": "pt:M-TDP-01-03:41",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10650,7 +10893,7 @@
       "product": "pt:M-TDP-01-03:42",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10658,7 +10901,7 @@
       "product": "pt:M-TDP-01-08:39",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10666,7 +10909,7 @@
       "product": "pt:M-TDP-01-08:40",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10674,7 +10917,7 @@
       "product": "pt:M-TDP-01-08:41",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10682,7 +10925,7 @@
       "product": "pt:M-TDP-01-08:44",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -10690,7 +10933,7 @@
       "product": "pt:M-TDP-01-04:43",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -10698,7 +10941,7 @@
       "product": "pt:M-W-01-09:35",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10706,7 +10949,7 @@
       "product": "pt:M-W-01-09:36",
       "branch": "CBBA",
       "qty": 16.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10714,7 +10957,7 @@
       "product": "pt:M-W-01-09:37",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10722,7 +10965,7 @@
       "product": "pt:M-W-01-09:38",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10730,7 +10973,7 @@
       "product": "pt:M-W-01-09:40",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10738,7 +10981,7 @@
       "product": "pt:M-W-01-09:41",
       "branch": "CBBA",
       "qty": 6.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10746,7 +10989,7 @@
       "product": "pt:M-W-01-09:42",
       "branch": "CBBA",
       "qty": 11.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10754,7 +10997,7 @@
       "product": "pt:M-W-01-09:43",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10762,7 +11005,7 @@
       "product": "pt:M-W-01-09:44",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10770,7 +11013,7 @@
       "product": "pt:M-W-01-10:35",
       "branch": "CBBA",
       "qty": 6.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10778,7 +11021,7 @@
       "product": "pt:M-W-01-10:36",
       "branch": "CBBA",
       "qty": 6.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10786,7 +11029,7 @@
       "product": "pt:M-W-01-10:37",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10794,7 +11037,7 @@
       "product": "pt:M-W-01-10:38",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10802,7 +11045,7 @@
       "product": "pt:M-W-01-10:40",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10810,7 +11053,7 @@
       "product": "pt:M-W-01-10:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -10818,7 +11061,7 @@
       "product": "pt:ES-V-01-01:28",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10826,7 +11069,7 @@
       "product": "pt:ES-V-01-01:29",
       "branch": "CBBA",
       "qty": 6.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10834,7 +11077,7 @@
       "product": "pt:ES-V-01-01:30",
       "branch": "CBBA",
       "qty": 7.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10842,7 +11085,7 @@
       "product": "pt:ES-V-01-01:31",
       "branch": "CBBA",
       "qty": 5.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10850,7 +11093,7 @@
       "product": "pt:ES-V-01-01:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10858,7 +11101,7 @@
       "product": "pt:ES-V-01-01:36",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10866,7 +11109,7 @@
       "product": "pt:ES-V-01-01:37",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10874,7 +11117,7 @@
       "product": "pt:ES-V-02-01:28",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10882,7 +11125,7 @@
       "product": "pt:ES-V-02-01:29",
       "branch": "CBBA",
       "qty": 7.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10890,7 +11133,7 @@
       "product": "pt:ES-V-02-01:30",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10898,7 +11141,7 @@
       "product": "pt:ES-V-02-01:31",
       "branch": "CBBA",
       "qty": 10.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10906,7 +11149,7 @@
       "product": "pt:ES-V-02-01:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10914,7 +11157,7 @@
       "product": "pt:ES-V-03-01:29",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10922,7 +11165,7 @@
       "product": "pt:ES-V-03-01:30",
       "branch": "CBBA",
       "qty": 5.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10930,7 +11173,7 @@
       "product": "pt:ES-V-03-01:31",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10938,7 +11181,7 @@
       "product": "pt:ES-V-03-01:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10946,7 +11189,7 @@
       "product": "pt:ES-V-03-01:36",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10954,7 +11197,7 @@
       "product": "pt:ES-V-03-01:37",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10962,7 +11205,7 @@
       "product": "pt:ES-V-04-01:28",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10970,7 +11213,7 @@
       "product": "pt:ES-V-04-01:29",
       "branch": "CBBA",
       "qty": 8.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10978,7 +11221,7 @@
       "product": "pt:ES-V-04-01:30",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10986,7 +11229,7 @@
       "product": "pt:ES-V-04-01:31",
       "branch": "CBBA",
       "qty": 5.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -10994,7 +11237,7 @@
       "product": "pt:ES-V-04-01:37",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11002,7 +11245,7 @@
       "product": "pt:ES-V-02-01:27",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11010,7 +11253,7 @@
       "product": "pt:ES-V-02-01:28",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11018,7 +11261,7 @@
       "product": "pt:ES-V-02-01:30",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11026,7 +11269,7 @@
       "product": "pt:ES-V-02-01:32",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11034,7 +11277,7 @@
       "product": "pt:ES-M-03-01:28",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11042,7 +11285,7 @@
       "product": "pt:ES-M-03-01:29",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11050,7 +11293,7 @@
       "product": "pt:ES-M-03-01:30",
       "branch": "CBBA",
       "qty": 6.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11058,7 +11301,7 @@
       "product": "pt:ES-M-03-01:31",
       "branch": "CBBA",
       "qty": 7.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11066,7 +11309,7 @@
       "product": "pt:ES-M-03-01:32",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11074,7 +11317,7 @@
       "product": "pt:ES-M-03-01:35",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11082,7 +11325,7 @@
       "product": "pt:ES-M-03-01:39",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -11090,7 +11333,7 @@
       "product": "pt:I-CL-01-06-0A:39",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -11098,7 +11341,7 @@
       "product": "pt:I-CL-01-06-0A:40",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -11106,7 +11349,7 @@
       "product": "pt:I-CL-01-06-0A:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -11114,7 +11357,7 @@
       "product": "pt:I-CL-01-06-0A:42",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -11122,7 +11365,7 @@
       "product": "pt:I-CL-01-06-0A:43",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -11130,7 +11373,7 @@
       "product": "pt:I-CL-01-06-0A:44",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -11138,7 +11381,7 @@
       "product": "pt:M-L-03-03:42",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 153.52,
       "uom": "PAR"
     },
     {
@@ -11146,7 +11389,7 @@
       "product": "pt:M-L-03-03:43",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 153.52,
       "uom": "PAR"
     },
     {
@@ -11154,7 +11397,7 @@
       "product": "pt:M-L-03-03:44",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 153.52,
       "uom": "PAR"
     },
     {
@@ -11162,7 +11405,7 @@
       "product": "pt:M-PC-01-03:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11170,7 +11413,7 @@
       "product": "pt:EL-V-01-01:43",
       "branch": "CBBA",
       "qty": 11.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -11178,7 +11421,7 @@
       "product": "pt:EL-V-01-11:43",
       "branch": "CBBA",
       "qty": 21.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -11186,7 +11429,7 @@
       "product": "pt:EL-V-01-06:42",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -11194,7 +11437,7 @@
       "product": "pt:EL-V-01-06:43",
       "branch": "CBBA",
       "qty": 9.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -11202,7 +11445,7 @@
       "product": "pt:EL-V-02-06:43",
       "branch": "CBBA",
       "qty": 10.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -11210,7 +11453,7 @@
       "product": "pt:C-PLY-01-11:38",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11218,7 +11461,7 @@
       "product": "pt:C-PLY-01-11:40",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11226,7 +11469,7 @@
       "product": "pt:C-PLY-01-11:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11234,7 +11477,7 @@
       "product": "pt:C-PLY-01-11:42",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11242,7 +11485,7 @@
       "product": "pt:C-PLY-01-12:38",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11250,7 +11493,7 @@
       "product": "pt:C-PLY-01-12:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11258,7 +11501,7 @@
       "product": "pt:C-PLY-01-12:42",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11266,7 +11509,7 @@
       "product": "pt:C-PLY-01-08:38",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11274,7 +11517,7 @@
       "product": "pt:C-PLY-01-08:41",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11282,7 +11525,7 @@
       "product": "pt:C-PLY-01-08:42",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -11290,7 +11533,7 @@
       "product": "pt:C-CLK-01-01:37",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -11298,7 +11541,7 @@
       "product": "pt:M-P-01-03:36",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11306,7 +11549,7 @@
       "product": "pt:M-P-01-03:40",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11314,7 +11557,7 @@
       "product": "pt:M-P-01-03:42",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11322,7 +11565,7 @@
       "product": "pt:M-P-01-03:44",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11330,7 +11573,7 @@
       "product": "pt:M-P-01-08:35",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11338,7 +11581,7 @@
       "product": "pt:M-P-01-08:36",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11346,7 +11589,7 @@
       "product": "pt:M-P-01-08:37",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11354,7 +11597,7 @@
       "product": "pt:M-P-01-08:38",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11362,7 +11605,7 @@
       "product": "pt:M-P-01-08:39",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11370,7 +11613,7 @@
       "product": "pt:M-P-01-08:40",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11378,7 +11621,7 @@
       "product": "pt:M-P-01-08:41",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11386,7 +11629,7 @@
       "product": "pt:M-P-01-08:42",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11394,7 +11637,7 @@
       "product": "pt:M-P-01-08:43",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11402,7 +11645,7 @@
       "product": "pt:M-P-01-08:44",
       "branch": "CBBA",
       "qty": 5.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11410,7 +11653,7 @@
       "product": "pt:M-P-01-01:39",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11418,7 +11661,7 @@
       "product": "pt:M-P-01-01:43",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11426,7 +11669,7 @@
       "product": "pt:M-P-01-01:44",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11434,7 +11677,7 @@
       "product": "pt:M-BT-04-01:35",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 420,
       "uom": "PAR"
     },
     {
@@ -11442,7 +11685,7 @@
       "product": "pt:M-TAR-01-03:36",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11450,7 +11693,7 @@
       "product": "pt:M-TAR-01-03:37",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11458,7 +11701,7 @@
       "product": "pt:M-TAR-01-03:38",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11466,7 +11709,7 @@
       "product": "pt:M-TAR-01-03:41",
       "branch": "CBBA",
       "qty": 2.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11474,7 +11717,7 @@
       "product": "pt:M-TAR-01-03:42",
       "branch": "CBBA",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11482,7 +11725,7 @@
       "product": "pt:M-TAR-01-03:43",
       "branch": "CBBA",
       "qty": 4.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11490,7 +11733,7 @@
       "product": "pt:M-TAR-01-03:44",
       "branch": "CBBA",
       "qty": 3.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -11498,7 +11741,7 @@
       "product": "pt:M-L-01-04-00:37",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11506,7 +11749,7 @@
       "product": "pt:M-L-01-04-00:38",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11514,7 +11757,7 @@
       "product": "pt:M-L-01-04-00:39",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11522,7 +11765,7 @@
       "product": "pt:M-L-01-04-00:40",
       "branch": "SCZ",
       "qty": 7.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11530,7 +11773,7 @@
       "product": "pt:M-L-01-04-00:41",
       "branch": "SCZ",
       "qty": 7.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11538,7 +11781,7 @@
       "product": "pt:M-L-01-04-00:42",
       "branch": "SCZ",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11546,7 +11789,7 @@
       "product": "pt:M-L-01-04-00:45",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11554,7 +11797,7 @@
       "product": "pt:M-L-01-04-00:46",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11562,7 +11805,7 @@
       "product": "pt:M-L-01-03-00:35",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11570,7 +11813,7 @@
       "product": "pt:M-L-01-03-00:36",
       "branch": "SCZ",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11578,7 +11821,7 @@
       "product": "pt:M-L-01-03-00:37",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11586,7 +11829,7 @@
       "product": "pt:M-L-01-03-00:38",
       "branch": "SCZ",
       "qty": 9.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11594,7 +11837,7 @@
       "product": "pt:M-L-01-03-00:39",
       "branch": "SCZ",
       "qty": 4.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11602,7 +11845,7 @@
       "product": "pt:M-L-01-03-00:40",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11610,7 +11853,7 @@
       "product": "pt:M-L-01-03-00:41",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11618,7 +11861,7 @@
       "product": "pt:M-L-01-03-00:42",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11626,7 +11869,7 @@
       "product": "pt:M-L-01-03-00:43",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11634,7 +11877,7 @@
       "product": "pt:M-L-01-03-00:44",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11642,7 +11885,7 @@
       "product": "pt:M-P-01-01:35",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11650,7 +11893,7 @@
       "product": "pt:M-P-01-01:36",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11658,7 +11901,7 @@
       "product": "pt:M-P-01-01:37",
       "branch": "SCZ",
       "qty": 4.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11666,7 +11909,7 @@
       "product": "pt:M-P-01-01:38",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11674,7 +11917,7 @@
       "product": "pt:M-P-01-01:39",
       "branch": "SCZ",
       "qty": 4.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11682,7 +11925,7 @@
       "product": "pt:M-P-01-01:40",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11690,7 +11933,7 @@
       "product": "pt:M-P-01-01:42",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11698,7 +11941,7 @@
       "product": "pt:M-RG-01-03:35",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11706,7 +11949,7 @@
       "product": "pt:M-RG-01-03:36",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11714,7 +11957,7 @@
       "product": "pt:M-RG-01-03:37",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11722,7 +11965,7 @@
       "product": "pt:M-RG-01-03:38",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11730,7 +11973,7 @@
       "product": "pt:M-RG-01-03:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11738,7 +11981,7 @@
       "product": "pt:M-RG-01-03:41",
       "branch": "SCZ",
       "qty": 6.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11746,7 +11989,7 @@
       "product": "pt:M-RG-01-03:42",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11754,7 +11997,7 @@
       "product": "pt:M-RG-01-03:43",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11762,7 +12005,7 @@
       "product": "pt:M-P-01-02:35",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11770,7 +12013,7 @@
       "product": "pt:M-P-01-02:36",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11778,7 +12021,7 @@
       "product": "pt:M-P-01-02:38",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11786,7 +12029,7 @@
       "product": "pt:M-P-01-02:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11794,7 +12037,7 @@
       "product": "pt:M-P-01-02:40",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11802,7 +12045,7 @@
       "product": "pt:M-P-01-02:42",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11810,7 +12053,7 @@
       "product": "pt:M-P-01-02:44",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 195.63,
       "uom": "PAR"
     },
     {
@@ -11818,7 +12061,7 @@
       "product": "pt:M-PC-01-01:35",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11826,7 +12069,7 @@
       "product": "pt:M-PC-01-01:36",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11834,7 +12077,7 @@
       "product": "pt:M-PC-01-01:37",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11842,7 +12085,7 @@
       "product": "pt:M-PC-01-01:38",
       "branch": "SCZ",
       "qty": 8.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11850,7 +12093,7 @@
       "product": "pt:M-PC-01-01:39",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11858,7 +12101,7 @@
       "product": "pt:M-PC-01-01:40",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11866,7 +12109,7 @@
       "product": "pt:M-PC-01-01:41",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11874,7 +12117,7 @@
       "product": "pt:M-PC-01-01:42",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11882,7 +12125,7 @@
       "product": "pt:M-PC-01-01:44",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -11890,7 +12133,7 @@
       "product": "pt:M-L-01-01-00:36",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11898,7 +12141,7 @@
       "product": "pt:M-L-01-01-00:37",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11906,7 +12149,7 @@
       "product": "pt:M-L-01-01-00:39",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11914,7 +12157,7 @@
       "product": "pt:M-L-01-01-00:40",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11922,7 +12165,7 @@
       "product": "pt:M-L-01-01-00:41",
       "branch": "SCZ",
       "qty": 8.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11930,7 +12173,7 @@
       "product": "pt:M-L-01-01-00:42",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -11938,7 +12181,7 @@
       "product": "pt:M-RG-01-01:36",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11946,7 +12189,7 @@
       "product": "pt:M-RG-01-01:37",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11954,7 +12197,7 @@
       "product": "pt:M-RG-01-01:43",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -11962,7 +12205,7 @@
       "product": "pt:M-W-01-09:35",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -11970,7 +12213,7 @@
       "product": "pt:M-W-01-09:36",
       "branch": "SCZ",
       "qty": 6.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -11978,7 +12221,7 @@
       "product": "pt:M-W-01-09:37",
       "branch": "SCZ",
       "qty": 4.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -11986,7 +12229,7 @@
       "product": "pt:M-W-01-09:38",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -11994,7 +12237,7 @@
       "product": "pt:M-W-01-09:39",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -12002,7 +12245,7 @@
       "product": "pt:M-W-01-09:41",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -12010,7 +12253,7 @@
       "product": "pt:M-W-01-09:42",
       "branch": "SCZ",
       "qty": 7.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -12018,7 +12261,7 @@
       "product": "pt:M-L-01-02-00:35",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -12026,7 +12269,7 @@
       "product": "pt:M-L-01-02-00:40",
       "branch": "SCZ",
       "qty": 7.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -12034,7 +12277,7 @@
       "product": "pt:M-L-01-02-00:41",
       "branch": "SCZ",
       "qty": 10.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -12042,7 +12285,7 @@
       "product": "pt:M-L-01-02-00:42",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -12050,7 +12293,7 @@
       "product": "pt:M-L-01-02-00:45",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 152,
       "uom": "PAR"
     },
     {
@@ -12058,7 +12301,7 @@
       "product": "pt:M-TAR-02-04:35",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12066,7 +12309,7 @@
       "product": "pt:M-TAR-02-04:36",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12074,7 +12317,7 @@
       "product": "pt:M-TDP-01-04:37",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12082,7 +12325,7 @@
       "product": "pt:M-TDP-01-04:38",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12090,7 +12333,7 @@
       "product": "pt:M-TDP-01-04:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12098,7 +12341,7 @@
       "product": "pt:M-TDP-01-03:35",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -12106,7 +12349,7 @@
       "product": "pt:M-TDP-01-03:36",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 193.52,
       "uom": "PAR"
     },
     {
@@ -12114,7 +12357,7 @@
       "product": "pt:M-TAR-01-04:37",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12122,7 +12365,7 @@
       "product": "pt:M-TAR-01-04:41",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12130,7 +12373,7 @@
       "product": "pt:M-TAR-01-04:42",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12138,7 +12381,7 @@
       "product": "pt:M-PC-01-03:36",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -12146,7 +12389,7 @@
       "product": "pt:M-PC-01-03:41",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -12154,7 +12397,7 @@
       "product": "pt:M-PC-01-03:42",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -12162,7 +12405,7 @@
       "product": "pt:M-PC-01-03:43",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -12170,7 +12413,7 @@
       "product": "pt:M-PC-01-03:44",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -12178,7 +12421,7 @@
       "product": "pt:M-PC-01-03:45",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 181.13,
       "uom": "PAR"
     },
     {
@@ -12186,7 +12429,7 @@
       "product": "pt:M-TDP-01-02:38",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12194,7 +12437,7 @@
       "product": "pt:M-TDP-01-02:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12202,7 +12445,7 @@
       "product": "pt:M-TDP-01-02:40",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 194,
       "uom": "PAR"
     },
     {
@@ -12210,7 +12453,7 @@
       "product": "pt:M-BT-01-10:37",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12218,7 +12461,7 @@
       "product": "pt:M-BT-01-10:42",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12226,7 +12469,7 @@
       "product": "pt:M-BT-01-09:35",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12234,7 +12477,7 @@
       "product": "pt:M-BT-01-09:37",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12242,7 +12485,7 @@
       "product": "pt:M-BT-01-09:39",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12250,7 +12493,7 @@
       "product": "pt:M-BT-01-09:40",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12258,7 +12501,7 @@
       "product": "pt:M-BT-01-09:41",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12266,7 +12509,7 @@
       "product": "pt:M-BT-01-09:44",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 160.26,
       "uom": "PAR"
     },
     {
@@ -12274,7 +12517,7 @@
       "product": "pt:M-W-01-10:37",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 148.33,
       "uom": "PAR"
     },
     {
@@ -12282,7 +12525,7 @@
       "product": "pt:ES-V-04-01-01:28",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12290,7 +12533,7 @@
       "product": "pt:ES-V-04-01-01:33",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12298,7 +12541,7 @@
       "product": "pt:ES-V-04-01-01:35",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12306,7 +12549,7 @@
       "product": "pt:ES-V-04-01-01:38",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12314,7 +12557,7 @@
       "product": "pt:ES-V-04-01-01:40",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12322,7 +12565,7 @@
       "product": "pt:ES-V-04-01-01:41",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12330,7 +12573,7 @@
       "product": "pt:ES-V-03-01-01:28",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12338,7 +12581,7 @@
       "product": "pt:ES-V-03-01-01:29",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12346,7 +12589,7 @@
       "product": "pt:ES-V-03-01-01:30",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12354,7 +12597,7 @@
       "product": "pt:ES-V-03-01-01:31",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12362,7 +12605,7 @@
       "product": "pt:ES-V-03-01-01:32",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12370,7 +12613,7 @@
       "product": "pt:ES-V-03-01-01:34",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12378,7 +12621,7 @@
       "product": "pt:ES-V-01-01:28",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -12386,7 +12629,7 @@
       "product": "pt:ES-V-01-01:29",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -12394,7 +12637,7 @@
       "product": "pt:ES-V-01-01:31",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -12402,7 +12645,7 @@
       "product": "pt:ES-V-01-01:32",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 70,
       "uom": "PAR"
     },
     {
@@ -12410,7 +12653,7 @@
       "product": "pt:ES-M-04-01:29",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12418,7 +12661,7 @@
       "product": "pt:ES-M-04-01:30",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12426,7 +12669,7 @@
       "product": "pt:ES-M-04-01:31",
       "branch": "SCZ",
       "qty": 2.0,
-      "cost": null,
+      "cost": 90,
       "uom": "PAR"
     },
     {
@@ -12434,7 +12677,7 @@
       "product": "pt:E-V-06-07:37",
       "branch": "SCZ",
       "qty": 6.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12442,7 +12685,7 @@
       "product": "pt:E-V-06-07:38",
       "branch": "SCZ",
       "qty": 16.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12450,7 +12693,7 @@
       "product": "pt:E-V-06-07:39",
       "branch": "SCZ",
       "qty": 12.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12458,7 +12701,7 @@
       "product": "pt:E-V-06-07:40",
       "branch": "SCZ",
       "qty": 6.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12466,7 +12709,7 @@
       "product": "pt:E-V-06-07:41",
       "branch": "SCZ",
       "qty": 15.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12474,7 +12717,7 @@
       "product": "pt:E-V-06-07:42",
       "branch": "SCZ",
       "qty": 5.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12482,7 +12725,7 @@
       "product": "pt:E-V-12-01:37",
       "branch": "SCZ",
       "qty": 8.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12490,7 +12733,7 @@
       "product": "pt:E-V-12-01:38",
       "branch": "SCZ",
       "qty": 9.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12498,7 +12741,7 @@
       "product": "pt:E-V-12-01:39",
       "branch": "SCZ",
       "qty": 12.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12506,7 +12749,7 @@
       "product": "pt:E-V-12-01:40",
       "branch": "SCZ",
       "qty": 6.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12514,7 +12757,7 @@
       "product": "pt:E-V-12-01:41",
       "branch": "SCZ",
       "qty": 3.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12522,7 +12765,7 @@
       "product": "pt:EL-V-01-01:43",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12530,7 +12773,7 @@
       "product": "pt:EL-V-01-01:43",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 100,
       "uom": "PAR"
     },
     {
@@ -12538,7 +12781,7 @@
       "product": "pt:I-CL-01-06-0A:44",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -12546,7 +12789,7 @@
       "product": "pt:I-CL-08-06-0A:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -12554,7 +12797,7 @@
       "product": "pt:I-CL-03-06-0A:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -12562,7 +12805,7 @@
       "product": "pt:I-CL-02-06-0A:39",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -12570,7 +12813,7 @@
       "product": "pt:I-CL-06-06-0A:38",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     },
     {
@@ -12578,7 +12821,7 @@
       "product": "pt:I-CH-01-06-0A:38",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 235,
       "uom": "PAR"
     },
     {
@@ -12586,7 +12829,7 @@
       "product": "pt:I-CL-01-06-0D:44",
       "branch": "SCZ",
       "qty": 1.0,
-      "cost": null,
+      "cost": 165,
       "uom": "PAR"
     }
   ],
