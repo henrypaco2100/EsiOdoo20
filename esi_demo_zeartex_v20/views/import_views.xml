@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_esi_zeartex_import_list" model="ir.ui.view">
+    <field name="name">esi.zeartex.import.list</field>
+    <field name="model">esi.zeartex.import</field>
+    <field name="arch" type="xml">
+      <list string="Importaciones Zeartex" create="0" delete="0">
+        <field name="code"/><field name="name"/><field name="route"/>
+        <field name="goods_usd"/><field name="expense_total_usd"/>
+        <field name="landed_total_usd"/><field name="projected_total_bob"/>
+        <field name="landed_cost_id"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_esi_zeartex_import_form" model="ir.ui.view">
+    <field name="name">esi.zeartex.import.form</field>
+    <field name="model">esi.zeartex.import</field>
+    <field name="arch" type="xml">
+      <form string="Importación Zeartex" create="0" delete="0">
+        <header>
+          <button name="action_prepare_landed_cost" type="object" string="Preparar costo en destino Odoo" class="btn-primary" confirm="Solo crear un borrador. Se requiere recepción validada y gastos/cuentas revisados. ¿Continuar?"/>
+          <button name="action_open_landed_cost" type="object" string="Abrir costo en destino" invisible="not landed_cost_id"/>
+        </header>
+        <sheet>
+          <div class="alert alert-warning" role="alert">SIMULACIÓN: el costo proyectado no cambia AVCO. Para actualizar la valoración debe seleccionarse una recepción terminada, calcularse y validarse el costo en destino en Inventario (solo en base de pruebas).</div>
+          <group>
+            <group>
+              <field name="code" readonly="1"/><field name="name" readonly="1"/>
+              <field name="company_id" readonly="1"/><field name="origin_country_id" readonly="1"/>
+              <field name="route" readonly="1"/><field name="departure"/>
+              <field name="destination"/>
+            </group>
+            <group>
+              <field name="currency_id" readonly="1"/><field name="exchange_rate"/>
+              <field name="goods_usd"/>
+              <field name="expense_total_usd" readonly="1"/>
+              <field name="landed_total_usd" readonly="1"/>
+              <field name="projected_total_bob" readonly="1"/>
+              <field name="purchase_id"/>
+              <field name="landed_cost_id" readonly="1"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Gastos de importación">
+              <field name="line_ids">
+                <list editable="bottom">
+                  <field name="sequence" widget="handle"/>
+                  <field name="name"/><field name="service_code"/>
+                  <field name="amount_usd"/><field name="capitalizable"/>
+                  <field name="split_method"/><field name="account_id"/>
+                </list>
+              </field>
+            </page>
+            <page string="Recepciones Odoo">
+              <field name="picking_ids" domain="[('company_id', '=', company_id), ('state', '=', 'done')]"/>
+              <div class="alert alert-info" role="alert">Los traslados deben estar validados y los productos deben usar AVCO antes de preparar Costos en destino.</div>
+            </page>
+            <page string="Notas"><field name="notes"/></page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_esi_zeartex_import" model="ir.actions.act_window">
+    <field name="name">Expedientes de importación</field>
+    <field name="res_model">esi.zeartex.import</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <menuitem id="menu_esi_zeartex_import" parent="menu_esi_zeartex_root"
+      name="Importaciones y costos" action="action_esi_zeartex_import" sequence="2" groups="base.group_system"/>
+  <record id="view_esi_zeartex_demo_form_import_inherit" model="ir.ui.view">
+    <field name="name">esi.zeartex.demo.form.import.inherit</field>
+    <field name="model">esi.zeartex.demo</field>
+    <field name="inherit_id" ref="view_esi_zeartex_demo_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="action_check_avco" type="object" string="5. Configurar AVCO seguro" confirm="Solo se cambiarán categorías exclusivas Zeartex que NO tengan existencias ni movimientos confirmados. ¿Continuar?"/>
+        <button name="action_create_import_scenarios" type="object" string="6. Crear 4 importaciones de ejemplo"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

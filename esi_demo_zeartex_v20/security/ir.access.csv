@@ -1,2 +1,4 @@
 id,name,model_id,group_id/id,operation,domain
 access_zeartex_demo_system,access.zeartex.demo.system,esi.zeartex.demo,base.group_system,cru,
+access_zeartex_import_system,access.zeartex.import.system,esi.zeartex.import,base.group_system,cru,
+access_zeartex_import_line_system,access.zeartex.import.line.system,esi.zeartex.import.line,base.group_system,cru,
