@@ -12,6 +12,7 @@ class DirectMigration(models.Model):
     data_imported = fields.Boolean(readonly=True, copy=False)
     stock_imported = fields.Boolean(readonly=True, copy=False)
     import_log = fields.Text(string='Resultado de importación', readonly=True, copy=False)
+    valuation_pending_log = fields.Text(string='Saldos cargados sin costo de apertura', readonly=True, copy=False)
     product_count = fields.Integer(string='Productos/variantes vinculados', readonly=True, copy=False)
 
     def _source(self):
@@ -193,6 +194,7 @@ class DirectMigration(models.Model):
         for row in data['finished']:
             self._finished(row)
         self._accounts(data['accounts'], notes)
+        self._configure_category_accounting()
         self._recipes(data, notes)
         self.write({'data_imported': True, 'loaded': True,
                     'product_count': len(data['materials']) + sum(len(r['sizes']) for r in data['finished']),
@@ -248,12 +250,15 @@ class DirectMigration(models.Model):
         self._lock()
         if not self.data_imported:
             raise UserError(_('Primero pulse Importar datos.'))
+        self._configure_category_accounting()
         data=self._source()
         warehouses={'FABRICA CALZADO':self.warehouse_factory_id,'CBBA':self.warehouse_cbba_id,'SCZ':self.warehouse_scz_id}
         groups=defaultdict(list)
         for row in data['stock']:
             groups[(row['branch'],row['product'])].append(row)
         notes=[]
+        valuation_warnings=[]
+        applied_quantities=defaultdict(float)
         applied=0
         for (branch,key), rows in groups.items():
             mark='balance:'+branch+':'+key
@@ -288,8 +293,11 @@ class DirectMigration(models.Model):
                     continue
                 scoped.standard_price=costs[0]
             if qty and scoped.standard_price<=0:
-                notes.append('Saldo pendiente: falta costo de apertura '+product.display_name+' / '+branch)
-                continue
+                if key.startswith('pt:') and scoped.standard_price == 0:
+                    valuation_warnings.append('%s / %s: %s pares cargados con costo cero. Falta regularizar valoración.' % (product.display_name, branch, qty))
+                else:
+                    notes.append('Saldo pendiente: falta costo válido de apertura '+product.display_name+' / '+branch)
+                    continue
             if qty:
                 quant=quants.create({'product_id':product.id,'location_id':warehouse.lot_stock_id.id,'inventory_quantity':qty})
                 result=quant.with_context(inventory_name='Apertura Tosscano — saldo al 23/10/2026').action_apply_inventory()
@@ -297,6 +305,12 @@ class DirectMigration(models.Model):
                     raise UserError(_('Odoo requiere resolver un conflicto de inventario: %s',product.display_name))
             self._bind(mark,product)
             applied+=1
+            if key.startswith('pt:'):
+                applied_quantities[branch]+=qty
+        if valuation_warnings:
+            self.valuation_pending_log = '\n'.join(filter(None, [self.valuation_pending_log, '\n'.join(valuation_warnings)]))
         self.write({'stock_imported':not notes,'import_log':(self.import_log or '')+'\n\nSALDOS: %s posiciones aplicadas en esta ejecución.\n'%applied+'\n'.join(notes)+
+                    '\nTerminados cargados en esta ejecución: '+', '.join('%s: %s pares' % (b, q) for b, q in sorted(applied_quantities.items()))+
+                    ('\nHay saldos de terminados cargados sin costo. Consulte Saldos cargados sin costo de apertura.' if self.valuation_pending_log else '')+
                     '\nFecha de movimientos: fecha de ejecución nativa. Corte de origen: 23/10/2026. No se reescriben fechas.'})
         return True
