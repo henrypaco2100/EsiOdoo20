@@ -91,6 +91,13 @@ class EsiZeartexDemoImports(models.Model):
             ('product_tmpl_id.company_id', '=', company.id)], limit=24)
         supplier = self.env['res.partner'].sudo().search([('ref', '=', 'ZEA-PROV-01')], limit=1)
         Purchase = self.env['purchase.order'].sudo().with_company(company)
+        # Verificamos antes de crear registros para no dejar expedientes sin orden.
+        if not supplier:
+            raise UserError(_('Falta el proveedor de demostración ZEA-PROV-01. Primero cargue los contactos de Zeartex.'))
+        if not variants:
+            raise UserError(_('No se encontraron variantes de Zeartex. Primero cargue el catálogo.'))
+        if 'tax_ids' not in self.env['purchase.order.line']._fields:
+            raise UserError(_('La instalación no expone purchase.order.line.tax_ids; revise compatibilidad de Compras.'))
         for code, route_name, route, country, goods, expenses in CASES:
             existing = scenario_model.search([('code', '=', code), ('company_id', '=', company.id)], limit=1)
             if existing:
@@ -112,12 +119,12 @@ class EsiZeartexDemoImports(models.Model):
                     'amount_usd': amount, 'split_method': method, 'capitalizable': capitalizable}))
             purchase = Purchase.search([('origin', '=', 'ZEA-' + code),
                 ('company_id', '=', company.id)], limit=1)
-            if not purchase and supplier and variants:
+            if not purchase:
                 product = variants[(created * 5) % len(variants)]
                 po_line = {'product_id': product.id, 'product_qty': 200 + created * 60,
                            'name': product.display_name,
                            'price_unit': round(float(product.standard_price) / 6.96, 2),
-                           'taxes_id': [(5, 0, 0)]}
+                           'tax_ids': [(5, 0, 0)]}
                 if 'uom_id' in self.env['purchase.order.line']._fields:
                     po_line['uom_id'] = product.uom_id.id
                 purchase = Purchase.create({'partner_id': supplier.id, 'company_id': company.id,

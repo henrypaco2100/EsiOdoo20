@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_esi_agro_demo_wizard_accounting" model="ir.ui.view">
+        <field name="name">esi.agro.demo.wizard.accounting.form</field>
+        <field name="model">esi.agro.demo.wizard</field>
+        <field name="inherit_id" ref="esi_demo_agrocons_v20.view_esi_agro_demo_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer/button[@name='action_load']" position="after">
+                <button name="action_audit_avco" type="object" string="Comprobar AVCO" class="btn-secondary"/>
+                <button name="action_create_draft_accounting" type="object" string="Crear facturas DEMO (borrador)" class="btn-secondary"/>
+                <button name="action_open_finance" type="object" string="Abrir Balance ESI" class="btn-secondary"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_agro_demo_invoices" model="ir.actions.act_window">
+        <field name="name">Facturas de demostración Agrocons</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('ref','ilike','AGC-DEMO-')]</field>
+    </record>
+    <record id="action_agro_demo_accounts" model="ir.actions.act_window">
+        <field name="name">Plan de cuentas existente</field>
+        <field name="res_model">account.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_agro_demo_invoices" name="Facturas de prueba" parent="menu_esi_agro_reports" action="action_agro_demo_invoices" sequence="22" groups="account.group_account_user"/>
+    <menuitem id="menu_agro_demo_accounts" name="Plan de cuentas (Odoo)" parent="menu_esi_agro_reports" action="action_agro_demo_accounts" sequence="23" groups="account.group_account_user"/>
+</odoo>

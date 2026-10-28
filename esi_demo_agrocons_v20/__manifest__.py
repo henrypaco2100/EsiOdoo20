@@ -1,6 +1,6 @@
 {
  'name':'ESI | Gestión Agrícola - Demo Familia Agrocons',
- 'version':'20.0.2.0.2',
+ 'version':'20.0.3.0.0',
  'category':'Industries/Agriculture',
  'summary':'Parcelas, campañas, siembras, labores, cosechas e integración con compras, inventario y ventas',
  'author':'ESI - Especialistas en Sistemas Integrados',
@@ -8,5 +8,5 @@
  'application':True,
  'installable':True,
  'depends':['base','product','stock','stock_account','purchase','sale_management','account'],
- 'data':['security/ir.access.csv','views/agro_views.xml','views/agro_extensions.xml','views/demo_wizard_views.xml'],
+ 'data':['security/ir.access.csv','views/agro_views.xml','views/agro_extensions.xml','views/demo_wizard_views.xml','views/accounting_demo_views.xml'],
 }

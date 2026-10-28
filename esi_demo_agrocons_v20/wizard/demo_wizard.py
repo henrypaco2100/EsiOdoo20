@@ -25,6 +25,15 @@ class AgroDemoWizard(models.TransientModel):
         comprador=partner('DEMO - Industria Aceitera del Oriente')
         category=env['product.category'].sudo().search([('name','=','DEMO | Agrocons - Insumos')],limit=1)
         if not category: category=env['product.category'].sudo().create({'name':'DEMO | Agrocons - Insumos'})
+        # No se cambia el método de valoración de una categoría que ya tiene movimientos.
+        existing = env['product.product'].sudo().search([('categ_id', '=', category.id)])
+        if existing:
+            moves = env['stock.move'].sudo().search_count([('product_id', 'in', existing.ids), ('state', '=', 'done')])
+            if moves:
+                method_field = 'property_cost_method' if 'property_cost_method' in category._fields else 'cost_method' if 'cost_method' in category._fields else None
+                current_method = getattr(category.with_company(company), method_field) if method_field else None
+                if current_method != 'average':
+                    raise UserError(_('La categoría DEMO tiene movimientos existentes y no utiliza AVCO. Detenga la carga y realice una migración de valoración controlada.'))
         # AVCO solo sobre la categoría propia de la DEMO; nunca en categorías ajenas.
         if 'cost_method' in category._fields:
             category.with_company(company).write({'cost_method':'average'})
