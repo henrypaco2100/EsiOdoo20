@@ -1,4 +1,8 @@
-# Migración Tosscano v20 — 20.0.4.0.0
+# Migración Tosscano v20 — 20.0.4.1.0
+
+## Categorías — 20.0.4.1.0
+
+En nuevas importaciones: **Producto terminado → familia → subfamilia** y **Materia prima → familia → subfamilia**. En una base ya importada, actualizar el módulo y pulsar **Agrupar categorías** en el registro existente. Conserva los IDs de las familias y sus descendientes, asignaciones de productos y saldos; configura AVCO y cuentas también en las dos raíces. No es necesario repetir datos, saldos o costos. Si una clasificación manual mezcla ambos tipos en el mismo árbol, informa el conflicto sin moverlo arbitrariamente.
 
 ## Actualizar una base ya importada
 
@@ -52,7 +56,7 @@ Las 12 fichas se conservan. La importación solo crea una receta cuando TODOS lo
 
 Requiere esi_calzados_v20 20.0.11.2.0 o posterior y esi_sucursales_v20. El ZIP contiene únicamente migrar_tosscano_v20 actualizado; no reemplaza los módulos de calzados, sucursales ni reportes existentes.
 
-41 pruebas locales aprobadas: conservación de cantidades, cobertura de costos, referencias/categorías/unidades, equivalencias, marcadores de saldos, cambios nativos de costo por compañía y repetición después de cambiar AVCO. Las pruebas de ejecución usan dobles ORM, no una instancia real de Odoo. Python/XML y estructura del ZIP verificados. No se accedió ni instaló nada en el servidor. La instalación y conciliación contable deben verificarse en una copia de la base.
+44 pruebas locales aprobadas: conservación de cantidades, cobertura de costos, referencias/categorías/unidades, equivalencias, marcadores de saldos, cambios nativos de costo por compañía y repetición después de cambiar AVCO. Las pruebas de ejecución usan dobles ORM, no una instancia real de Odoo. Python/XML y estructura del ZIP verificados. No se accedió ni instaló nada en el servidor. La instalación y conciliación contable deben verificarse en una copia de la base.
 
 Las referencias persistentes pertenecen a `tosscano_import_data`. No eliminarlas manualmente. La herramienta no revierte automáticamente ajustes ya aplicados.
 

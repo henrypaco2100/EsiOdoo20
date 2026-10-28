@@ -71,17 +71,68 @@ class DirectMigration(models.Model):
             'name': self._xmlname(key), 'model': record._name, 'res_id': record.id, 'noupdate': True})
         return record
 
-    def _category(self, family, subfamily=None):
-        parent = False
-        for name in [family, subfamily]:
+    def _category_root(self, name):
+        model = self.env['product.category']
+        root = model.search([('name', '=ilike', name), ('parent_id', '=', False)])
+        if len(root) > 1:
+            raise UserError(_('Hay varias categorías raíz llamadas %s.', name))
+        return root or model.create({'name': name})
+
+    def _category(self, family, subfamily=None, root_name='Materia prima'):
+        root = self._category_root(root_name)
+        parent = root
+        for level, name in enumerate([family, subfamily]):
             if not name:
                 continue
             name = ' '.join(name.upper().split())
             found = self.env['product.category'].search([('name', '=', name), ('parent_id', '=', parent.id if parent else False)])
             if len(found) > 1:
                 raise UserError(_('Categorías duplicadas con el mismo padre: %s', name))
+            if level == 0 and not found:
+                # Move the existing family, keeping its ID, children, product
+                # assignments and accounting properties intact.
+                legacy = self.env['product.category'].search([('name', '=', name), ('parent_id', '=', False)])
+                if len(legacy) > 1:
+                    raise UserError(_('Familia duplicada: %s', name))
+                if legacy and legacy != root:
+                    legacy.write({'parent_id': root.id})
+                    found = legacy
             parent = found or self.env['product.category'].create({'name': name, 'parent_id': parent.id if parent else False})
         return parent
+
+    def action_group_categories(self):
+        self._lock()
+        data = self._source()
+        roots = {name: self._category_root(name) for name in ('Materia prima', 'Producto terminado')}
+        # Collect actual trees first: a manually shared tree cannot be moved
+        # into both roots. Let the user separate that tree explicitly.
+        branches = {}
+        for kind, rows in [('Materia prima', data['materials']), ('Producto terminado', data['finished'])]:
+            for row in rows:
+                record = self._ref(row['key'])
+                if not record:
+                    continue
+                category = record.categ_id
+                while category.parent_id and category.parent_id not in list(roots.values()):
+                    category = category.parent_id
+                if category in list(roots.values()):
+                    if category != roots[kind]:
+                        raise UserError(_('Un producto está asignado directamente a la raíz incorrecta: %s.', record.display_name))
+                    continue
+                if category.id in branches and branches[category.id][1] != kind:
+                    raise UserError(_('La categoría %s contiene terminados y materias primas importados. Separe esa clasificación antes de agrupar.', category.display_name))
+                branches[category.id] = (category, kind)
+        for category, kind in branches.values():
+            if category.parent_id != roots[kind]:
+                category.write({'parent_id': roots[kind].id})
+        # Also build/reuse the source paths for subsequent imports.
+        for row in data['materials']:
+            self._category(row.get('family') or 'MATERIAS PRIMAS', row.get('subfamily') or 'OTROS MATERIALES')
+        for row in data['finished']:
+            self._category('CALZADOS ' + row['family'], row['subfamily'], 'Producto terminado')
+        self._configure_category_accounting()
+        self.import_log = (self.import_log or '') + '\nCategorías agrupadas bajo Materia prima y Producto terminado. Se conservan familias, subfamilias y productos.'
+        return True
 
     def _uom(self, label):
         label = {'UNI': 'UNIDAD', 'UNIDADES': 'UNIDAD', 'METROS': 'METRO', 'M': 'METRO', 'FT2': 'PIE2', 'L': 'LITRO', 'GR': 'GRAMO'}.get(label.upper(), label.upper())
@@ -172,7 +223,7 @@ class DirectMigration(models.Model):
                 lines.append(self._attribute_line('Color', [row['color']]))
             template = self.env['product.template'].create({
                 'name': row['name'].strip(), 'type': 'consu', 'is_storable': True, 'company_id': False,
-                'uom_id': self._uom('PAR').id, 'categ_id': self._category('CALZADOS ' + row['family'], row['subfamily']).id,
+                'uom_id': self._uom('PAR').id, 'categ_id': self._category('CALZADOS ' + row['family'], row['subfamily'], 'Producto terminado').id,
                 'sale_ok': True, 'purchase_ok': False, 'esi_manufacture_ok': True, 'esi_component_ok': False,
                 'attribute_line_ids': lines,
             })

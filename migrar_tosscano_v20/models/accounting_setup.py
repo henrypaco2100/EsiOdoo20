@@ -132,7 +132,7 @@ class MigrationAccounting(models.Model):
                 category_kinds[category.id] = kind if previous in (None, kind) else 'other'
                 category = category.parent_id
         for row in data['finished']:
-            category = self._category('CALZADOS ' + row['family'], row['subfamily'])
+            category = self._category('CALZADOS ' + row['family'], row['subfamily'], 'Producto terminado')
             while category:
                 category_kinds[category.id] = 'finished'
                 category = category.parent_id
