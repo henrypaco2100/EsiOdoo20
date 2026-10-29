@@ -1,0 +1,16 @@
+<odoo>
+  <template id="report_mrporder_esi_sizes" inherit_id="mrp.report_mrporder">
+    <!-- La OF multi-talla usa una variante como referencia técnica. En el informe
+         mostramos el modelo principal y la plantilla para no presentar T40 como
+         si fuese el único producto fabricado. -->
+    <xpath expr="//span[@t-field='o.product_id']" position="replace">
+      <span t-out="o.esi_main_product_display or o.product_id.display_name"/>
+    </xpath>
+    <xpath expr="//span[@t-field='o.product_description_variants']/ancestor::div[1]" position="after">
+      <div class="col-6" t-if="o.esi_size_quantities_display">
+        <strong>Tallas a fabricar:</strong><br/>
+        <span t-out="o.esi_size_quantities_display"/>
+      </div>
+    </xpath>
+  </template>
+</odoo>

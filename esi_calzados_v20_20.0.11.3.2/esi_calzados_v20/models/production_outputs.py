@@ -14,6 +14,56 @@ class Production(models.Model):
     esi_allowed_output_ids = fields.Many2many(related='esi_plan_bom_id.esi_allowed_variant_ids')
     esi_output_total = fields.Float(compute='_compute_output_total', string='Total a fabricar')
     esi_outputs_dirty = fields.Boolean(compute='_compute_output_total')
+    esi_main_product_display = fields.Char(
+        string='Producto principal', compute='_compute_esi_production_display')
+    esi_size_quantities_display = fields.Char(
+        string='Tallas a fabricar', compute='_compute_esi_production_display')
+
+    @staticmethod
+    def _esi_size_sort_key(value):
+        text = (value or '').strip()
+        try:
+            return (0, float(text.replace(',', '.')), text)
+        except (ValueError, TypeError):
+            return (1, 0.0, text.casefold())
+
+    @api.depends(
+        'esi_template_id.name', 'product_id.product_tmpl_id.name',
+        'esi_output_line_ids.product_id', 'esi_output_line_ids.quantity',
+        'esi_output_line_ids.uom_id',
+        'esi_output_line_ids.product_id.product_template_attribute_value_ids',
+        'esi_output_line_ids.product_id.product_template_attribute_value_ids.name',
+        'esi_output_line_ids.product_id.product_template_attribute_value_ids.attribute_id.name',
+        'product_id.product_template_attribute_value_ids',
+        'product_id.product_template_attribute_value_ids.name',
+        'product_id.product_template_attribute_value_ids.attribute_id.name')
+    def _compute_esi_production_display(self):
+        for mo in self:
+            template = mo.esi_template_id or mo.product_id.product_tmpl_id
+            reference_products = mo.esi_output_line_ids.mapped('product_id') or mo.product_id
+            model_value = False
+            for product in reference_products:
+                model_ptav = product.product_template_attribute_value_ids.filtered(
+                    lambda v: (v.attribute_id.name or '').strip().casefold() == 'modelo')[:1]
+                if model_ptav:
+                    model_value = model_ptav.name
+                    break
+            if not model_value:
+                model_value = template.default_code or False
+            mo.esi_main_product_display = (
+                '[%s] %s' % (model_value, template.name) if model_value else template.name
+            ) if template else (mo.product_id.display_name or False)
+
+            rows = []
+            for line in mo.esi_output_line_ids.filtered(lambda l: l.product_id and l.quantity > 0):
+                size_ptav = line.product_id.product_template_attribute_value_ids.filtered(
+                    lambda v: (v.attribute_id.name or '').strip().casefold() == 'talla')[:1]
+                size = size_ptav.name if size_ptav else line.product_id.display_name
+                qty = ('%g' % line.quantity)
+                uom = line.uom_id.name or ''
+                rows.append((self._esi_size_sort_key(size), '%s = %s %s' % (size, qty, uom)))
+            rows.sort(key=lambda item: item[0])
+            mo.esi_size_quantities_display = ' · '.join(label for _, label in rows) or False
 
     @api.depends('esi_output_line_ids.product_id', 'esi_output_line_ids.quantity', 'esi_plan_grid')
     def _compute_output_total(self):

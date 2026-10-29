@@ -158,6 +158,8 @@ class Workorder(models.Model):
     _inherit = 'mrp.workorder'
 
     esi_center_step = fields.Integer(string='Paso del recorrido', readonly=True, copy=True, index=True)
+    esi_main_product_display = fields.Char(related='production_id.esi_main_product_display', readonly=True)
+    esi_size_quantities_display = fields.Char(related='production_id.esi_size_quantities_display', readonly=True)
 
     def unlink(self):
         if self.filtered(lambda w: w.esi_center_step and w.production_id.state not in ('draft', 'cancel')):

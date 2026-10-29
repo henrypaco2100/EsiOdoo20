@@ -75,7 +75,8 @@
         <templates>
           <t t-name="card">
             <div class="d-flex justify-content-between"><strong><field name="production_id"/></strong><field name="state" widget="badge"/></div>
-            <div class="my-2"><field name="product_id"/></div>
+            <div class="my-2"><strong><field name="esi_main_product_display"/></strong></div>
+            <div class="mb-1" invisible="not esi_size_quantities_display"><span class="text-muted">Tallas: </span><field name="esi_size_quantities_display"/></div>
             <div><strong><field name="qty_production"/></strong> <field name="uom_id"/></div>
             <div class="text-muted">Paso <field name="esi_center_step"/> · <field name="workcenter_id"/></div>
             <footer class="mt-3">
@@ -95,7 +96,8 @@
     <field name="arch" type="xml">
       <list create="0" edit="0" delete="0">
         <field name="production_id"/>
-        <field name="product_id"/>
+        <field name="esi_main_product_display" string="Producto principal"/>
+        <field name="esi_size_quantities_display" string="Tallas / cantidades"/>
         <field name="workcenter_id"/>
         <field name="esi_center_step"/>
         <field name="qty_production" string="Cantidad total"/>
