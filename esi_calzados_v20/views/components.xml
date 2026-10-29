@@ -1,0 +1,36 @@
+<odoo>
+  <record id="product_component_option" model="ir.ui.view">
+    <field name="name">product.template.component.option</field><field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//div[@name='options']" position="inside">
+        <span name="esi_manufacture_option" class="d-inline-flex" invisible="type != 'consu'">
+          <field name="esi_manufacture_ok" widget="boolean_checkbox" class="w-auto"/><label for="esi_manufacture_ok"/>
+        </span>
+        <span name="esi_component_option" class="d-inline-flex" invisible="type == 'combo'">
+          <field name="esi_component_ok" widget="boolean_checkbox" class="w-auto"/><label for="esi_component_ok"/>
+        </span>
+      </xpath>
+    </field>
+  </record>
+  <record id="bom_component_filter" model="ir.ui.view">
+    <field name="name">mrp.bom.component.filter</field><field name="model">mrp.bom</field>
+    <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='bom_line_ids']/list/field[@name='product_id']" position="attributes">
+        <attribute name="domain">[('type', 'in', ['consu', 'service']), ('esi_component_ok', '=', True)]</attribute>
+        <attribute name="context">{'default_is_storable': True, 'default_esi_component_ok': True}</attribute>
+      </xpath>
+    </field>
+  </record>
+  <record id="production_component_filter" model="ir.ui.view">
+    <field name="name">mrp.production.component.filter</field><field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='move_raw_ids']/list/field[@name='product_id']" position="attributes">
+        <attribute name="domain">[('type', '=', 'consu'), ('esi_component_ok', '=', True)]</attribute>
+        <attribute name="context">{'default_is_storable': True, 'default_esi_component_ok': True}</attribute>
+      </xpath>
+    </field>
+  </record>
+</odoo>

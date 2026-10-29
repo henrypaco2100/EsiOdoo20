@@ -1,0 +1,13 @@
+<odoo>
+  <record id="group_multi_output" model="ir.ui.view">
+    <field name="name">esi.production.group.multi.output</field><field name="model">esi.production.group</field>
+    <field name="inherit_id" ref="view_esi_production_group_form"/>
+    <field name="arch" type="xml">
+      <field name="responsible_id" position="before"><field name="mode" invisible="1"/><field name="picking_type_id" readonly="state != 'draft'" required="1"/><field name="sale_id" invisible="not sale_id"/><field name="batch_bom_id" invisible="1"/></field>
+      <xpath expr="//field[@name='line_ids']/list/field[@name='bom_id']" position="before"><field name="product_tmpl_id" column_invisible="True"/></xpath>
+      <field name="line_ids" position="before"><div class="text-muted mb-2" invisible="mode != 'multi'">Las tallas compatibles comparten una orden. Un cambio de color, modelo o material genera otra orden.</div></field>
+    </field>
+  </record>
+  <record id="sale_group_button" model="ir.ui.view"><field name="name">sale.order.production.group</field><field name="model">sale.order</field><field name="inherit_id" ref="sale.view_order_form"/><field name="arch" type="xml"><xpath expr="//header" position="inside"><button name="action_esi_production_group" type="object" string="Grupo de fabricación" groups="mrp.group_mrp_user"/></xpath></field></record>
+  <record id="production_output_matrix" model="ir.ui.view"><field name="name">mrp.production.output.matrix</field><field name="model">mrp.production</field><field name="inherit_id" ref="mrp.mrp_production_form_view"/><field name="arch" type="xml"><xpath expr="//notebook" position="inside"><page string="Productos / tallas de salida" invisible="not esi_group_id"><field name="move_finished_ids" readonly="1"><list create="0" edit="0" delete="0"><field name="product_id"/><field name="product_uom_qty" string="Planificado"/><field name="quantity" string="Registrado"/><field name="uom_id"/><field name="state"/></list></field><div class="text-muted">Registre las cantidades reales y los lotes/series mediante los movimientos nativos de la OF. Esta tabla es de consulta.</div></page></xpath></field></record>
+<record id="production_destajo_button" model="ir.ui.view"><field name="name">mrp.production.destajo.button</field><field name="model">mrp.production</field><field name="inherit_id" ref="mrp.mrp_production_form_view"/><field name="arch" type="xml"><xpath expr="//header" position="inside"><button name="action_esi_destajo" type="object" string="Registrar destajo" invisible="not esi_group_id or state == 'cancel'" groups="mrp.group_mrp_user"/></xpath></field></record></odoo>

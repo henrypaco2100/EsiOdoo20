@@ -1,0 +1,16 @@
+<templates xml:space="preserve">
+  <t t-name="esi_calzados_v20.VariantGrid">
+    <div class="table-responsive">
+      <table t-if="this.grid.matrix" class="table table-bordered align-middle">
+        <thead><tr><th t-foreach="this.grid.header" t-as="head" t-key="head_index"><t t-out="head.name"/></th></tr></thead>
+        <tbody><tr t-foreach="this.grid.matrix" t-as="row" t-key="row_index">
+          <t t-foreach="row" t-as="cell" t-key="cell_index">
+            <th t-if="cell_index === 0"><t t-out="cell.name"/></th>
+            <td t-else=""><input t-if="cell.is_possible_combination" type="number" min="0" step="any" class="form-control text-end" style="min-width:90px" t-att-aria-label="row[0].name + ' / ' + this.grid.header[cell_index].name" t-att-value="cell.qty" t-att-disabled="this.props.readonly" t-on-change="(ev) => this.change(row_index, cell_index, ev)"/><span t-else="">—</span></td>
+          </t>
+        </tr></tbody>
+      </table>
+      <span t-else="" class="text-muted">Seleccione un producto con variantes.</span>
+    </div>
+  </t>
+</templates>

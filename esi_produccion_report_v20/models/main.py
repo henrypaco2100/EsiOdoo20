@@ -146,14 +146,15 @@ class Report(models.TransientModel):
             orders = orders.sorted(lambda o: (self._esi_operation_summary(o)[0], o.name or '', o.id))
             title += ' · Órdenes por centro actual'
         if self.kind in ('summary', 'centers'):
-            headers = ['OF', 'Grupo', 'Producto / características', 'Cantidad total (tallas)',
-                'Unidad', 'Estado OF', 'Centro de trabajo actual', 'Estado etapa', 'Etapas completadas',
-                'Responsable', 'Sucursal']
+            headers = ['OF', 'Grupo', 'Producto principal', 'Tallas / cantidades',
+                'Cantidad total', 'Unidad', 'Estado OF', 'Centro de trabajo actual', 'Estado etapa',
+                'Etapas completadas', 'Responsable', 'Sucursal']
             rows = []
             for o in orders:
                 operation, operation_state, advance = self._esi_operation_summary(o)
                 rows.append([o.name, o.esi_group_id.name or '',
-                    o.esi_batch_description if o.esi_batch_attribute_ids else o.product_id.display_name,
+                    o.esi_main_product_display or o.product_id.product_tmpl_id.display_name,
+                    o.esi_size_quantities_display or '',
                     o.esi_display_total_qty, o.uom_id.name, labels.get(o.state, o.state),
                     operation, operation_state, advance, o.esi_responsible_id.name or '', o.company_id.name])
             return title, headers, rows
@@ -161,7 +162,7 @@ class Report(models.TransientModel):
         if self.kind == 'detail':
             order = self.production_id
             operation, operation_state, advance = self._esi_operation_summary(order)
-            rows.append(['Resumen', order.product_id.product_tmpl_id.display_name, order.esi_display_total_qty, order.uom_id.name, labels.get(order.state, order.state), 'Centro / etapa actual: %s (%s), avance %s' % (operation, operation_state, advance)])
+            rows.append(['Resumen', order.esi_main_product_display or order.product_id.product_tmpl_id.display_name, order.esi_display_total_qty, order.uom_id.name, labels.get(order.state, order.state), 'Tallas: %s · Centro / etapa actual: %s (%s), avance %s' % (order.esi_size_quantities_display or '—', operation, operation_state, advance)])
             rows.append(['Resumen', 'Responsable', '', '', '', order.esi_responsible_id.name or order.user_id.name or 'Sin asignar'])
             rows.append(['Resumen', 'Origen / grupo', '', '', '', '%s / %s' % (order.origin or '—', order.esi_group_id.name or '—')])
             wo_labels = dict(self.env['mrp.workorder']._fields['state']._description_selection(self.env))

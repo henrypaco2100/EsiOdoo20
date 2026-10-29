@@ -1,0 +1,24 @@
+<odoo>
+  <record id="attribute_highlight" model="ir.ui.view">
+    <field name="name">product.attribute.card.highlight</field><field name="model">product.attribute</field>
+    <field name="inherit_id" ref="product.product_attribute_view_form"/>
+    <field name="arch" type="xml"><xpath expr="//group[@name='main_fields']" position="inside"><group string="Fabricación y visualización"><field name="esi_highlight_card" string="Destacar valores en la tarjeta"/><field name="esi_group_production" string="Compartir materiales entre sus valores"/></group></xpath></field>
+  </record>
+  <record id="variant_card_highlight" model="ir.ui.view">
+    <field name="name">product.product.card.highlight</field><field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_kanban_view"/>
+    <field name="arch" type="xml"><xpath expr="//templates//main/div[1]" position="after"><div class="fw-bold fs-2 text-primary text-break mb-2" invisible="not esi_variant_highlight"><field name="esi_variant_highlight"/></div></xpath></field>
+  </record>
+  <record id="template_card_highlight" model="ir.ui.view">
+    <field name="name">product.template.card.highlight</field><field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_kanban_view"/>
+    <field name="arch" type="xml"><xpath expr="//templates//main/div[1]" position="after"><div class="fw-bold fs-2 text-primary text-break mb-2" invisible="not esi_variant_highlight"><field name="esi_variant_highlight"/></div></xpath></field>
+  </record>
+  <record id="catalog_card_highlight" model="ir.ui.view">
+    <field name="name">product.product.catalog.highlight</field><field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_view_kanban_catalog"/>
+    <field name="arch" type="xml"><xpath expr="//field[@name='name']" position="after"><div class="fw-bold fs-2 text-primary text-break mb-2" invisible="not esi_variant_highlight"><field name="esi_variant_highlight"/></div></xpath></field>
+  </record>
+  <record id="action_products_by_variant" model="ir.actions.act_window"><field name="name">Productos por talla / variante</field><field name="res_model">product.product</field><field name="view_mode">kanban,list,form</field><field name="domain">[('is_storable', '=', True)]</field></record>
+  <record id="menu_products_by_variant" model="ir.ui.menu"><field name="name">Productos por talla / variante</field><field name="active" eval="False"/></record>
+</odoo>

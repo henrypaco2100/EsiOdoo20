@@ -1,0 +1,121 @@
+<odoo>
+  <record id="bom_center_route_form" model="ir.ui.view">
+    <field name="name">mrp.bom.center.route</field>
+    <field name="model">mrp.bom</field>
+    <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//page[@name='operations']" position="before">
+        <page name="esi_centers" string="Recorrido por centros" invisible="type != 'normal'">
+          <p class="text-muted">Ordene los centros por los que pasará el lote completo. Al confirmar la fabricación se crearán las órdenes de trabajo, sin configurar operaciones. El tiempo se multiplica por la cantidad total de la orden.</p>
+          <field name="esi_center_route_ids" nolabel="1">
+            <list editable="bottom">
+              <field name="sequence" widget="handle"/>
+              <field name="workcenter_id" options="{'no_create': True}"
+                     domain="[('company_id', 'in', [False, parent.company_id])]"/>
+              <field name="minutes_per_unit"/>
+            </list>
+          </field>
+        </page>
+      </xpath>
+      <xpath expr="//page[@name='operations']" position="attributes">
+        <attribute name="invisible" add="esi_center_route_ids" separator=" or "/>
+      </xpath>
+    </field>
+  </record>
+  <record id="production_center_route_form" model="ir.ui.view">
+    <field name="name">mrp.production.center.route</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <field name="esi_center_route" invisible="1"/>
+        <field name="esi_current_center_workorder_id" invisible="1"/>
+        <field name="esi_current_center_state" invisible="1"/>
+        <button name="action_esi_start_center" type="object" string="Iniciar centro" class="btn-primary"
+                invisible="not esi_current_center_workorder_id or esi_current_center_state != 'ready' or state not in ('confirmed', 'progress')"/>
+        <button name="action_esi_advance_center" type="object" string="Finalizar centro y avanzar"
+                class="btn-primary" invisible="not esi_current_center_workorder_id or esi_current_center_state != 'progress' or state not in ('confirmed', 'progress')"
+                confirm="Se registrará el lote completo como terminado en el centro actual y se habilitará el siguiente. ¿Continuar?"/>
+      </xpath>
+      <xpath expr="//sheet/group" position="before">
+        <group string="Seguimiento por centros" invisible="not esi_center_route">
+          <field name="esi_current_center_id" readonly="1" options="{'no_open': True}"/>
+          <field name="esi_center_progress" readonly="1"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+  <record id="production_center_route_list" model="ir.ui.view">
+    <field name="name">mrp.production.center.route.list</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+    <field name="arch" type="xml">
+      <field name="product_id" position="after">
+        <field name="esi_current_center_id" optional="show"/>
+        <field name="esi_center_progress" optional="hide"/>
+      </field>
+    </field>
+  </record>
+  <record id="production_center_route_search" model="ir.ui.view">
+    <field name="name">mrp.production.center.route.search</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+    <field name="arch" type="xml">
+      <xpath expr="//search" position="inside">
+        <field name="esi_current_center_id"/>
+        <filter name="esi_center_group" string="Centro actual" context="{'group_by': 'esi_current_center_id'}"/>
+      </xpath>
+    </field>
+  </record>
+  <record id="center_route_kanban" model="ir.ui.view">
+    <field name="name">mrp.workorder.center.route.kanban</field>
+    <field name="model">mrp.workorder</field>
+    <field name="arch" type="xml">
+      <kanban default_group_by="workcenter_id" create="0" records_draggable="false" groups_draggable="false" group_create="false" group_edit="false" group_delete="false">
+        <templates>
+          <t t-name="card">
+            <div class="d-flex justify-content-between"><strong><field name="production_id"/></strong><field name="state" widget="badge"/></div>
+            <div class="my-2"><strong><field name="esi_main_product_display"/></strong></div>
+            <div class="mb-1" invisible="not esi_size_quantities_display"><span class="text-muted">Tallas: </span><field name="esi_size_quantities_display"/></div>
+            <div><strong><field name="qty_production"/></strong> <field name="uom_id"/></div>
+            <div class="text-muted">Paso <field name="esi_center_step"/> · <field name="workcenter_id"/></div>
+            <footer class="mt-3">
+              <button name="button_start" type="object" string="Iniciar centro" class="btn btn-secondary" invisible="state != 'ready'"/>
+              <button name="action_esi_advance_center" type="object" string="Finalizar y avanzar" class="btn btn-primary"
+                      invisible="state != 'progress'"
+                      confirm="¿Terminar el lote completo en este centro y habilitar el siguiente?"/>
+            </footer>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+  <record id="center_route_list" model="ir.ui.view">
+    <field name="name">mrp.workorder.center.route.list</field>
+    <field name="model">mrp.workorder</field>
+    <field name="arch" type="xml">
+      <list create="0" edit="0" delete="0">
+        <field name="production_id"/>
+        <field name="esi_main_product_display" string="Producto principal"/>
+        <field name="esi_size_quantities_display" string="Tallas / cantidades"/>
+        <field name="workcenter_id"/>
+        <field name="esi_center_step"/>
+        <field name="qty_production" string="Cantidad total"/>
+        <field name="uom_id"/>
+        <field name="state" widget="badge"/>
+        <button name="action_esi_advance_center" type="object" string="Finalizar y avanzar" invisible="state != 'progress'"
+                confirm="¿Terminar el lote completo en este centro y habilitar el siguiente?"/>
+      </list>
+    </field>
+  </record>
+  <record id="action_center_route" model="ir.actions.act_window">
+    <field name="name">Fabricación por centros</field>
+    <field name="res_model">mrp.workorder</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'kanban', 'view_id': ref('center_route_kanban')}), (0, 0, {'view_mode': 'list', 'view_id': ref('center_route_list')}), (0, 0, {'view_mode': 'form', 'view_id': ref('mrp.mrp_production_workorder_form_view_inherit')})]"/>
+    <field name="domain">[('esi_center_step', '&gt;', 0), ('production_state', 'in', ['confirmed', 'progress']), ('state', 'in', ['ready', 'progress'])]</field>
+    <field name="context">{'search_default_work_center': True}</field>
+    <field name="search_view_id" ref="mrp.view_mrp_production_workorder_form_view_filter"/>
+  </record>
+  <menuitem id="menu_center_route" name="Fabricación por centros" parent="mrp.menu_mrp_manufacturing" action="action_center_route" sequence="25" groups="mrp.group_mrp_user"/>
+</odoo>
