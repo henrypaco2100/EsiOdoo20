@@ -261,11 +261,44 @@ class EsiCleanupProfile(models.Model):
         if len(ids) > 300000:
             raise UserError(_('La tabla %s supera el límite de seguridad por lote; divida la operación.') % table)
         subtotal = 0
+
+        # Algunas tablas de negocio (especialmente account_move) tienen claves
+        # foráneas que apuntan a la MISMA tabla: reversos, asientos origen, etc.
+        # La versión anterior intentaba seguir esas relaciones de forma recursiva
+        # y terminaba detectando un falso "ciclo SQL". En una limpieza total de
+        # los registros seleccionados, lo correcto es ampliar el conjunto de IDs
+        # autorreferenciados y eliminarlos juntos en una sola sentencia DELETE.
+        self_edges = [(child, column, has_id) for child, column, has_id in edges.get(table, []) if child == table]
+        if self_edges:
+            expanded = set(ids)
+            changed = True
+            while changed:
+                changed = False
+                base_ids = sorted(expanded)
+                for _child, column, has_id in self_edges:
+                    if not has_id:
+                        continue
+                    for start in range(0, len(base_ids), 1000):
+                        batch = base_ids[start:start+1000]
+                        self.env.cr.execute(
+                            sql.SQL('SELECT id FROM {} WHERE {} = ANY(%s)').format(
+                                sql.Identifier(table), sql.Identifier(column)
+                            ),
+                            (batch,),
+                        )
+                        related = {row[0] for row in self.env.cr.fetchall()}
+                        new_ids = related - expanded
+                        if new_ids:
+                            self._sql_company_guard(table, list(new_ids), allowed, total_scope)
+                            expanded.update(new_ids)
+                            changed = True
+            ids = expanded
+
+        # Procesar únicamente dependencias de OTRAS tablas. Las relaciones
+        # autorreferenciadas ya quedaron incluidas en `ids` y se eliminan juntas.
         for child, column, has_id in edges.get(table, []):
             if child == table:
-                # Self references are handled recursively, but PostgreSQL may
-                # block cycles. Such cycles are surfaced as errors, not concealed.
-                pass
+                continue
             for start in range(0, len(ids), 1000):
                 batch = sorted(ids)[start:start+1000]
                 if has_id:
