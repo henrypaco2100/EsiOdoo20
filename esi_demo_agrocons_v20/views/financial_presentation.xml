@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <record id="action_agro_balance_estructurado" model="ir.actions.act_window">
+  <field name="name">Balance General - Agrícola</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'balance', 'default_posted_only':True, 'default_esi_structured':True}</field>
+ </record>
+ <record id="action_agro_resultados_estructurado" model="ir.actions.act_window">
+  <field name="name">Estado de Resultados - Agrícola</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'profit', 'default_posted_only':True, 'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_balance_estructurado" name="Balance General - Agrícola" parent="menu_esi_agro_reports" action="action_agro_balance_estructurado" sequence="50" groups="account.group_account_user"/>
+ <menuitem id="menu_agro_resultados_estructurado" name="Estado de Resultados - Agrícola" parent="menu_esi_agro_reports" action="action_agro_resultados_estructurado" sequence="51" groups="account.group_account_user"/>
+</odoo>

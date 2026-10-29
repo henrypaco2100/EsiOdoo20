@@ -1,0 +1,9 @@
+ACTUALIZACIÓN SOLO DEMO PARA ODOO 20 COMMUNITY
+Este archivo NO incluye ni modifica esi_finanzas_v20, esi_reportes_base_v20 ni otros módulos ESI.
+Requiere que esi_finanzas_v20 original ya esté disponible e instalado, con sus dependencias.
+Los nuevos accesos Balance General y Estado de Resultados agrupados están dentro de esta DEMO.
+El menú original de Finanzas ESI permanece sin cambios.
+ANTES DE ACTUALIZAR: haga respaldo, utilice una base de pruebas aislada, y confirme módulos instalados.
+Instalar la carpeta del módulo en addons, reiniciar y ACTUALIZAR el módulo de esta DEMO.
+No se agregan asientos ficticios por instalar; las operaciones contables deben validarse según la configuración de la compañía.
+La instalación real en servidor y exportación PDF/Excel requieren pruebas de aceptación.
