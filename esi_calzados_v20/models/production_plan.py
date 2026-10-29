@@ -109,7 +109,18 @@ class ProductionPlan(models.Model):
             self.esi_plan_dirty = True
 
     def _esi_prepare_plan_values(self, vals, existing=None):
-        if existing and (existing.move_raw_ids.filtered(lambda m: not m.bom_line_id)
+        # In direct multi-size mode the component/workorder sections are readonly
+        # while the MO is in draft. Odoo may nevertheless create preview/native
+        # moves without bom_line_id (and some generated workorders may not carry
+        # operation_id yet) before the final size-plan rebuild. Those records are
+        # system-generated and must not be mistaken for manual edits when the
+        # user confirms or reselects sizes.
+        #
+        # Keep the original protection for normal/legacy orders where manual
+        # components or operations really could be overwritten.
+        direct_size_draft = bool(existing and existing.state == 'draft' and existing.esi_variant_line_mode)
+        if existing and not direct_size_draft and (
+                existing.move_raw_ids.filtered(lambda m: not m.bom_line_id)
                 or existing.workorder_ids.filtered(lambda wo: not wo.operation_id)):
             raise UserError(_('Esta OF contiene componentes u operaciones manuales. Prepare una OF nueva para planificarla por tallas desde la receta común.'))
         def value(name, default=False):

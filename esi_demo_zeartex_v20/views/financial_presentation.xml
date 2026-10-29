@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="zeartex_finance_structured_form" model="ir.ui.view">
+    <field name="name">esi.finance.report.zeartex.structured</field>
+    <field name="model">esi.finance.report</field>
+    <field name="inherit_id" ref="esi_finanzas_v20.report_form"/>
+    <field name="arch" type="xml">
+      <field name="posted_only" position="after">
+        <field name="esi_structured"/>
+      </field>
+    </field>
+  </record>
+  <record id="zeartex_balance_structured" model="ir.actions.act_window">
+    <field name="name">Balance General estructurado</field>
+    <field name="res_model">esi.finance.report</field>
+    <field name="view_mode">form</field>
+    <field name="context">{'default_kind': 'balance', 'default_esi_structured': True, 'default_posted_only': True}</field>
+  </record>
+  <record id="zeartex_profit_structured" model="ir.actions.act_window">
+    <field name="name">Estado de Resultados estructurado</field>
+    <field name="res_model">esi.finance.report</field>
+    <field name="view_mode">form</field>
+    <field name="context">{'default_kind': 'profit', 'default_esi_structured': True, 'default_posted_only': True}</field>
+  </record>
+  <menuitem id="menu_zeartex_balance_structured" name="Balance General estructurado" parent="menu_esi_zeartex_root" action="zeartex_balance_structured" sequence="50" groups="account.group_account_user"/>
+  <menuitem id="menu_zeartex_profit_structured" name="Estado de Resultados estructurado" parent="menu_esi_zeartex_root" action="zeartex_profit_structured" sequence="51" groups="account.group_account_user"/>
+</odoo>

@@ -37,6 +37,15 @@ class TestOutputLines(TestDirectSizePlan):
         self.assertEqual(mo.esi_total_output_qty, 60)
         self.assertEqual(sum(mo.move_raw_ids.mapped('product_uom_qty')), 120)
 
+    def test_generated_draft_components_without_bom_line_do_not_block_confirmation(self):
+        mo = self.env['mrp.production'].create(self._line_values())
+        # Reproduce the live Odoo 20 case: preview/native draft components may
+        # exist without bom_line_id even though the user never added them by hand.
+        mo.move_raw_ids.write({'bom_line_id': False})
+        mo.action_confirm()
+        self.assertNotEqual(mo.state, 'draft')
+        self.assertEqual(mo.esi_total_output_qty, 50)
+
     def test_shared_recipe_rejects_other_color(self):
         self._line_values()
         red = (self.template.product_variant_ids - self.products)[:1]
