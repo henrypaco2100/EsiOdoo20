@@ -15,4 +15,12 @@ Columnas: Código, Descripción, Unidad, PU, TOTAL, tallas ordenadas y Valor. Co
 - Sin sudo ni SQL directo: respeta permisos y reglas de registros, exige una compañía autorizada y verifica que el almacén pertenezca a su jerarquía autorizada. La matriz incluye todas sus sucursales asignadas al usuario. Almacén vacío incluye todos los almacenes del ámbito. Cada sucursal conserva su costo y sus filas de totales.
 - Excel con encabezado fijo, filtros y orientación horizontal. PDF A3 horizontal; para más de 24 tallas, usar Excel o filtrar producto.
 
-Validación: 8 pruebas locales de la matriz (tallas, totales, negativos, costos variables, separación de atributos/unidades y cero), sintaxis Python/XML y ZIP. No probado mediante instalación en un servidor Odoo 20 ni con renderizador PDF real. No modifica productos, costos, saldos o movimientos.
+Validación: 11 pruebas locales de la matriz (tallas, totales, negativos, costos variables, separación de atributos/unidades y cero), sintaxis Python/XML y ZIP. No probado mediante instalación en un servidor Odoo 20 ni con renderizador PDF real. No modifica productos, costos, saldos o movimientos.
+
+## Diseño 20.0.1.3.0
+
+Código y descripción tienen anchos propios, mayores que las tallas. La pantalla muestra texto de 12 px, ajuste de palabras y desplazamiento horizontal cuando todas las columnas no caben. El PDF mantiene A3 horizontal, anchos proporcionales y encabezado repetido; no utiliza el desplazamiento de pantalla. Excel conserva columnas amplias y ahora ajusta las descripciones.
+
+Actualizar el módulo y volver a pulsar Consultar: la vista previa guardada antes de la actualización conserva el HTML anterior hasta regenerarla. Si se conservan assets antiguos, recargar el navegador con Ctrl+Shift+R.
+
+Se verificaron estructura HTML, columnas, valores y escape de texto mediante pruebas. No se pudo ejecutar aquí una comprobación visual con navegador o wkhtmltopdf. No se afirma una prueba de instalación real en Odoo.

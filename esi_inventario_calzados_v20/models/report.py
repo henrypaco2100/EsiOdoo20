@@ -6,6 +6,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools import BinaryBytes
 from .matrix import build_matrix
+from .layout import render_matrix
 
 
 class ShoeInventoryReport(models.TransientModel):
@@ -89,16 +90,8 @@ class ShoeInventoryReport(models.TransientModel):
             self._scope_company().currency_id.name,fields.Datetime.context_timestamp(self,fields.Datetime.now()).strftime('%d/%m/%Y %H:%M'))
         return title,headers,rows
 
-    def _html(self,title,headers,rows):
-        def cell(v):
-            return escape(('%g' % v) if isinstance(v,(float,int)) else str(v or ''))
-        html = '<h3>%s</h3><p>PU: costo actual por unidad. Existencias propias actuales, sin consignación. Variable: las tallas tienen costos distintos.</p>' % escape(title)
-        html += '<table class="table table-sm table-bordered" style="font-size:9px;width:100%"><thead><tr>'
-        html += ''.join('<th>%s</th>'%cell(h) for h in headers)+'</tr></thead><tbody>'
-        for row in rows:
-            html += '<tr%s>' % (' style="font-weight:bold"' if row[headers.index('Descripción')]=='TOTAL' else '')
-            html += ''.join('<td>%s</td>'%cell(v) for v in row)+'</tr>'
-        return html+'</tbody></table>'
+    def _html(self, title, headers, rows, print_mode=False):
+        return render_matrix(title, headers, rows, print_mode=print_mode)
 
     def action_xlsx(self):
         self.ensure_one()
@@ -109,7 +102,7 @@ class ShoeInventoryReport(models.TransientModel):
         head = book.add_format({'bold':True,'bg_color':'#072955','font_color':'white','border':1})
         num = book.add_format({'num_format':'#,##0.###;[Red]-#,##0.###;"-"','border':1})
         money = book.add_format({'num_format':'#,##0.00','border':1})
-        text = book.add_format({'border':1})
+        text = book.add_format({'border':1,'text_wrap':True,'valign':'top'})
         total = book.add_format({'bold':True,'bg_color':'#E2EFDA','num_format':'#,##0.###','border':1})
         sheet.merge_range(0,0,0,len(headers)-1,title,head)
         sheet.merge_range(1,0,1,len(headers)-1,'PU = costo actual por unidad. Variable = costos distintos por talla. Cantidades actuales; no es un corte histórico.')
@@ -122,7 +115,7 @@ class ShoeInventoryReport(models.TransientModel):
         if count: sheet.autofilter(3,0,3+count,len(headers)-1)
         sheet.freeze_panes(4,headers.index('Descripción')+1)
         sheet.set_column(0,len(headers)-1,12)
-        sheet.set_column(headers.index('Código'),headers.index('Código'),23)
+        sheet.set_column(headers.index('Código'),headers.index('Código'),27)
         sheet.set_column(headers.index('Descripción'),headers.index('Descripción'),72)
         first_size = headers.index('TOTAL')+1
         if first_size < len(headers)-1: sheet.set_column(first_size,len(headers)-2,8)
@@ -147,6 +140,6 @@ class InventoryDocument(models.AbstractModel):
         if len(docs)!=1 or docs.create_uid != self.env.user:
             raise UserError(_('Seleccione un informe propio.'))
         title,headers,rows = docs._report_data()
-        if len(headers)>30:
+        if len(headers) - headers.index('TOTAL') - 2 > 24:
             raise UserError(_('Para más de 24 tallas utilice Excel o filtre por producto.'))
-        return {'docs':docs,'doc_ids':docs.ids,'doc_model':docs._name,'body':Markup(docs._html(title,headers,rows))}
+        return {'docs':docs,'doc_ids':docs.ids,'doc_model':docs._name,'body':Markup(docs._html(title,headers,rows,print_mode=True))}

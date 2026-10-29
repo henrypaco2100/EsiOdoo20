@@ -4,6 +4,7 @@ from collections import defaultdict
 from odoo import fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools import file_open
+from .size_policy import required_sizes
 
 FINISHED_ALIASES = {'M-W-01-010': 'M-W-01-10', 'M-BT-01-010': 'M-BT-01-10'}
 
@@ -20,7 +21,10 @@ class DirectMigration(models.Model):
 
     def _source(self):
         with file_open('migrar_tosscano_v20/data/direct.json', 'r') as stream:
-            return json.load(stream)
+            data = json.load(stream)
+        for row in data['finished']:
+            row['sizes'] = required_sizes(row)
+        return data
 
     def _lock(self):
         self._check_scope()
@@ -306,6 +310,7 @@ class DirectMigration(models.Model):
         self._accounts(data['accounts'], notes)
         self._configure_category_accounting()
         notes.extend(self._apply_finished_costs(data))
+        notes.extend(self._import_sale_prices(data))
         notes.append('Recetas: use el botón 3. Crear recetas (Fábrica) después de importar los datos.')
         self.write({'data_imported': True, 'loaded': True,
                     'product_count': len(data['materials']) + sum(len(r['sizes']) for r in data['finished']),
@@ -385,6 +390,30 @@ class DirectMigration(models.Model):
                 self._bind(key,bom)
                 created += 1
         notes.insert(0, 'Fábrica: %s. %s LdM creadas, %s ya existentes, %s fichas pendientes.' % (self.factory_id.display_name,created,existing,pending))
+
+    def action_complete_sizes(self):
+        self._lock()
+        if not self.data_imported:
+            raise UserError(_('Primero pulse 1. Importar datos.'))
+        if not self.env.user.has_group('account.group_account_manager') or not self.env.user.has_group('stock.group_stock_manager'):
+            raise UserError(_('Se requieren permisos de administrador de Contabilidad e Inventario.'))
+        data = self._source()
+        notes = []
+        for row in data['finished']:
+            conflict = self._finished_conflict(row)
+            if conflict:
+                notes.append(conflict)
+            elif self._ref(row['key']):
+                self._finished(row)
+            else:
+                notes.append('Producto no importado: ' + row['code'])
+        # Give newly created variants their confirmed opening cost in each branch.
+        # Existing cost revision markers preserve subsequent native AVCO changes.
+        notes.extend(self._apply_finished_costs(data))
+        self.import_log = (self.import_log or '') + '\n\nTALLAS COMPLETADAS\n' + '\n'.join([
+            'Rango 34–46 para líneas no infantiles. Escolar/infantil conserva sus tallas. No se cargaron saldos.'
+        ] + notes)
+        return True
 
     def action_create_recipes(self):
         self._lock()

@@ -1,0 +1,547 @@
+{
+  "source": "PRECIOS PRODUCTO TERMINADO.xlsx",
+  "sheet": "Hoja1",
+  "currency": "BOB",
+  "revision": "2026-10-29",
+  "rows": [
+    {
+      "code": "C-CLK-01",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 7
+    },
+    {
+      "code": "C-CLK-02",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 8
+    },
+    {
+      "code": "C-PLY-01",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 90,
+      "row": 9
+    },
+    {
+      "code": "C-PLY-02",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 90,
+      "row": 10
+    },
+    {
+      "code": "C-CLS-01",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 90,
+      "row": 11
+    },
+    {
+      "code": "C-CLS-02",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 90,
+      "row": 12
+    },
+    {
+      "code": "C-GMN-01",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 80,
+      "row": 13
+    },
+    {
+      "code": "EL-V-01",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 14
+    },
+    {
+      "code": "E-V-02",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 15
+    },
+    {
+      "code": "E-V-03",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 16
+    },
+    {
+      "code": "E-V-04",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 17
+    },
+    {
+      "code": "E-V-05",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 18
+    },
+    {
+      "code": "E-V-06",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 19
+    },
+    {
+      "code": "E-V-07",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 20
+    },
+    {
+      "code": "E-V-08",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 21
+    },
+    {
+      "code": "E-V-09",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 22
+    },
+    {
+      "code": "E-V-11",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 23
+    },
+    {
+      "code": "E-V-12",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 24
+    },
+    {
+      "code": "E-V-13",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 25
+    },
+    {
+      "code": "E-V-14",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 26
+    },
+    {
+      "code": "E-V-17",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 27
+    },
+    {
+      "code": "E-V-18",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 28
+    },
+    {
+      "code": "E-V-19",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 29
+    },
+    {
+      "code": "E-V-20",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 30
+    },
+    {
+      "code": "E-V-21",
+      "retail": 220,
+      "wholesale": null,
+      "reference_cost": 100,
+      "row": 31
+    },
+    {
+      "code": "ES-V-01",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 32
+    },
+    {
+      "code": "ES-V-02",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 33
+    },
+    {
+      "code": "ES-V-03",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 34
+    },
+    {
+      "code": "ES-V-04",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 35
+    },
+    {
+      "code": "ES-V-05",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 36
+    },
+    {
+      "code": "ES-M-01",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 37
+    },
+    {
+      "code": "ES-M-02",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 38
+    },
+    {
+      "code": "ES-M-03",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 39
+    },
+    {
+      "code": "ES-M-04",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 40
+    },
+    {
+      "code": "ES-CL-00",
+      "retail": 220,
+      "wholesale": 150,
+      "reference_cost": 70,
+      "row": 41
+    },
+    {
+      "code": "I-CH-01",
+      "retail": 450,
+      "wholesale": 350,
+      "reference_cost": 235,
+      "row": 42
+    },
+    {
+      "code": "I-B-01",
+      "retail": 600,
+      "wholesale": 350,
+      "reference_cost": 235,
+      "row": 43
+    },
+    {
+      "code": "I-B-02",
+      "retail": 600,
+      "wholesale": 350,
+      "reference_cost": 235,
+      "row": 44
+    },
+    {
+      "code": "I-B-03",
+      "retail": 600,
+      "wholesale": 350,
+      "reference_cost": 240,
+      "row": 45
+    },
+    {
+      "code": "I-CH-02",
+      "retail": 450,
+      "wholesale": 350,
+      "reference_cost": 240,
+      "row": 46
+    },
+    {
+      "code": "I-CH-03",
+      "retail": 450,
+      "wholesale": 350,
+      "reference_cost": 235,
+      "row": 47
+    },
+    {
+      "code": "I-CL-01",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 165,
+      "row": 48
+    },
+    {
+      "code": "I-CL-02",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 165,
+      "row": 49
+    },
+    {
+      "code": "I-CL-03",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 165,
+      "row": 50
+    },
+    {
+      "code": "I-CL-04",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 165,
+      "row": 51
+    },
+    {
+      "code": "I-CL-05",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 165,
+      "row": 52
+    },
+    {
+      "code": "I-CL-06",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 165,
+      "row": 53
+    },
+    {
+      "code": "I-CL-07A",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 175,
+      "row": 54
+    },
+    {
+      "code": "I-CL-07B",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 175,
+      "row": 55
+    },
+    {
+      "code": "I-CT-01",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 56
+    },
+    {
+      "code": "I-CL-08",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 175,
+      "row": 57
+    },
+    {
+      "code": "M-BT-01",
+      "retail": 350,
+      "wholesale": 260,
+      "reference_cost": 210,
+      "row": 58
+    },
+    {
+      "code": "M-BT-02",
+      "retail": 350,
+      "wholesale": 260,
+      "reference_cost": 220,
+      "row": 59
+    },
+    {
+      "code": "M-BT-03",
+      "retail": 350,
+      "wholesale": 260,
+      "reference_cost": 230,
+      "row": 60
+    },
+    {
+      "code": "M-PC-01",
+      "retail": 350,
+      "wholesale": 260,
+      "reference_cost": 220,
+      "row": 61
+    },
+    {
+      "code": "M-PC-02",
+      "retail": 350,
+      "wholesale": 260,
+      "reference_cost": 220,
+      "row": 62
+    },
+    {
+      "code": "M-L-00",
+      "retail": 330,
+      "wholesale": 340,
+      "reference_cost": 233,
+      "row": 63
+    },
+    {
+      "code": "M-L-01",
+      "retail": 330,
+      "wholesale": 340,
+      "reference_cost": 233,
+      "row": 64
+    },
+    {
+      "code": "M-L-02",
+      "retail": 330,
+      "wholesale": 340,
+      "reference_cost": 233,
+      "row": 65
+    },
+    {
+      "code": "M-L-03",
+      "retail": 380,
+      "wholesale": 270,
+      "reference_cost": 190,
+      "row": 66
+    },
+    {
+      "code": "M-P-01",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 230,
+      "row": 67
+    },
+    {
+      "code": "M-P-02",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 240,
+      "row": 68
+    },
+    {
+      "code": "M-P-03",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 250,
+      "row": 69
+    },
+    {
+      "code": "M-TCS-01",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 245,
+      "row": 70
+    },
+    {
+      "code": "M-TCT-01",
+      "retail": 450,
+      "wholesale": 350,
+      "reference_cost": 190,
+      "row": 71
+    },
+    {
+      "code": "M-RG-01",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 245,
+      "row": 72
+    },
+    {
+      "code": "M-W-01",
+      "retail": 330,
+      "wholesale": 240,
+      "reference_cost": 218,
+      "row": 73
+    },
+    {
+      "code": "M-TDP-01",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 193,
+      "row": 74
+    },
+    {
+      "code": "M-TAR-02",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 193,
+      "row": 75
+    },
+    {
+      "code": "M-TAR-01",
+      "retail": 490,
+      "wholesale": 340,
+      "reference_cost": 193,
+      "row": 76
+    },
+    {
+      "code": "M-BT-04",
+      "retail": 1200,
+      "wholesale": 800,
+      "reference_cost": 420,
+      "row": 77
+    },
+    {
+      "code": "TK-CL-01",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 78
+    },
+    {
+      "code": "TK-CL-02",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 79
+    },
+    {
+      "code": "TK-CL-03B",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 80
+    },
+    {
+      "code": "TK-CL-03A",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 81
+    },
+    {
+      "code": "TK-CL-04",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 82
+    },
+    {
+      "code": "TK-CL-05",
+      "retail": 350,
+      "wholesale": 250,
+      "reference_cost": 260,
+      "row": 83
+    }
+  ]
+}

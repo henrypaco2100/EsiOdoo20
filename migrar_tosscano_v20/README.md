@@ -1,12 +1,24 @@
-# Migración Tosscano v20 — 20.0.5.0.0
+# Migración Tosscano v20 — 20.0.6.0.0
 
 Datos de apertura con corte al **28/10/2026**, para una **base nueva**.
+
+## Precios de venta — 20.0.6.0.0
+
+Incluye precio de venta y listas Minorista/Mayorista en BOB, compartidas entre sucursales. **Importar datos** las carga automáticamente. En una base existente, usar **4. Cargar precios de venta y tarifas**, sin repetir saldos.
+
+65 plantillas tienen precio por modelo para todas sus tallas. EL-V-02-06 queda pendiente por diferencia de código respecto a E-V-02. Donde falta mayorista, se usa minorista; se conservan las tres filas cuyo mayorista supera al minorista. Véase PRECIOS_Y_TARIFAS.md. No se cambian costos ni se interpreta la columna de costo como precio de venta.
+
+## Tallas completas — actualización 20.0.5.1.0
+
+Todas las líneas no infantiles incluyen las tallas 34 a 46, sin necesidad de saldo. Se conservan todas las tallas existentes. En este catálogo la línea infantil se identifica como **Escolar** (8 plantillas); mantiene sus tallas de origen. No se agrega stock ficticio: los saldos siguen sumando 6.449 pares.
+
+En una base ya importada con corte 28/10, actualizar el módulo y pulsar **Completar tallas 34–46** en el registro existente. No repetir Importar saldos. Se crean las variantes faltantes y se les asignan los costos confirmados por compañía. Los marcadores conservan los costos posteriores ya procesados.
 
 ## Instalación y uso
 
 Requiere `esi_calzados_v20` 20.0.11.2.0 o posterior y `esi_sucursales_v20`. Copiar la carpeta de este ZIP al directorio de addons, reiniciar Odoo e instalar el módulo. El ZIP incluye únicamente el módulo de migración.
 
-Crear el registro y seleccionar TOSSCANO GRUP, Fábrica, CBBA y SCZ, con un almacén por sucursal. Las cuatro compañías deben usar BOB y el usuario debe tener acceso a ellas. Se requieren permisos de administración de Ajustes, Inventario y Contabilidad; para recetas, Fabricación.
+Crear el registro y seleccionar TOSSCANO GRUP, Fábrica, CBBA y SCZ, con un almacén por sucursal. Las cuatro compañías deben usar BOB y el usuario debe tener acceso a ellas. Se requieren permisos de administración de Ajustes, Ventas, Inventario y Contabilidad; para recetas, Fabricación.
 
 1. **Importar datos**: categorías, unidades, productos, plan contable, costos y configuración AVCO.
 2. **Importar saldos**: cantidades de las nuevas hojas de inventario.
@@ -17,7 +29,7 @@ Las recetas siempre pertenecen a la compañía seleccionada en Fábrica, aunque 
 ## Contenido del corte
 
 - 352 materias primas, exclusivas de Fábrica y con Componentes activo.
-- 66 plantillas de terminados, 361 variantes, globales y con Fabricar activo.
+- 66 plantillas de terminados, 802 variantes, globales y con Fabricar activo.
 - Categorías: **Materia prima → familia → subfamilia** y **Producto terminado → familia → subfamilia**.
 - 13 unidades, 280 cuentas de origen y configuración AVCO/cuentas por compañía.
 - Terminados: Fábrica **4.156 pares**, CBBA **1.874**, SCZ **419**; total **6.449 pares**.

@@ -1,2 +1,7 @@
-.o_esi_size_kardex_wide .o_form_sheet { max-width: none !important; width: 100%; }
-.o_esi_size_kardex_wide .o_field_html { width: 100%; }
+.o_esi_size_kardex_wide {
+    .o_form_sheet { max-width: none !important; width: 100%; }
+    .o_field_html { width: 100%; min-width: 0; }
+    .esi-size-scroll { overflow-x: auto; max-width: 100%; }
+    .esi-size-matrix { table-layout: fixed; border-collapse: collapse; }
+    .esi-size-matrix th, .esi-size-matrix td { word-break: normal !important; }
+}
