@@ -45,3 +45,24 @@ Se corrigió la carga demo: `with_company()` se aplica al recordset del asistent
 - Utiliza `uom_id` en líneas de compra de Odoo 20.
 - Selecciona el campo disponible para configurar AVCO en la categoría agrícola y detiene la carga si no puede establecerlo.
 - No confirma inventarios ni facturas al pulsar Cargar DEMO.
+
+
+## Actualización 20.0.3.1.0 — operación manual y revisión previa
+
+La aplicación agrícola es complementaria. Los documentos comerciales y contables se registran en las aplicaciones nativas de Odoo 20. La carga ficticia crea registros agrícolas y documentos en BORRADOR; no hace asientos, ni valida recepciones, ni ajusta existencias.
+
+### Recorrido seguro por una base de pruebas
+
+1. Actualice el módulo instalado sin desinstalarlo y compruebe que existe una copia de seguridad.
+2. Ejecute **Cargar DEMO Agrocons** (solo si aún faltan los registros) y después **Verificar preparación**, que comprueba AVCO en categorías Agrocons, almacén, diarios y campañas sin cambiar nada.
+3. En **Compras**, revise la RFQ `DEMO-AGC-RFQ-001`, proveedor, moneda, impuestos y cantidades. Confirmarla y validar su recepción es una decisión manual que afecta inventario y valoración.
+4. En **Inventario**, compruebe que semillas, insumos y soya de la demo están en categorías EXCLUSIVAS de Agrocons bajo AVCO. Para consumos, utilice un procedimiento de salida a ubicación de producción compatible con la contabilidad de su compañía; no registre a la vez el mismo consumo con dos mecanismos.
+5. En **Gestión Agrícola**, registre parcela, campaña, horas, gastos y cosecha. Los datos históricos cargados son informativos, no constituyen movimientos físicos existentes.
+6. Para ingresar soya cosechada con costo de producción, NO basta con un ajuste de inventario ni con escribir `standard_price`. Primero concilie los consumos y gastos atribuibles; luego use un flujo de producción/valoración validado contablemente para su configuración. La acción técnica **Recibir grano** no garantiza capitalización del costo y no debe usarse como cierre contable definitivo.
+7. En **Ventas**, compruebe `DEMO-AGC-SO-001`; confirme entregas solo en una copia de pruebas con existencias reales de la demo.
+8. En **Facturación**, utilice **Crear facturas DEMO (borrador)**. Revise cuentas y diarios. Ningún borrador aparecerá en Balance o Resultados como documento publicado. Consulte `esi_finanzas_v20` para informes financieros reales de apuntes publicados.
+
+**Regla global ESI:** AVCO para bienes inventariables de la demo, sin tocar productos ni categorías ajenas. Los servicios no llevan valoración de stock. No se valida automáticamente ningún movimiento, factura ni asiento.
+
+### Advertencia de alcance
+Este paquete NO automatiza la conciliación contable de costos agrícolas ni la capitalización de insumos y mano de obra en AVCO de la soya. Tampoco se ha ejecutado una prueba integral en Odoo 20 de un servidor en vivo: requiere validación en una base restaurada de pruebas antes de uso comercial.

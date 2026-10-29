@@ -14,6 +14,7 @@ from .valuation import movement_unit_value, reconcile_values
 
 class Kardex(models.TransientModel):
     _name = 'esi.kardex.report'
+    _inherit = 'esi.report.mixin'
     _description = 'Kardex físico (solo consulta)'
 
     company_id = fields.Many2one('res.company', string='Compañía', required=True,
@@ -23,11 +24,11 @@ class Kardex(models.TransientModel):
     date_from = fields.Date(string='Desde', required=True,
                             default=lambda self: fields.Date.context_today(self).replace(day=1))
     date_to = fields.Date(string='Hasta', required=True, default=fields.Date.context_today)
-    warehouse_ids = fields.Many2many('stock.warehouse', string='Almacenes', check_company=True)
-    location_ids = fields.Many2many('stock.location', string='Ubicaciones y sububicaciones', check_company=True)
-    product_ids = fields.Many2many('product.product', string='Productos / variantes', check_company=True)
+    warehouse_ids = fields.Many2many('stock.warehouse', string='Almacenes', check_company=False)
+    location_ids = fields.Many2many('stock.location', string='Ubicaciones y sububicaciones', check_company=False)
+    product_ids = fields.Many2many('product.product', string='Productos / variantes', check_company=False)
     category_ids = fields.Many2many('product.category', string='Categorías y subcategorías')
-    lot_ids = fields.Many2many('stock.lot', string='Lotes / series', check_company=True)
+    lot_ids = fields.Many2many('stock.lot', string='Lotes / series', check_company=False)
     uom_ids = fields.Many2many('uom.uom', string='Unidades adicionales',
         help='Añade columnas equivalentes. Solo convierte unidades con la misma unidad de referencia raíz; las incompatibles quedan vacías.')
     group_warehouse = fields.Boolean(string='Separar por almacén', default=True)
@@ -65,10 +66,15 @@ class Kardex(models.TransientModel):
     @api.depends('company_id', 'warehouse_ids')
     def _compute_allowed_locations(self):
         for record in self:
-            warehouses = record.warehouse_ids or self.env['stock.warehouse'].with_context(active_test=False).search([('company_id', '=', record.company_id.id)])
-            record.allowed_location_ids = self.env['stock.location'].with_context(active_test=False).search([
+            if not record.company_id:
+                record.allowed_location_ids = False
+                continue
+            scope_ids = record._report_companies().ids
+            scoped_env = record.with_context(allowed_company_ids=scope_ids).env
+            warehouses = record.warehouse_ids or scoped_env['stock.warehouse'].with_context(active_test=False).search([('company_id', 'in', scope_ids)])
+            record.allowed_location_ids = scoped_env['stock.location'].with_context(active_test=False).search([
                 ('id', 'child_of', warehouses.mapped('view_location_id').ids),
-                ('company_id', '=', record.company_id.id), ('usage', 'in', ['view', 'internal'])])
+                ('company_id', 'in', record._report_companies().ids), ('usage', 'in', ['view', 'internal'])])
 
     @api.depends('company_id', 'date_from', 'date_to', 'warehouse_ids', 'location_ids',
                  'category_ids', 'product_ids', 'lot_ids', 'uom_ids', 'own_only',
@@ -138,13 +144,14 @@ class Kardex(models.TransientModel):
         self.check_access('read')
         if self.create_uid != self.env.user:
             raise UserError(_('Este reporte pertenece a otro usuario.'))
-        if self.company_id not in self.env.companies:
+        if self._scope_company() not in self.env.companies:
             raise UserError(_('Compañía no autorizada.'))
         if not self.date_from or not self.date_to or self.date_from > self.date_to:
             raise UserError(_('Revise el rango de fechas.'))
-        for records in (self.warehouse_ids, self.location_ids, self.product_ids, self.lot_ids):
+        scoped = self.with_context(allowed_company_ids=self._report_companies().ids)
+        for records in (scoped.warehouse_ids, scoped.location_ids, scoped.product_ids, scoped.lot_ids):
             records.check_access('read')
-            if any(r.company_id and r.company_id != self.company_id for r in records):
+            if any(r.company_id and r.company_id not in self._report_companies() for r in records):
                 raise UserError(_('Los filtros deben pertenecer a la compañía seleccionada.'))
         self.category_ids.check_access('read')
         self.uom_ids.check_access('read')
@@ -161,17 +168,17 @@ class Kardex(models.TransientModel):
 
     def _scopes(self):
         warehouse_model = self.env['stock.warehouse'].with_context(active_test=False)
-        warehouses = self.warehouse_ids or warehouse_model.search([('company_id', '=', self.company_id.id)])
+        warehouses = self._scope_records('warehouse_ids') or warehouse_model.search([('company_id', '=', self._scope_company().id)])
         if not warehouses:
             raise UserError(_('No hay almacenes accesibles en esta compañía.'))
         scopes = {}
         covered = set()
         for warehouse in warehouses:
             domain = [('id', 'child_of', warehouse.view_location_id.id),
-                      ('usage', '=', 'internal'), ('company_id', '=', self.company_id.id)]
+                      ('usage', '=', 'internal'), ('company_id', '=', self._scope_company().id)]
             # child_of on id includes selected locations themselves.
             if self.location_ids:
-                domain.append(('id', 'child_of', self.location_ids.ids))
+                domain.append(('id', 'child_of', self._scope_records('location_ids').ids))
             locations = self.env['stock.location'].with_context(active_test=False).search(domain)
             ids = set(locations.ids)
             if covered & ids:
@@ -185,13 +192,13 @@ class Kardex(models.TransientModel):
             scopes = {0: ('Consolidado de almacenes seleccionados', covered)}
         return scopes, covered
 
-    def _report_data(self):
+    def _report_data_single(self):
         self._validate_request()
         tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
         start = tz.localize(datetime.combine(self.date_from, time.min)).astimezone(pytz.UTC).replace(tzinfo=None)
         end = tz.localize(datetime.combine(self.date_to + timedelta(days=1), time.min)).astimezone(pytz.UTC).replace(tzinfo=None)
         scopes, locations = self._scopes()
-        domain = [('company_id', '=', self.company_id.id), ('state', '=', 'done'),
+        domain = [('company_id', '=', self._scope_company().id), ('state', '=', 'done'),
                   ('date', '<', end), '|', ('location_id', 'in', list(locations)),
                   ('location_dest_id', 'in', list(locations))]
         if self.product_ids:
@@ -215,8 +222,8 @@ class Kardex(models.TransientModel):
             if key not in cost_cache:
                 # Native Odoo 20 valuation includes product.value cost updates.
                 # Isolate the selected company: active siblings must not sum.
-                scoped = product.with_company(self.company_id).with_context(
-                    allowed_company_ids=self.company_id.ids, to_date=at,
+                scoped = product.with_company(self._scope_company()).with_context(
+                    allowed_company_ids=self._scope_company().ids, to_date=at,
                     warehouse_id=False, location=False, lot_id=False,
                     owner_id=False, from_date=False)
                 cost_cache[key] = scoped.avg_cost
@@ -270,7 +277,7 @@ class Kardex(models.TransientModel):
             for key, balance in balances.items():
                 initial = sum(q * native_cost(products_by_id[p], start - timedelta(microseconds=1)) for p,q in opening_qty[key].items())
                 closing = sum(q * native_cost(products_by_id[p], end - timedelta(microseconds=1)) for p,q in closing_qty[key].items())
-                monetary[key] = reconcile_values(balance['lines'],initial,closing,self.company_id.currency_id.name)
+                monetary[key] = reconcile_values(balance['lines'],initial,closing,self._scope_company().currency_id.name)
 
         def make_row(key, quantities, event=None, label=''):
             warehouse, entity, unit, category = metadata[key]
@@ -295,11 +302,11 @@ class Kardex(models.TransientModel):
                 if event:
                     row += event['money']
                 elif label == 'SALDO INICIAL':
-                    row += [self.company_id.currency_id.name,'',initial,0.0,0.0,0.0,initial]
+                    row += [self._scope_company().currency_id.name,'',initial,0.0,0.0,0.0,initial]
                 elif label == 'AJUSTE DE VALORACIÓN AL CORTE':
-                    row += [self.company_id.currency_id.name,'',0.0,0.0,0.0,adjustment,closing]
+                    row += [self._scope_company().currency_id.name,'',0.0,0.0,0.0,adjustment,closing]
                 else:
-                    row += [self.company_id.currency_id.name,'',initial,vin,vout,adjustment,closing]
+                    row += [self._scope_company().currency_id.name,'',initial,vin,vout,adjustment,closing]
             return row
 
         def sort_key(key):
@@ -317,7 +324,7 @@ class Kardex(models.TransientModel):
                 rows.append(make_row(key, (balance['opening'], balance['incoming'], balance['outgoing'], balance['closing']), label='RESUMEN DEL PRODUCTO'))
             else:
                 rows.append(make_row(key, (balance['opening'], balance['incoming'], balance['outgoing'], balance['closing'])))
-        title = f'Kardex físico y valorado — {self.company_id.display_name} — {self.date_from} / {self.date_to}' if self.show_valuation else f'Kardex físico — {self.company_id.display_name} — {self.date_from} / {self.date_to}'
+        title = f'Kardex físico y valorado — {self._scope_company().display_name} — {self.date_from} / {self.date_to}' if self.show_valuation else f'Kardex físico — {self._scope_company().display_name} — {self.date_from} / {self.date_to}'
         return title, headers, rows
 
     def _html(self, title, headers, rows):

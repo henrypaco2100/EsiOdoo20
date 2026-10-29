@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <record id="report_form" model="ir.ui.view">
     <field name="name">esi.finance.report.form</field>
@@ -12,13 +13,13 @@
         <sheet>
           <group>
             <field name="company_id"/>
-            <field name="include_branches"/><field name="kind"/>
+            <field name="report_company_ids" widget="many2many_tags" readonly="1" string="Matriz y sucursales incluidas" options="{'no_open': True}"/><field name="include_branches" invisible="1"/><field name="kind"/>
             <field name="date_from"/>
             <field name="date_to"/>
             <field name="posted_only"/>
             <field name="store_id" invisible="1"/>
-            <field name="analytic_id"/>
-            <field name="account_ids" widget="many2many_tags"/>
+            <field name="analytic_id" context="{'allowed_company_ids': report_company_ids}"/>
+            <field name="account_ids" widget="many2many_tags" context="{'allowed_company_ids': report_company_ids}"/>
             <field name="partner_id"/>
           </group>
           <field name="preview" widget="html" nolabel="1"/>

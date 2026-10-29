@@ -14,12 +14,12 @@ class ShoeInventoryReport(models.TransientModel):
     _description = 'Kardex por talla'
 
     company_id = fields.Many2one('res.company', string='Sucursal / compañía', required=True, default=lambda s: s.env.company)
-    warehouse_id = fields.Many2one('stock.warehouse', string='Almacén', required=True,
-        domain="[('company_id', '=', company_id)]",
-        default=lambda s: s.env['stock.warehouse'].search([('company_id','=',s.env.company.id)], limit=1))
+    warehouse_id = fields.Many2one('stock.warehouse', string='Almacén', required=False,
+        domain="[('company_id', 'in', report_company_ids)]",
+        default=False)
     category_id = fields.Many2one('product.category', string='Categoría y descendientes',
         default=lambda s: s.env['product.category'].search([('name','=ilike','Producto terminado'),('parent_id','=',False)],limit=1))
-    template_id = fields.Many2one('product.template', string='Producto', domain="[('esi_manufacture_ok','=',True), '|', ('company_id','=',False), ('company_id','=',company_id)]")
+    template_id = fields.Many2one('product.template', string='Producto', domain="[('esi_manufacture_ok','=',True), '|', ('company_id','=',False), ('company_id','in',report_company_ids)]")
     size_attribute_id = fields.Many2one('product.attribute', string='Atributo de talla', required=True,
         default=lambda s: s.env['product.attribute'].search([('name','=ilike','Talla')],limit=1))
     quantity_type = fields.Selection([('physical','Existencia física'),('free','Disponible sin reservas')],
@@ -28,7 +28,7 @@ class ShoeInventoryReport(models.TransientModel):
 
     @api.onchange('company_id')
     def _onchange_company(self):
-        self.warehouse_id = self.env['stock.warehouse'].search([('company_id','=',self.company_id.id)],limit=1)
+        self.warehouse_id = False
         self.template_id = False
         self.preview = False
 
@@ -36,30 +36,31 @@ class ShoeInventoryReport(models.TransientModel):
     def _clear_preview(self):
         self.preview = False
 
-    def _report_data(self):
+    def _report_data_single(self):
         self.ensure_one()
         self.check_access('read')
-        if self.company_id not in self.env.companies:
+        if self._scope_company() not in self.env.companies:
             raise UserError(_('Active la sucursal seleccionada antes de consultar.'))
-        self.warehouse_id.check_access('read')
-        if not self.warehouse_id or self.warehouse_id.company_id != self.company_id:
-            raise UserError(_('Seleccione un almacén de la sucursal elegida.'))
+        warehouses = self.warehouse_id or self.env['stock.warehouse'].search([('company_id','=',self._scope_company().id)])
+        warehouses.check_access('read')
+        if any(w.company_id != self._scope_company() for w in warehouses):
+            raise UserError(_('Seleccione un almacén del ámbito elegido.'))
         if not self.size_attribute_id:
             raise UserError(_('Seleccione el atributo Talla.'))
         domain = [('esi_manufacture_ok','=',True), ('is_storable','=',True),
-                  '|', ('company_id','=',False), ('company_id','=',self.company_id.id)]
+                  '|', ('company_id','=',False), ('company_id','=',self._scope_company().id)]
         if self.category_id:
             self.category_id.check_access('read')
             domain.append(('categ_id','child_of',self.category_id.id))
         if self.template_id:
             self.template_id.check_access('read')
             domain.append(('product_tmpl_id','=',self.template_id.id))
-        products = self.env['product.product'].with_company(self.company_id).with_context(active_test=False).search(domain, limit=20001)
+        products = self.env['product.product'].with_company(self._scope_company()).with_context(active_test=False).search(domain, limit=20001)
         if len(products)>20000:
             raise UserError(_('Hay más de 20.000 variantes. Filtre por categoría o producto.'))
-        quants = self.env['stock.quant'].with_company(self.company_id)._read_group([
-            ('company_id','=',self.company_id.id), ('product_id','in',products.ids),
-            ('location_id','child_of',self.warehouse_id.view_location_id.id),
+        quants = self.env['stock.quant'].with_company(self._scope_company())._read_group([
+            ('company_id','=',self._scope_company().id), ('product_id','in',products.ids),
+            ('location_id','child_of',warehouses.mapped('view_location_id').ids),
             ('location_id.usage','=','internal'), ('owner_id','=',False)],
             ['product_id'], ['quantity:sum','reserved_quantity:sum'])
         quantities = {p.id:qty - reserved if self.quantity_type == 'free' else qty for p,qty,reserved in quants}
@@ -83,9 +84,9 @@ class ShoeInventoryReport(models.TransientModel):
                 'qty':qty,'cost':p.standard_price})
         headers, rows = build_matrix(entries,self.include_zero)
         title = 'Kardex por talla · %s · %s · %s · %s · %s' % (
-            self.company_id.name,self.warehouse_id.name,
+            self._scope_company().name,', '.join(warehouses.mapped('name')),
             'Existencia física' if self.quantity_type == 'physical' else 'Disponible sin reservas',
-            self.company_id.currency_id.name,fields.Datetime.context_timestamp(self,fields.Datetime.now()).strftime('%d/%m/%Y %H:%M'))
+            self._scope_company().currency_id.name,fields.Datetime.context_timestamp(self,fields.Datetime.now()).strftime('%d/%m/%Y %H:%M'))
         return title,headers,rows
 
     def _html(self,title,headers,rows):
@@ -95,7 +96,7 @@ class ShoeInventoryReport(models.TransientModel):
         html += '<table class="table table-sm table-bordered" style="font-size:9px;width:100%"><thead><tr>'
         html += ''.join('<th>%s</th>'%cell(h) for h in headers)+'</tr></thead><tbody>'
         for row in rows:
-            html += '<tr%s>' % (' style="font-weight:bold"' if row[1]=='TOTAL' else '')
+            html += '<tr%s>' % (' style="font-weight:bold"' if row[headers.index('Descripción')]=='TOTAL' else '')
             html += ''.join('<td>%s</td>'%cell(v) for v in row)+'</tr>'
         return html+'</tbody></table>'
 
@@ -115,14 +116,16 @@ class ShoeInventoryReport(models.TransientModel):
         sheet.write_row(3,0,headers,head)
         for i,row in enumerate(rows,4):
             for j,value in enumerate(row):
-                fmt = total if row[1]=='TOTAL' else money if j in (3,len(headers)-1) and isinstance(value,(int,float)) else num if isinstance(value,(int,float)) else text
+                fmt = total if row[headers.index('Descripción')]=='TOTAL' else money if j in (headers.index('PU'),len(headers)-1) and isinstance(value,(int,float)) else num if isinstance(value,(int,float)) else text
                 sheet.write(i,j,value,fmt)
-        count = sum(r[1]!='TOTAL' for r in rows)
+        count = sum(r[headers.index('Descripción')]!='TOTAL' for r in rows)
         if count: sheet.autofilter(3,0,3+count,len(headers)-1)
-        sheet.freeze_panes(4,2)
-        sheet.set_column(0,0,23);sheet.set_column(1,1,72);sheet.set_column(2,2,12)
-        sheet.set_column(3,4,13)
-        if len(headers)>6: sheet.set_column(5,len(headers)-2,8)
+        sheet.freeze_panes(4,headers.index('Descripción')+1)
+        sheet.set_column(0,len(headers)-1,12)
+        sheet.set_column(headers.index('Código'),headers.index('Código'),23)
+        sheet.set_column(headers.index('Descripción'),headers.index('Descripción'),72)
+        first_size = headers.index('TOTAL')+1
+        if first_size < len(headers)-1: sheet.set_column(first_size,len(headers)-2,8)
         sheet.set_column(len(headers)-1,len(headers)-1,17)
         sheet.set_landscape();sheet.set_paper(8);sheet.fit_to_pages(1,0);sheet.repeat_rows(0,3)
         book.close()

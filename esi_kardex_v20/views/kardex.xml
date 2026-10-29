@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <record id="view_kardex_form" model="ir.ui.view">
     <field name="name">esi.kardex.report.form</field>
@@ -20,15 +20,15 @@
               <group>
                 <group string="¿De qué compañía y período?">
                   <field name="company_id" options="{'no_create': True}"/>
-                  <field name="period"/>
+                  <field name="report_company_ids" widget="many2many_tags" readonly="1" string="Matriz y sucursales incluidas" options="{'no_open': True}"/><field name="period"/>
                   <field name="date_from" readonly="period != 'custom'"/>
                   <field name="date_to" readonly="period != 'custom'"/>
                   <field name="report_mode" widget="radio"/>
                 </group>
                 <group string="¿Qué almacenes y productos?">
-                  <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]" options="{'no_create': True}" placeholder="Vacío = todos los almacenes"/>
+                  <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id', 'in', report_company_ids)]" options="{'no_create': True}" placeholder="Vacío = todos los almacenes" context="{'allowed_company_ids': report_company_ids}"/>
                   <field name="category_ids" widget="many2many_tags" options="{'no_create': True}" placeholder="Vacío = todas las categorías"/>
-                  <field name="product_ids" widget="many2many_tags" domain="[('type', '!=', 'service'), '|', ('company_id', '=', False), ('company_id', '=', company_id)] + ([('categ_id', 'child_of', category_ids)] if category_ids else [])" options="{'no_create': True}" placeholder="Vacío = todos los productos de esas categorías"/>
+                  <field name="product_ids" widget="many2many_tags" domain="[('type', '!=', 'service'), '|', ('company_id', '=', False), ('company_id', 'in', report_company_ids)] + ([('categ_id', 'child_of', category_ids)] if category_ids else [])" options="{'no_create': True}" placeholder="Vacío = todos los productos de esas categorías" context="{'allowed_company_ids': report_company_ids}"/>
                 </group>
               </group>
               <p class="text-muted">El saldo inicial incluye los movimientos anteriores al período. Las categorías incluyen sus subcategorías.</p>
@@ -36,8 +36,8 @@
             <page string="2. Más filtros y presentación" name="advanced_filters">
               <group>
                 <group string="Afinar la búsqueda (opcional)">
-                  <field name="location_ids" widget="many2many_tags" domain="[('id', 'in', allowed_location_ids)]" options="{'no_create': True}" placeholder="Todas las ubicaciones internas de los almacenes"/>
-                  <field name="lot_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)] + ([('product_id', 'in', product_ids)] if product_ids else []) + ([('product_id.categ_id', 'child_of', category_ids)] if category_ids else [])" options="{'no_create': True}" placeholder="Todos los lotes / series de los productos"/>
+                  <field name="location_ids" widget="many2many_tags" domain="[('id', 'in', allowed_location_ids)]" options="{'no_create': True}" placeholder="Todas las ubicaciones internas de los almacenes" context="{'allowed_company_ids': report_company_ids}"/>
+                  <field name="lot_ids" widget="many2many_tags" domain="[('company_id', 'in', report_company_ids)] + ([('product_id', 'in', product_ids)] if product_ids else []) + ([('product_id.categ_id', 'child_of', category_ids)] if category_ids else [])" options="{'no_create': True}" placeholder="Todos los lotes / series de los productos" context="{'allowed_company_ids': report_company_ids}"/>
                   <field name="own_only"/>
                 </group>
                 <group string="¿Cómo quieres ver el resultado?">

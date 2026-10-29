@@ -13,7 +13,7 @@
         <sheet>
           <group>
             <field name="company_id"/>
-            <field name="date_from"/>
+            <field name="report_company_ids" widget="many2many_tags" readonly="1" string="Matriz y sucursales incluidas" options="{'no_open': True}"/><field name="date_from"/>
             <field name="date_to"/>
             <field name="store_id" invisible="1"/>
             <field name="partner_id"/>

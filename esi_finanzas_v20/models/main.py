@@ -15,7 +15,7 @@ class FinanceReport(models.TransientModel):
     date_from = fields.Date(required=True, default=lambda s:fields.Date.today().replace(day=1))
     date_to = fields.Date(required=True, default=fields.Date.today)
     kind = fields.Selection([('trial','Sumas y saldos'),('balance','Balance general'),('profit','Estado de resultados'),('ledger','Libro mayor'),('receivable','CxC por vencimiento'),('payable','CxP por vencimiento'),('cash','Movimientos de caja y bancos'),('cashflow','Flujo de efectivo por actividad'),('statement','Estado de cuenta de contacto'),('analytic','Resultado analítico'),('executive','Resumen ejecutivo'),('tax','Resumen de apuntes de impuestos')], required=True, default='trial')
-    include_branches = fields.Boolean(string='Incluir sucursales activas descendientes', default=False, help='Incluye solo las sucursales de esta compañía activadas en el selector superior. Comparten moneda con su matriz.')
+    include_branches = fields.Boolean(string='Incluir sucursales activas descendientes', default=True, help='La jerarquía se incluye automáticamente; campo conservado por compatibilidad.')
     store_id = fields.Many2one('esi.store', string='Sucursal')
     analytic_id = fields.Many2one('account.analytic.account', string='Cuenta analítica')
     account_ids = fields.Many2many('account.account', string='Cuentas')
@@ -24,15 +24,16 @@ class FinanceReport(models.TransientModel):
 
     def _report_data(self):
         self.ensure_one();self.check_access('read')
-        if self.company_id not in self.env.companies or self.date_from > self.date_to:
+        if self.company_id not in self.env.user.company_ids or self.date_from > self.date_to:
             raise UserError(_('Revise compañía y rango de fechas.'))
-        report_companies = self.company_id._accessible_branches() if self.include_branches else self.company_id
+        report_companies = self._report_companies()
+        if any(c.currency_id != self.company_id.currency_id for c in report_companies):
+            raise UserError(_('No se suman monedas distintas. Consulte esas compañías por separado.'))
         domain = [('company_id','in',report_companies.ids),('date','<=',self.date_to),('display_type','not in',['line_section','line_note'])]
         if self.posted_only:domain += [('parent_state','=','posted')]
         else:domain += [('parent_state','!=','cancel')]
         if self.account_ids:domain += [('account_id','in',self.account_ids.ids)]
         if self.partner_id:domain += [('partner_id','=',self.partner_id.id)]
-        if self.store_id and not self.company_id.parent_id and not self.include_branches:domain += ['|',('esi_store_id','=',self.store_id.id),'&',('esi_store_id','=',False),('move_id.esi_store_id','=',self.store_id.id)]
         if self.kind in ('receivable','payable'):
             domain += [('account_id.account_type','=', 'asset_receivable' if self.kind=='receivable' else 'liability_payable')]
         if self.kind in ('cash','cashflow'):domain += [('account_id.account_type','=','asset_cash')]
@@ -42,7 +43,7 @@ class FinanceReport(models.TransientModel):
             if not self.partner_id:raise UserError(_('Seleccione un contacto.'))
             domain += [('account_id.account_type','in',['asset_receivable','liability_payable'])]
         if self.kind=='tax':domain += [('tax_line_id','!=',False),('date','>=',self.date_from)]
-        lines = self.env['account.move.line'].with_company(self.company_id).search(domain,order='date,id',limit=100001)
+        lines = self.env['account.move.line'].with_company(self.company_id).with_context(allowed_company_ids=report_companies.ids).search(domain,order='date,id',limit=100001)
         if len(lines)>100000:raise UserError(_('El informe supera 100.000 apuntes. Reduzca las cuentas o el período.'))
         def weight(line):
             if not self.analytic_id:return 1.0
@@ -101,13 +102,13 @@ class FinanceReport(models.TransientModel):
         if self.kind in ('ledger','cash','statement'):
             for aid in sorted(accounts,key=lambda i:accounts[i].code or ''):
                 a=accounts[aid]; running=sums[aid][0]
-                rows.append([a.code,a.name,'','Saldo inicial','',0.0,0.0,running])
+                rows.append([a.code,a.name,'','Saldo inicial','','',0.0,0.0,running])
                 for line in lines.filtered(lambda l:l.account_id.id==aid and l.date>=self.date_from):
                     f=weight(line)
                     if not f:continue
                     running+=line.balance*f
-                    rows.append([a.code,a.name,str(line.date),line.move_id.name,line.partner_id.display_name or '',line.debit*f,line.credit*f,running])
-            return title,['Código','Cuenta','Fecha','Asiento','Contacto','Debe','Haber','Saldo'],rows
+                    rows.append([a.code,a.name,str(line.date),line.move_id.name,line.company_id.name,line.partner_id.display_name or '',line.debit*f,line.credit*f,running])
+            return title,['Código','Cuenta','Fecha','Asiento','Sucursal / compañía','Contacto','Debe','Haber','Saldo'],rows
         earnings=0.0
         for aid in sorted(accounts,key=lambda i:accounts[i].code or ''):
             a=accounts[aid];opening,debit,credit=sums[aid];closing=opening+debit-credit

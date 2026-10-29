@@ -14,13 +14,13 @@
           <group>
             <group string="Qué desea consultar">
               <field name="company_id"/>
-              <field name="production_id" options="{'no_create': True}"/>
-              <field name="kind" string="Contenido del informe"/><field name="workcenter_id" options="{'no_create': True}" invisible="kind == 'piecework'"/>
+              <field name="report_company_ids" widget="many2many_tags" readonly="1" string="Matriz y sucursales incluidas" options="{'no_open': True}"/><field name="production_id" options="{'no_create': True}" context="{'allowed_company_ids': report_company_ids}"/>
+              <field name="kind" string="Contenido del informe"/><field name="workcenter_id" options="{'no_create': True}" invisible="kind == 'piecework'" context="{'allowed_company_ids': report_company_ids}"/>
             </group>
             <group string="Filtros de varias órdenes" invisible="production_id">
               <field name="date_basis" invisible="kind == 'piecework'"/>
               <field name="date_from" string="Desde"/><field name="date_to" string="Hasta"/>
-              <field name="group_id"/><field name="state_filter"/>
+              <field name="group_id" context="{'allowed_company_ids': report_company_ids}"/><field name="state_filter"/>
             </group>
           </group>
           <div class="alert alert-info" invisible="production_id">Seleccione la sucursal de las órdenes y, opcionalmente, su centro actual. El centro se obtiene de las etapas en progreso; si no hay, de las listas para iniciar o la primera pendiente.</div>

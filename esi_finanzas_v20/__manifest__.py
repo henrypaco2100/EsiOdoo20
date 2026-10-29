@@ -9,4 +9,4 @@
  'license': 'LGPL-3',
  'maintainer': 'ESI',
  'name': 'Informes financieros',
- 'version': '20.0.3.0.0'}
+ 'version': '20.0.4.0.0'}

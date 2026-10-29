@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <record id="inventory_form" model="ir.ui.view">
     <field name="name">esi.shoe.inventory.report.form</field>
@@ -5,8 +6,8 @@
     <field name="arch" type="xml">
       <form string="Kardex por talla" class="o_esi_size_kardex_wide">
         <header><button name="action_preview" type="object" string="Consultar" class="btn-primary"/><button name="action_xlsx" type="object" string="Excel"/><button name="action_pdf" type="object" string="PDF"/></header>
-        <sheet><group><group><field name="company_id"/><field name="warehouse_id" options="{'no_create': True}"/><field name="category_id" options="{'no_create': True}"/></group>
-          <group><field name="template_id" options="{'no_create': True}"/><field name="size_attribute_id" options="{'no_create': True}"/><field name="quantity_type"/><field name="include_zero"/></group></group>
+        <sheet><group><group><field name="company_id"/><field name="report_company_ids" widget="many2many_tags" readonly="1" string="Matriz y sucursales incluidas" options="{'no_open': True}"/><field name="warehouse_id" options="{'no_create': True}" context="{'allowed_company_ids': report_company_ids}" placeholder="Vacío = todos los almacenes de la matriz y sus sucursales"/><field name="category_id" options="{'no_create': True}"/></group>
+          <group><field name="template_id" options="{'no_create': True}" context="{'allowed_company_ids': report_company_ids}"/><field name="size_attribute_id" options="{'no_create': True}"/><field name="quantity_type"/><field name="include_zero"/></group></group>
           <div class="alert alert-info">Inventario actual de productos marcados Fabricar. Cada columna corresponde a una talla; colores, modelos y materiales distintos se muestran en filas separadas. PU es el costo de la sucursal.</div>
           <div style="overflow-x:auto"><field name="preview" widget="html" nolabel="1"/></div>
         </sheet>

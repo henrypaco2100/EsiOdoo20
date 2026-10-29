@@ -14,12 +14,12 @@ class Report(models.TransientModel):
     date_from = fields.Date(required=True, default=lambda s: fields.Date.today().replace(day=1))
     date_to = fields.Date(required=True, default=fields.Date.today)
     date_basis = fields.Selection([('date_start', 'Inicio de fabricación'), ('date_finished', 'Finalización (solo terminadas)')], default='date_start', required=True, string='Fecha utilizada')
-    group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', '=', company_id)]")
-    production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', '=', company_id)]")
+    group_id = fields.Many2one('esi.production.group', string='Grupo', domain="[('company_id', 'in', report_company_ids)]")
+    production_id = fields.Many2one('mrp.production', string='Orden de fabricación', domain="[('company_id', 'in', report_company_ids)]")
     kind = fields.Selection([('detail', 'Ficha completa de una orden'), ('summary', 'Resumen de órdenes'), ('centers', 'Órdenes por centro de trabajo actual'), ('outputs', 'Productos terminados por talla'),
         ('operations', 'Seguimiento de centros y operaciones'), ('shortage', 'Necesidad no reservada'), ('piecework', 'Destajos'), ('cost', 'Costos nativos de producción'), ('estimate', 'Materiales: costo estimado'), ('purchase', 'Materiales: faltantes por comprar')], required=True, default='summary')
 
-    workcenter_id = fields.Many2one('mrp.workcenter', string='Centro de trabajo actual', domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
+    workcenter_id = fields.Many2one('mrp.workcenter', string='Centro de trabajo actual', domain="['|', ('company_id', '=', False), ('company_id', 'in', report_company_ids)]")
 
     state_filter = fields.Selection([('all', 'Todos'), ('open', 'Pendientes y en progreso'), ('done', 'Terminadas')], default='all', required=True, string='Estado de fabricación')
 
@@ -84,10 +84,10 @@ class Report(models.TransientModel):
         self.production_id = False
         self.preview = False
 
-    def _report_data(self):
+    def _report_data_single(self):
         self.ensure_one()
         self.check_access('read')
-        if self.company_id not in self.env.companies:
+        if self._scope_company() not in self.env.companies:
             raise UserError(_('Active la sucursal seleccionada en el selector superior antes de consultar.'))
         if self.kind == 'detail' and not self.production_id:
             raise UserError(_('Seleccione una orden para ver su ficha completa.'))
@@ -95,15 +95,15 @@ class Report(models.TransientModel):
             raise UserError(_('Revise el rango de fechas.'))
         if self.group_id:
             self.group_id.check_access('read')
-            if self.group_id.company_id != self.company_id:
+            if self.group_id.company_id != self._scope_company():
                 raise UserError(_('El grupo pertenece a otra sucursal.'))
-        title = 'Producción · %s · %s / %s' % (self.company_id.name, self.date_from, self.date_to)
+        title = 'Producción · %s · %s / %s' % (self._scope_company().name, self.date_from, self.date_to)
         if self.kind == 'piecework':
-            domain = [('company_id', '=', self.company_id.id), ('date', '>=', self.date_from), ('date', '<=', self.date_to)]
+            domain = [('company_id', '=', self._scope_company().id), ('date', '>=', self.date_from), ('date', '<=', self.date_to)]
             if self.group_id:
                 domain.append(('group_id', '=', self.group_id.id))
             if self.production_id:
-                if self.production_id.company_id != self.company_id:
+                if self.production_id.company_id != self._scope_company():
                     raise UserError(_('La orden pertenece a otra sucursal.'))
                 domain.append(('production_id', '=', self.production_id.id))
             records = self.env['esi.destajo'].search(domain, order='date,id', limit=10001)
@@ -114,16 +114,16 @@ class Report(models.TransientModel):
         tz = pytz.timezone(self.env.user.tz or 'UTC')
         start = tz.localize(datetime.combine(self.date_from, time.min)).astimezone(pytz.UTC).replace(tzinfo=None)
         end = tz.localize(datetime.combine(self.date_to + timedelta(days=1), time.min)).astimezone(pytz.UTC).replace(tzinfo=None)
-        domain = [('company_id', '=', self.company_id.id), (self.date_basis, '>=', start), (self.date_basis, '<', end), ('state', '!=', 'cancel')]
+        domain = [('company_id', '=', self._scope_company().id), (self.date_basis, '>=', start), (self.date_basis, '<', end), ('state', '!=', 'cancel')]
         if self.date_basis == 'date_finished':
             domain.append(('state', '=', 'done'))
         if self.group_id:
             domain.append(('esi_group_id', '=', self.group_id.id))
         if self.production_id:
             self.production_id.check_access('read')
-            if self.production_id.company_id != self.company_id:
+            if self.production_id.company_id != self._scope_company():
                 raise UserError(_('La orden pertenece a otra sucursal.'))
-            domain = [('company_id', '=', self.company_id.id), ('id', '=', self.production_id.id), ('state', '!=', 'cancel')]
+            domain = [('company_id', '=', self._scope_company().id), ('id', '=', self.production_id.id), ('state', '!=', 'cancel')]
         if not self.production_id:
             if self.state_filter == 'open':
                 domain.append(('state', 'not in', ['done', 'cancel']))
@@ -132,11 +132,11 @@ class Report(models.TransientModel):
         orders = self.env['mrp.production'].search(domain, order='date_start,id', limit=10001)
         if len(orders) > 10000:
             raise UserError(_('El reporte supera 10.000 órdenes. Reduzca el período.'))
-        title = ('Fabricación · %s · %s' % (self.company_id.name, self.production_id.name)) if self.production_id else title + ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
+        title = ('Fabricación · %s · %s' % (self._scope_company().name, self.production_id.name)) if self.production_id else title + ' · ' + dict(self._fields['date_basis'].selection)[self.date_basis]
         labels = dict(self.env['mrp.production']._fields['state']._description_selection(self.env))
         if self.workcenter_id and self.kind != 'piecework':
             self.workcenter_id.check_access('read')
-            if self.workcenter_id.company_id and self.workcenter_id.company_id != self.company_id:
+            if self.workcenter_id.company_id and self.workcenter_id.company_id != self._scope_company():
                 raise UserError(_('El centro de trabajo pertenece a otra sucursal.'))
             orders = orders.filtered(lambda o: self.workcenter_id in self._esi_current_workorders(o).workcenter_id)
             if self.production_id and not orders:
