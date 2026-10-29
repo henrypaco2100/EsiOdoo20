@@ -9,6 +9,7 @@
                 <button name="action_audit_avco" type="object" string="Comprobar AVCO" class="btn-secondary"/>
                 <button name="action_create_draft_accounting" type="object" string="Crear facturas DEMO (borrador)" class="btn-secondary"/>
                 <button name="action_create_posted_finance_demo" type="object" string="Publicar escenario contable DEMO" class="btn-secondary" confirm="Se publicarán 5 documentos contables ficticios en la compañía seleccionada. Solo usar en una base aislada de pruebas. ¿Continuar?"/>
+                <button name="action_open_posted_demo" type="object" string="VER asientos DEMO" class="btn-secondary"/>
                 <button name="action_open_finance" type="object" string="Abrir Balance ESI" class="btn-secondary"/>
             </xpath>
             <xpath expr="//sheet/group" position="inside">

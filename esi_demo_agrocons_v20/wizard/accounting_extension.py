@@ -102,7 +102,7 @@ class AgroAccountingDemoWizard(models.TransientModel):
         # Reejecución segura: jamás duplica un escenario ya creado.
         previous = Move.search([('company_id', '=', company.id), ('ref', 'like', tag + '%')], limit=1)
         if previous:
-            raise UserError(_('Ya existe un escenario contable Agrocons con referencia %s. No se duplicaron registros.') % tag)
+            return self._action_open_posted_demo(company)
         # Evitar mezclar contabilidad ficticia con datos ajenos en compañías activas.
         # Confirmación expresa, preflight y ausencia de cambios sobre cuentas compartidas.
         products = env['product.product'].sudo().search([('default_code', '=like', 'DEMO-AGC-%')])
@@ -180,10 +180,23 @@ class AgroAccountingDemoWizard(models.TransientModel):
             'Servicios agrícolas ficticios de la campaña')
         invoice(tag+'-05-VENTA','2026-10-20','out_invoice',customer,sales,income,185000,
             'Ingreso demostrativo por comercialización de soya (sin salida de stock)')
-        return {'type':'ir.actions.client','tag':'display_notification','params':{
-            'title':_('Contabilidad ficticia publicada'),
-            'message':_('Se publicaron cinco documentos de demostración (capital, gastos, dos facturas de compra y una de venta). Abra los reportes financieros ESI con fechas del 1 al 28 de octubre de 2026 y Solo asientos publicados activado. No se alteró el stock ni se contabilizó costo de cosecha.'),
-            'type':'success','sticky':True}}
+        return self._action_open_posted_demo(company)
+
+    def _action_open_posted_demo(self, company):
+        """Muestra lo publicado para la compañía seleccionada (no toda la contabilidad)."""
+        Move = self.env['account.move'].with_company(company).sudo()
+        demo = Move.search([('company_id', '=', company.id),
+                            ('ref', 'like', 'AGC-CONT-DEMO-2026%')], order='date,id')
+        if not demo:
+            raise UserError(_('Agrocons no tiene asientos de este escenario en %s. Use Publicar escenario contable DEMO.') % company.display_name)
+        return {'type': 'ir.actions.act_window', 'name': _('Asientos publicados – Agrocons'),
+                'res_model': 'account.move', 'view_mode': 'list,form',
+                'domain': [('id','in',demo.ids)],
+                'context': {'search_default_posted': 0}}
+
+    def action_open_posted_demo(self):
+        self.ensure_one()
+        return self._action_open_posted_demo(self.company_id)
 
     def action_open_finance(self):
         self.ensure_one()
@@ -224,3 +237,47 @@ class AgroAccountingDemoWizard(models.TransientModel):
             'title': _('Revisión Agrocons'),
             'message': _('Catálogo con AVCO, almacén, diarios y campañas detectados. La prueba de valoración y de movimientos sigue pendiente de ejecutarse en una copia de pruebas.'),
             'type': 'success', 'sticky': True}}
+
+    def action_posted_operational_entries(self):
+        """Todas las facturas y asientos PUBLICADOS, no solo el escenario precargado."""
+        self.ensure_one()
+        company = self.company_id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Asientos publicados - operaciones de la compañía'),
+            'res_model': 'account.move',
+            'view_mode': 'list,form',
+            'domain': [('company_id', '=', company.id), ('state', '=', 'posted')],
+            'context': {'default_company_id': company.id},
+        }
+
+    def action_audit_operational_accounting(self):
+        """Diagnóstico de configuración: NUNCA publica ni duplica asientos."""
+        self.ensure_one()
+        company = self.company_id
+        if company not in self.env.companies:
+            raise UserError(_('Active primero la compañía elegida en el selector de compañías.'))
+        env = self.with_company(company).env
+        Journal = env['account.journal']
+        Move = env['account.move']
+        Account = env['account.account']
+        missing = []
+        for journal_type, label in [('purchase', 'Compras'), ('sale', 'Ventas'), ('general', 'Misceláneo')]:
+            if not Journal.search([('company_id', '=', company.id), ('type', '=', journal_type)], limit=1):
+                missing.append('Falta diario: ' + label)
+        receivable = Account.search([('account_type', '=', 'asset_receivable')], limit=1)
+        payable = Account.search([('account_type', '=', 'liability_payable')], limit=1)
+        if not receivable:
+            missing.append('Falta cuenta de clientes')
+        if not payable:
+            missing.append('Falta cuenta de proveedores')
+        posted = Move.search_count([('company_id', '=', company.id), ('state', '=', 'posted')])
+        drafts = Move.search_count([('company_id', '=', company.id), ('state', '=', 'draft'), ('move_type', 'in', ['in_invoice','out_invoice'])])
+        message = '%s: %s asientos/documentos publicados, %s facturas en borrador.' % (company.display_name, posted, drafts)
+        if missing:
+            message += ' PENDIENTES: ' + '; '.join(missing)
+        else:
+            message += ' Diarios y cuentas básicas identificados. Confirme cuentas de productos, impuestos y valoración antes de operar.'
+        return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': {
+            'title': _('Auditoría de contabilidad operativa'), 'message': message,
+            'type': 'warning' if missing or not posted else 'success', 'sticky': True}}

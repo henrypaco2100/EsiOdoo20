@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <record id="action_agro_posted_entries" model="ir.actions.act_window">
+   <field name="name">Asientos contables DEMO – Agrocons</field>
+   <field name="res_model">account.move</field><field name="view_mode">list,form</field>
+   <field name="domain">[('ref','like','AGC-CONT-DEMO-2026%')]</field>
+ </record>
+ <menuitem id="menu_agro_posted_entries" name="Asientos contables DEMO" parent="menu_esi_agro_reports" action="action_agro_posted_entries" sequence="20" groups="account.group_account_user"/>
+</odoo>

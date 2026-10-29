@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <record id="action_zea_posted_entries" model="ir.actions.act_window">
+   <field name="name">Asientos contables DEMO – Zeartex</field>
+   <field name="res_model">account.move</field><field name="view_mode">list,form</field>
+   <field name="domain">[('ref','like','ZEA-CONT-DEMO-2026%')]</field>
+ </record>
+ <menuitem id="menu_zea_posted_entries" name="Asientos contables DEMO" parent="menu_esi_zeartex_root" action="action_zea_posted_entries" sequence="30" groups="account.group_account_user"/>
+</odoo>

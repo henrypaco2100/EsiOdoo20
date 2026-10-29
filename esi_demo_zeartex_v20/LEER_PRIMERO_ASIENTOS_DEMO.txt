@@ -1,0 +1,11 @@
+ESI / Odoo 20 – Asientos DEMO
+
+Instalar o actualizar el módulo NO PUBLICA ASIENTOS.
+Para generarlos, entrar a la carga DEMO, elegir la empresa CORRECTA y marcar las confirmaciones de base de pruebas.
+Agrocons: Gestión Agrícola ESI > Configuración > Cargar DEMO Agrocons > Publicar escenario contable DEMO.
+Zeartex: ESI Demo Zeartex > Cargar demostración > 7. Publicar escenario CONTABLE de prueba.
+Después del éxito, la aplicación abrirá directamente los asientos publicados.
+También habrá menú Asientos contables DEMO para consultarlos.
+Fecha de los asientos: octubre de 2026. Verificar filtro de fechas y compañías en los reportes ESI.
+Si existe bloqueo por cuentas, diarios, AVCO o compañía, Odoo presentará una advertencia y NO publicará parcialmente el escenario.
+Advertencia: los asientos publicados afectan la contabilidad. SOLO en copia de pruebas aislada. NO contabilizan movimientos físicos de stock ni garantizan integración con AVCO.

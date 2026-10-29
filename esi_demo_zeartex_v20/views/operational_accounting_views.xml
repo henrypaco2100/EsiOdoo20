@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <record id="view_zear_operational_flow_buttons" model="ir.ui.view">
+  <field name="name">esi.zeartex.demo.operational.flow</field><field name="model">esi.zeartex.demo</field>
+  <field name="inherit_id" ref="view_esi_zeartex_demo_form"/>
+  <field name="arch" type="xml"><xpath expr="//header" position="inside">
+    <button name="action_audit_operational_accounting" type="object" string="8. Revisar diarios y asientos"/>
+    <button name="action_posted_operational_entries" type="object" string="9. VER todas las operaciones contabilizadas"/>
+  </xpath></field>
+ </record>
+ <record id="action_zear_all_posted_entries" model="ir.actions.act_window">
+  <field name="name">Asientos de operaciones (todos)</field><field name="res_model">account.move</field>
+  <field name="view_mode">list,form</field><field name="domain">[('state','=','posted')]</field>
+ </record>
+ <record id="action_zear_all_sales_invoices" model="ir.actions.act_window">
+  <field name="name">Facturas de ventas</field><field name="res_model">account.move</field>
+  <field name="view_mode">list,form</field><field name="domain">[('move_type','in',['out_invoice','out_refund'])]</field>
+ </record>
+ <record id="action_zear_all_purchase_invoices" model="ir.actions.act_window">
+  <field name="name">Facturas de compras</field><field name="res_model">account.move</field>
+  <field name="view_mode">list,form</field><field name="domain">[('move_type','in',['in_invoice','in_refund'])]</field>
+ </record>
+ <menuitem id="menu_zear_all_posted_entries" name="Asientos de operaciones (todos)" parent="menu_esi_zeartex_root" action="action_zear_all_posted_entries" groups="account.group_account_user" sequence="40"/>
+ <menuitem id="menu_zear_all_sales_invoices" name="Facturas de ventas" parent="menu_esi_zeartex_root" action="action_zear_all_sales_invoices" groups="account.group_account_user" sequence="41"/>
+ <menuitem id="menu_zear_all_purchase_invoices" name="Facturas de compras" parent="menu_esi_zeartex_root" action="action_zear_all_purchase_invoices" groups="account.group_account_user" sequence="42"/>
+</odoo>

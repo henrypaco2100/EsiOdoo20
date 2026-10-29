@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_esi_zeartex_demo_form_accounting_inherit" model="ir.ui.view">
+    <field name="name">esi.zeartex.demo.form.accounting.inherit</field>
+    <field name="model">esi.zeartex.demo</field>
+    <field name="inherit_id" ref="view_esi_zeartex_demo_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="action_post_accounting_demo" type="object"
+          string="7. Publicar escenario CONTABLE de prueba"
+          confirm="ATENCIÓN: publicará 7 documentos ficticios en la contabilidad real de la compañía elegida. SOLO para una BASE DE PRUEBAS AISLADA. No genera ni valora stock. ¿Confirma?"/>
+        <button name="action_open_posted_demo" type="object" string="VER asientos DEMO"/>
+        <button name="action_open_financial_report" type="object" string="Abrir Balance ESI"/>
+      </xpath>
+      <xpath expr="//sheet/group[1]" position="after">
+        <group string="Escenario contable publicado (SOLO BASE DE PRUEBAS)">
+          <field name="confirm_posted_accounting"/>
+          <div class="alert alert-warning" role="alert">Publicar el escenario genera movimientos contables ficticios en la compañía elegida. Estos asientos aparecerán en libros y estados financieros, pero NO se vinculan con stock ni costos en destino. Para compras/ventas futuras use los flujos estándar de Odoo y PUBLIQUE sus facturas.</div>
+        </group>
+      </xpath>
+    </field>
+  </record>
+</odoo>
