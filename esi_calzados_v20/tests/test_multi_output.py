@@ -65,3 +65,32 @@ class TestMultiOutput(TransactionCase):
         for p in self.products:
             self.assertIn('Talla prueba:', p.esi_variant_highlight)
         self.assertIn('40', self.template.esi_variant_highlight)
+
+    def test_same_batch_lot_is_propagated_to_all_size_outputs(self):
+        self.template.tracking = 'lot'
+        group = self._group()
+        group.action_create_productions()
+        mo = group.production_ids
+        self.env['stock.quant']._update_available_quantity(self.material, mo.location_src_id, 120)
+        mo.action_assign()
+        lot_name = 'FABRICA/MO/TEST-LOTE'
+        primary_lot = self.env['stock.lot'].create({
+            'name': lot_name,
+            'product_id': mo.product_id.id,
+            'company_id': mo.company_id.id,
+        })
+        mo.lot_producing_ids = [Command.set(primary_lot.ids)]
+        with Form(mo) as form:
+            form.qty_producing = mo.product_qty
+        mo.button_mark_done()
+        self.assertEqual(mo.state, 'done')
+        lots = self.env['stock.lot'].search([
+            ('name', '=', lot_name),
+            ('product_id', 'in', self.products.ids),
+        ])
+        self.assertEqual(set(lots.product_id.ids), set(self.products.ids))
+        for move in mo.move_finished_ids.filtered(lambda m: m.product_id in self.products):
+            produced_lines = move.move_line_ids.filtered(lambda line: line.quantity > 0)
+            self.assertTrue(produced_lines)
+            self.assertEqual(set(produced_lines.lot_id.mapped('name')), {lot_name})
+            self.assertTrue(all(line.lot_id.product_id == move.product_id for line in produced_lines))
