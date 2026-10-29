@@ -30,9 +30,9 @@ class DirectMigration(models.Model):
         self._check_scope()
         if str(self.cutoff) != '2026-10-28':
             raise UserError(_('Este paquete corresponde al corte 28/10/2026 y está preparado para una base nueva. No reutilice el registro del corte anterior.'))
-        required = {'esi_material_type', 'esi_measure', 'esi_component_ok', 'esi_manufacture_ok'}
+        required = {'esi_material_type', 'esi_measure', 'esi_component_ok', 'esi_manufacture_ok', 'product_add_mode'}
         if required - set(self.env['product.template']._fields):
-            raise UserError(_('Actualice primero esi_calzados_v20 a la versión 20.0.11.2.0 o posterior.'))
+            raise UserError(_('Actualice primero esi_calzados_v20 a la versión 20.0.11.3.0 o posterior y verifique sale_product_matrix.'))
         if any(c.currency_id.name != 'BOB' for c in (self.root_id | self.factory_id | self.cbba_id | self.scz_id)):
             raise UserError(_('Los costos de origen están en bolivianos. Las compañías seleccionadas deben usar BOB.'))
         self.env.cr.execute('SELECT pg_advisory_xact_lock(20261028, 27102026)')
@@ -175,14 +175,45 @@ class DirectMigration(models.Model):
             attr.esi_group_production = True
         return attr
 
+    @staticmethod
+    def _size_sort_key(value):
+        """Sort footwear sizes numerically, keeping unusual labels after numbers."""
+        text = str(value).strip()
+        try:
+            return (0, float(text.replace(',', '.')), text)
+        except ValueError:
+            return (1, 0.0, text.upper())
+
+    @classmethod
+    def _ordered_attribute_values(cls, name, values):
+        # The source catalogue may arrive in any order.  Talla must always be
+        # presented numerically (34, 35, 36...) in variants and matrices.
+        unique = list(dict.fromkeys(values))
+        if name == 'Talla':
+            return sorted(unique, key=cls._size_sort_key)
+        return unique
+
     def _attribute_line(self, name, values, grouped=False):
         attr = self._attribute(name, grouped)
         ids = []
-        for name_value in values:
-            value = self.env['product.attribute.value'].search([('attribute_id', '=', attr.id), ('name', '=', str(name_value))], limit=2)
+        ordered_values = self._ordered_attribute_values(name, values)
+        for position, name_value in enumerate(ordered_values, start=1):
+            value_model = self.env['product.attribute.value']
+            value = value_model.search([('attribute_id', '=', attr.id), ('name', '=', str(name_value))], limit=2)
             if len(value) > 1:
                 raise UserError(_('Valor de atributo duplicado: %s', name_value))
-            value = value or self.env['product.attribute.value'].create({'attribute_id': attr.id, 'name': str(name_value)})
+            vals = {'attribute_id': attr.id, 'name': str(name_value)}
+            if name == 'Talla' and 'sequence' in value_model._fields:
+                # Sequence is global to the Talla value, so derive it from the
+                # numeric size itself instead of from the current template.
+                try:
+                    vals['sequence'] = int(round(float(str(name_value).replace(',', '.')) * 100))
+                except ValueError:
+                    vals['sequence'] = 100000 + position
+            if not value:
+                value = value_model.create(vals)
+            elif name == 'Talla' and 'sequence' in value._fields and value.sequence != vals.get('sequence'):
+                value.sequence = vals['sequence']
             ids.append(value.id)
         return (0, 0, {'attribute_id': attr.id, 'value_ids': [(6, 0, ids)]})
 
@@ -232,6 +263,7 @@ class DirectMigration(models.Model):
                 'name': row['name'].strip(), 'type': 'consu', 'is_storable': True, 'company_id': False,
                 'uom_id': self._uom('PAR').id, 'categ_id': self._category('CALZADOS ' + row['family'], row['subfamily'], 'Producto terminado').id,
                 'sale_ok': True, 'purchase_ok': False, 'esi_manufacture_ok': True, 'esi_component_ok': False,
+                'product_add_mode': 'matrix',
                 'attribute_line_ids': lines,
             })
             self._bind(row['key'], template)
@@ -244,8 +276,13 @@ class DirectMigration(models.Model):
             missing = set(required) - set(line.value_ids.ids)
             if missing:
                 line.write({'value_ids': [(4, value_id) for value_id in sorted(missing)]})
+        finish_vals = {}
         if not template.esi_manufacture_ok:
-            template.write({'esi_manufacture_ok': True})
+            finish_vals['esi_manufacture_ok'] = True
+        if 'product_add_mode' in template._fields and template.product_add_mode != 'matrix':
+            finish_vals['product_add_mode'] = 'matrix'
+        if finish_vals:
+            template.write(finish_vals)
         for product in template.product_variant_ids:
             size = product.product_template_attribute_value_ids.filtered(lambda v: v.attribute_id.name == 'Talla').name
             key = row['key'] + ':' + size
@@ -322,74 +359,237 @@ class DirectMigration(models.Model):
                     'Costos unitarios de terminados incluidos en BOB, por talla y compañía.'] + notes)})
         return True
 
+    def _recipe_generated_code(self, row, size=False):
+        """Stable code for a component present in the approved LDM but absent in inventory source."""
+        if size:
+            if row.get('name', '').upper().strip() == 'PLANTILLAS':
+                return 'ACC-PLA-%s' % size
+            if 'NUMERACION LENGUA' in row.get('name', '').upper():
+                return 'ACC-ETQ-LEN-MIL-%s' % size
+            if 'NUMERACION BOLSA' in row.get('name', '').upper():
+                return 'ACC-ETQ-BOL-MIL-%s' % size
+        if row.get('code'):
+            return row['code']
+        token = ''.join(ch if ch.isalnum() else '-' for ch in row.get('name', '').upper())
+        token = '-'.join(part for part in token.split('-') if part)[:36]
+        return 'LDM-%s-%s-%s' % (row['recipe'], row.get('row', 0), token or 'COMP')
+
+    def _recipe_material_category(self, row):
+        family = ' '.join((row.get('family') or 'OTROS').upper().split())
+        family = {'CUERO': 'CUEROS', 'CINTA': 'CINTAS', 'ACABADO': 'ACCESORIOS'}.get(family, family)
+        return self._category(family, 'RECETAS MILITARES')
+
+    def _recipe_create_missing_material(self, row, code, size=False, notes=None):
+        """Create only components explicitly present in the approved military LDM.
+
+        This avoids guessing an unrelated catalogue product when the LDM code is absent.
+        """
+        key = 'recipe-material:' + code
+        product = self._ref(key)
+        if product:
+            return product
+        found = self.env['product.product'].with_context(active_test=False).search([
+            ('default_code', '=', code), ('company_id', '=', self.factory_id.id)], limit=2)
+        if len(found) == 1:
+            if not found.esi_component_ok:
+                found.product_tmpl_id.write({'esi_component_ok': True})
+            return self._bind(key, found)
+        if len(found) > 1:
+            return False
+        name = row.get('name') or code
+        if size:
+            if name.upper().strip() == 'PLANTILLAS':
+                name = 'PLANTILLA #%s' % size
+            elif 'NUMERACION LENGUA' in name.upper():
+                name = 'ETIQUETA LENGUETA AK47-%s' % size
+            elif 'NUMERACION BOLSA' in name.upper():
+                name = 'ETIQUETA BOLSAS MILITAR VERDE %s' % size
+        uom = self._uom(row['uom'])
+        template = self.env['product.template'].with_company(self.factory_id).create({
+            'name': name, 'default_code': code, 'type': 'consu', 'is_storable': True,
+            'company_id': self.factory_id.id, 'uom_id': uom.id,
+            'categ_id': self._recipe_material_category(row).id,
+            'purchase_ok': True, 'sale_ok': False, 'esi_component_ok': True,
+            'esi_manufacture_ok': False, 'standard_price': float(row.get('unit_price') or 0),
+            'esi_measure': 'TALLA' if size else '', 'esi_material_type': 'RECETA MILITAR',
+        })
+        product = template.product_variant_id
+        self._bind(key, product)
+        if notes is not None:
+            notes.append('Componente creado desde LDM aprobada: %s (%s).' % (code, name))
+        return product
+
+    def _recipe_find_component(self, data, row, notes, code=False, size=False):
+        code = code or self._recipe_generated_code(row, size=size)
+        candidates = []
+        for material in data['materials']:
+            if material['code'] == code:
+                product = self._ref(material['key'])
+                if product:
+                    candidates.append(product)
+        if not candidates:
+            candidates = list(self.env['product.product'].with_context(active_test=False).search([
+                ('default_code', '=', code), ('company_id', '=', self.factory_id.id),
+                ('esi_component_ok', '=', True)], limit=2))
+        unique = list({p.id: p for p in candidates}.values())
+        if len(unique) == 1:
+            return unique[0]
+        if len(unique) > 1:
+            return False
+        return self._recipe_create_missing_material(row, code, size=size, notes=notes)
+
+    def _recipe_qty(self, row, product, notes):
+        """Return quantity expressed in the component inventory UoM.
+
+        If native Odoo can convert the LDM UoM, use it. For legacy stock kept in
+        packaging units (LATA/CONO/BOTE/PAQUETE/ROLLO), preserve the approved
+        LDM material cost by converting its consumption to a fraction of that
+        inventory unit. The source quantity/UoM remains in the migration data.
+        """
+        source_uom = self._uom(row['uom'])
+        qty = float(row['qty_per_pair'])
+        if source_uom == product.uom_id:
+            return qty
+        # Obvious source wording: one sole/plant is one inventory pair.
+        if source_uom.name.upper() in ('UNIDAD', 'UNI') and product.uom_id.name.upper() == 'PAR' \
+                and any(word in (row.get('name') or '').upper() for word in ('PLANTA', 'SUELA')):
+            return qty
+        try:
+            converted = source_uom._compute_quantity(qty, product.uom_id, round=False, raise_if_failure=False)
+        except TypeError:
+            converted = False
+        except Exception:
+            converted = False
+        if converted not in (False, None) and converted > 0:
+            return converted
+        # Legacy migration stores some materials by container while the approved
+        # LDM consumes litres/grams/metres. Use the source cost to keep the exact
+        # approved cost per pair while consuming the real stocked product.
+        scoped = product.with_company(self.factory_id)
+        inv_cost = float(scoped.standard_price or 0)
+        source_cost = float(row.get('cost_per_pair') or (qty * float(row.get('unit_price') or 0)))
+        if inv_cost > 0 and source_cost >= 0:
+            converted = source_cost / inv_cost
+            if converted > 0:
+                notes.append('Conversión LDM %s: %.6g %s → %.6g %s (equivalencia de costo de apertura).' % (
+                    product.default_code or product.display_name, qty, source_uom.name,
+                    converted, product.uom_id.name))
+                return converted
+        return False
+
+    def _recipe_size_ptav(self, template, size):
+        return template.attribute_line_ids.filtered(
+            lambda line: line.attribute_id.name == 'Talla').product_template_value_ids.filtered(
+            lambda ptav: ptav.name == str(size))[:1]
+
+    def _recipe_size_rows(self, data, row, template, notes):
+        """Expand size-dependent source lines and restrict each line to its Talla."""
+        name = (row.get('name') or '').upper().strip()
+        if name == 'PLANTILLAS':
+            prefix = 'ACC-PLA-'
+        elif 'NUMERACION LENGUA' in name:
+            prefix = 'ACC-ETQ-LEN-MIL-'
+        elif 'NUMERACION BOLSA' in name:
+            prefix = 'ACC-ETQ-BOL-MIL-'
+        else:
+            return None
+        result = []
+        size_line = template.attribute_line_ids.filtered(lambda line: line.attribute_id.name == 'Talla')
+        if len(size_line) != 1:
+            return False
+        for value in size_line.value_ids.sorted(lambda v: (int(v.name) if str(v.name).isdigit() else 9999, v.name)):
+            size = str(value.name)
+            ptav = self._recipe_size_ptav(template, size)
+            if not ptav:
+                return False
+            code = prefix + size
+            product = self._recipe_find_component(data, row, notes, code=code, size=size)
+            if not product:
+                return False
+            qty = self._recipe_qty(row, product, notes)
+            if qty is False:
+                return False
+            result.append((0, 0, {
+                'product_id': product.id, 'product_qty': qty, 'uom_id': product.uom_id.id,
+                'bom_product_template_attribute_value_ids': [(6, 0, ptav.ids)],
+            }))
+        return result
+
     def _recipes(self, data, notes):
-        # A recipe is created only when every positive component is unambiguous
-        # and has the same inventory unit. Never silently truncate a recipe.
-        by_code = defaultdict(list)
-        for row in data['materials']:
-            product = self._ref(row['key'])
-            if product:
-                by_code[row['code']].append(product)
+        # The approved military LDM is authoritative for recipe components.
+        # Missing catalogue components are created from the LDM instead of
+        # silently dropping lines. Size-specific materials are applied only to
+        # their corresponding Talla through native mrp.bom.line variant values.
         created = existing = pending = 0
         for recipe in data['recipes']:
-            targets = [row for row in data['finished'] if row['code'].startswith(recipe['code']+'-')]
+            targets = [row for row in data['finished'] if row['code'].startswith(recipe['code'] + '-')]
             if not targets:
-                notes.append('LdM '+recipe['code']+' pendiente: no hay producto terminado de ese modelo en los inventarios recibidos.')
+                notes.append('LdM %s pendiente: no hay producto terminado de ese modelo en los inventarios recibidos.' % recipe['code'])
                 pending += 1
                 continue
-            components = [r for r in data['components'] if r['recipe'] == recipe['code'] and r['qty_per_pair'] > 0]
-            lines=[]
-            errors=[]
+            components = [r for r in data['components']
+                          if r['recipe'] == recipe['code'] and float(r.get('qty_per_pair') or 0) > 0]
             if not components:
-                errors.append('sin componentes con cantidad positiva')
-            for r in components:
-                products=list({p.id:p for p in by_code.get(r['code'], [])}.values())
-                if not products and r['code']:
-                    products = list(self.env['product.product'].search([
-                        ('default_code','=',r['code']),('company_id','=',self.factory_id.id),('esi_component_ok','=',True)],limit=2))
-                if len(products)!=1:
-                    errors.append(str(r['code'] or r['name'])+' sin correspondencia única')
-                    continue
-                product=products[0]
-                uom=self._uom(r['uom'])
-                if uom!=product.uom_id or not product.esi_component_ok:
-                    errors.append(str(r['code'])+' unidad o uso pendiente')
-                    continue
-                if r['code'] in ('ACC-PLA-40','ACC-ETQ-LEN-MIL-40','ACC-BOL-CEL-35'):
-                    errors.append(str(r['code'])+' requiere distribución por talla o concepto')
-                    continue
-                lines.append((0,0,{'product_id':product.id,'product_qty':r['qty_per_pair'],'uom_id':uom.id}))
-            if errors:
-                notes.append('LdM '+recipe['code']+' no creada: '+', '.join(sorted(set(errors))))
+                notes.append('LdM %s no creada: sin componentes con cantidad positiva.' % recipe['code'])
                 pending += 1
                 continue
             for row in targets:
                 if self._finished_conflict(row):
                     continue
-                if not row['code'].startswith(recipe['code']+'-'):
-                    continue
-                key='bom:'+row['key']
+                key = 'bom:' + row['key']
                 if self._ref(key):
                     existing += 1
                     continue
-                template=self._ref(row['key'])
+                template = self._ref(row['key'])
                 if not template:
-                    notes.append('Producto sin importar para receta '+recipe['code']+': '+row['code'])
+                    notes.append('Producto sin importar para receta %s: %s' % (recipe['code'], row['code']))
+                    pending += 1
                     continue
                 matches = self.env['mrp.bom'].with_context(active_test=False).search([
-                    ('company_id','=',self.factory_id.id),('product_tmpl_id','=',template.id),('code','=',recipe['code'])],limit=1)
+                    ('company_id', '=', self.factory_id.id), ('product_tmpl_id', '=', template.id),
+                    ('code', '=', recipe['code'])], limit=1)
                 if matches:
-                    notes.append('Ya existe una LdM manual para '+row['code']+' en Fábrica; no se duplicó ni se modificó.')
+                    notes.append('Ya existe una LdM manual para %s en Fábrica; no se duplicó ni se modificó.' % row['code'])
                     existing += 1
                     continue
-                bom=self.env['mrp.bom'].with_company(self.factory_id).create({
-                    'product_tmpl_id':template.id,'company_id':self.factory_id.id,'product_qty':1,
-                    'uom_id':template.uom_id.id,'type':'normal','code':recipe['code'],
-                    'esi_multi_variant':True,'esi_allowed_variant_ids':[(6,0,template.product_variant_ids.ids)],
-                    'bom_line_ids':lines})
-                self._bind(key,bom)
+                lines = []
+                errors = []
+                for component in components:
+                    sized = self._recipe_size_rows(data, component, template, notes)
+                    if sized is False:
+                        errors.append('%s sin correspondencia completa por talla' % (component.get('name') or component.get('code')))
+                        continue
+                    if sized is not None:
+                        lines.extend(sized)
+                        continue
+                    product = self._recipe_find_component(data, component, notes)
+                    if not product:
+                        errors.append('%s sin correspondencia única' % (component.get('code') or component.get('name')))
+                        continue
+                    qty = self._recipe_qty(component, product, notes)
+                    if qty is False:
+                        errors.append('%s sin conversión de unidad' % (component.get('code') or component.get('name')))
+                        continue
+                    lines.append((0, 0, {'product_id': product.id, 'product_qty': qty, 'uom_id': product.uom_id.id}))
+                if errors:
+                    notes.append('LdM %s / %s no creada: %s' % (recipe['code'], row['code'], ', '.join(sorted(set(errors)))))
+                    pending += 1
+                    continue
+                allowed = template.product_variant_ids
+                if not allowed:
+                    notes.append('LdM %s / %s no creada: plantilla sin variantes almacenables.' % (recipe['code'], row['code']))
+                    pending += 1
+                    continue
+                bom = self.env['mrp.bom'].with_company(self.factory_id).create({
+                    'product_tmpl_id': template.id, 'company_id': self.factory_id.id, 'product_qty': 1,
+                    'uom_id': template.uom_id.id, 'type': 'normal', 'code': recipe['code'],
+                    'esi_multi_variant': True, 'esi_allowed_variant_ids': [(6, 0, allowed.ids)],
+                    'bom_line_ids': lines,
+                })
+                self._bind(key, bom)
                 created += 1
-        notes.insert(0, 'Fábrica: %s. %s LdM creadas, %s ya existentes, %s fichas pendientes.' % (self.factory_id.display_name,created,existing,pending))
+        notes.insert(0, 'Fábrica: %s. %s LdM creadas, %s ya existentes, %s pendientes.' % (
+            self.factory_id.display_name, created, existing, pending))
 
     def action_complete_sizes(self):
         self._lock()
@@ -584,10 +784,15 @@ class DirectMigration(models.Model):
             raise UserError(_('Todavía no hay productos vinculados. Primero pulse Importar datos.'))
         changed_materials = material_templates.filtered(lambda p: not p.esi_component_ok)
         changed_finished = finished_templates.filtered(lambda p: not p.esi_manufacture_ok)
+        changed_matrix = finished_templates.filtered(
+            lambda p: 'product_add_mode' in p._fields and p.product_add_mode != 'matrix')
         changed_materials.write({'esi_component_ok': True})
         changed_finished.write({'esi_manufacture_ok': True})
-        message = _('%s materias primas marcadas como Componentes; %s terminados marcados como Fabricar.',
-                    len(changed_materials), len(changed_finished))
+        if changed_matrix:
+            changed_matrix.write({'product_add_mode': 'matrix'})
+        message = _('%s materias primas marcadas como Componentes; %s terminados marcados como Fabricar; '
+                    '%s terminados configurados con selección Matrix.',
+                    len(changed_materials), len(changed_finished), len(changed_matrix))
         self.import_log = (self.import_log or '') + '\n' + message
         return {'type': 'ir.actions.client', 'tag': 'display_notification',
                 'params': {'title': _('Productos actualizados'), 'message': message,

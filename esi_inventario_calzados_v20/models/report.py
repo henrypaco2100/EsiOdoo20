@@ -83,7 +83,11 @@ class ShoeInventoryReport(models.TransientModel):
             entries.append({'template':p.product_tmpl_id.id,'attributes':sorted(others.ids),
                 'unit':p.uom_id.name,'size':label,'name':description,'code':code,
                 'qty':qty,'cost':p.standard_price})
-        headers, rows = build_matrix(entries,self.include_zero)
+        headers, rows = build_matrix(
+            entries,
+            self.include_zero,
+            cost_rounding=self._scope_company().currency_id.rounding,
+        )
         title = 'Kardex por talla · %s · %s · %s · %s · %s' % (
             self._scope_company().name,', '.join(warehouses.mapped('name')),
             'Existencia física' if self.quantity_type == 'physical' else 'Disponible sin reservas',

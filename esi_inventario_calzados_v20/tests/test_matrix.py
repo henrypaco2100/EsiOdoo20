@@ -35,6 +35,20 @@ class MatrixTests(TestCase):
         h,r=module.build_matrix([self.e('40',10,100),self.e('41',20,150)])
         self.assertEqual(r[0][3],'Variable')
         self.assertEqual(r[0][-1],4000)
+    def test_same_displayed_currency_cost_is_not_variable(self):
+        h,r=module.build_matrix([
+            self.e('40',10,195.629999),
+            self.e('41',20,195.630001),
+        ], cost_rounding=0.01)
+        self.assertEqual(r[0][3],195.63)
+        self.assertAlmostEqual(r[0][-1],5868.90, places=2)
+
+    def test_different_displayed_currency_cost_is_variable(self):
+        h,r=module.build_matrix([
+            self.e('40',10,195.63),
+            self.e('41',20,195.64),
+        ], cost_rounding=0.01)
+        self.assertEqual(r[0][3],'Variable')
     def test_totals_by_unit(self):
         h,r=module.build_matrix([self.e(),self.e(unit='UNIDAD')])
         self.assertEqual(len([v for v in r if v[1]=='TOTAL']),2)

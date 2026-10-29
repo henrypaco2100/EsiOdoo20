@@ -1,8 +1,8 @@
-# Migración Tosscano v20 — 20.0.6.0.0
+# Migración Tosscano v20 — 20.0.7.0.0
 
 Datos de apertura con corte al **28/10/2026**, para una **base nueva**.
 
-## Precios de venta — 20.0.6.0.0
+## Precios de venta — 20.0.7.0.0
 
 Incluye precio de venta y listas Minorista/Mayorista en BOB, compartidas entre sucursales. **Importar datos** las carga automáticamente. En una base existente, usar **4. Cargar precios de venta y tarifas**, sin repetir saldos.
 
@@ -16,13 +16,14 @@ En una base ya importada con corte 28/10, actualizar el módulo y pulsar **Compl
 
 ## Instalación y uso
 
-Requiere `esi_calzados_v20` 20.0.11.2.0 o posterior y `esi_sucursales_v20`. Copiar la carpeta de este ZIP al directorio de addons, reiniciar Odoo e instalar el módulo. El ZIP incluye únicamente el módulo de migración.
+Requiere `esi_calzados_v20` 20.0.11.3.0 o posterior y `esi_sucursales_v20`. Copiar la carpeta de este ZIP al directorio de addons, reiniciar Odoo e instalar el módulo. El ZIP incluye únicamente el módulo de migración.
 
 Crear el registro y seleccionar TOSSCANO GRUP, Fábrica, CBBA y SCZ, con un almacén por sucursal. Las cuatro compañías deben usar BOB y el usuario debe tener acceso a ellas. Se requieren permisos de administración de Ajustes, Ventas, Inventario y Contabilidad; para recetas, Fabricación.
 
 1. **Importar datos**: categorías, unidades, productos, plan contable, costos y configuración AVCO.
 2. **Importar saldos**: cantidades de las nuevas hojas de inventario.
 3. **Crear recetas (Fábrica)**: intenta crear las LdM completas y muestra las pendientes con su motivo en «Recetas en Fábrica». Puede repetirse sin duplicar las LdM vinculadas.
+4. **Productos terminados en Matrix**: las nuevas plantillas migradas se crean con `Variant Selection = Matrix`. Para una base ya migrada, pulse **Activar Componentes, Fabricar y Matrix** para corregir también los terminados existentes sin recrearlos.
 
 Las recetas siempre pertenecen a la compañía seleccionada en Fábrica, aunque los productos terminados sean globales. No se crean empresas ni almacenes. Actualizar el módulo no ejecuta importaciones automáticamente. No reutilizar un registro del corte anterior para cargar estos saldos sobre una base operativa.
 
@@ -44,11 +45,18 @@ El 28/10/2026 es el **corte del archivo fuente**. Los ajustes de inventario y co
 
 Los marcadores impiden recargar aperturas ya aplicadas y sobrescribir después un promedio modificado por operaciones. Se omiten productos con existencias, reservas o movimientos previos incompatibles con una apertura. El detalle aparece en el resultado.
 
-## Recetas recibidas
+## Recetas recibidas — 20.0.7.0.0
 
-Incluye las **12 fichas militares** del último Excel, con 292 líneas fuente. Las cantidades se interpretan por par, incluso cuando la ficha tiene un lote mayor. Los costos de mano de obra y gastos se conservan como evidencia; no se inventan tiempos de operaciones.
+Incluye las **12 fichas militares aprobadas** del Excel `FICHAS DE COSTO MILITAR APROBADO(2).xlsx`, con 292 líneas fuente (incluidas líneas informativas/cero). Las cantidades positivas se interpretan por par. Los costos de mano de obra y gastos se conservan como evidencia; no se inventan tiempos de operación.
 
-**Con los archivos actuales, las 12 fichas quedan pendientes: no se crean LdM parciales.** Faltan equivalencias de materiales/unidades y hay códigos ambiguos o asociados a una sola talla. Véase `INCIDENCIAS_RECETAS.md`. Algunas fichas tampoco tienen producto terminado correspondiente en el catálogo recibido. El botón informa estas incidencias sin bloquear productos ni saldos. Resolver esas equivalencias requiere datos adicionales y una actualización de la correspondencia; no basta repetir el botón.
+El botón **3. Crear recetas (Fábrica)** ahora crea LdM compartidas completas para los productos terminados que sí existen en el catálogo migrado. No se crea una LdM parcial: si una línea no se puede resolver, esa LdM queda pendiente y el motivo se registra.
+
+- **PLANTILLAS**, **NUMERACION LENGUA** y **NUMERACION BOLSA** se expanden por talla y usan el campo nativo «Aplicar a variantes», de modo que cada componente de talla sólo se consume para su talla.
+- Componentes presentes explícitamente en la ficha aprobada pero ausentes del inventario fuente se crean como materias primas de Fábrica bajo `RECETAS MILITARES`, conservando código, UDM y precio unitario de la ficha. Las dos líneas sin código de M-RG-01 reciben un código técnico estable de la migración.
+- Cuando la ficha consume litros/gramos/metros pero el inventario heredado está en LATA/CONO/BOTE/PAQUETE/ROLLO y no existe una capacidad física en la fuente, se usa una fracción equivalente al costo aprobado de la LdM. Esta equivalencia preserva el costo por par, pero debe validarse contra las capacidades reales antes de producción.
+- Tres modelos de ficha no tienen actualmente un producto terminado objetivo en el catálogo de existencias recibido: **M-BT-03, M-L-00 y M-P-02**. Esas tres fichas quedan pendientes hasta que exista el producto terminado correspondiente.
+
+Los 9 modelos restantes alcanzan **27 plantillas de producto terminado** en los datos actuales. Repetir el botón no duplica LdM ya vinculadas y no modifica LdM manuales existentes. Véase `INCIDENCIAS_RECETAS.md`.
 
 ## Evidencia y validación
 

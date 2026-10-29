@@ -15,13 +15,30 @@ class Template(models.Model):
             for p in self.product_variant_ids if p.is_storable}
         selected = set(selected_ids or [])
         available = False
+
+        # First resolve the real product behind every matrix cell.
         for row in grid['matrix']:
             for cell in row[1:]:
                 product = products.get(tuple(cell.get('ptav_ids', [])))
                 cell['product_id'] = product.id if product else False
                 cell['is_possible_combination'] = bool(product and cell.get('is_possible_combination'))
-                cell['qty'] = int(bool(product and product.id in selected))
                 available |= cell['is_possible_combination']
+
         if not available:
             raise UserError(_('La plantilla no tiene variantes almacenables disponibles.'))
+
+        # New shared recipe: select every size from the first valid row by default.
+        # A row fixes model/color/material; columns are the grouped attribute (Talla).
+        # Existing recipes keep their current explicit selection.
+        if not selected:
+            for row in grid['matrix']:
+                row_products = [cell.get('product_id') for cell in row[1:]
+                                if cell.get('is_possible_combination') and cell.get('product_id')]
+                if row_products:
+                    selected.update(row_products)
+                    break
+
+        for row in grid['matrix']:
+            for cell in row[1:]:
+                cell['qty'] = int(bool(cell.get('product_id') and cell['product_id'] in selected))
         return grid

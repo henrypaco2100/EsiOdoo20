@@ -176,15 +176,24 @@ class AgroAccountingDemoWizard(models.TransientModel):
         supplier = demo_partner('DEMO - Agroinsumos Oriente SRL', False)
         contractor = demo_partner('DEMO - Servicio Agrícola del Norte', False)
         def entry(ref, date, lines):
-            debits = round(sum(v[1] for v in lines), 2)
-            credits = round(sum(v[2] for v in lines), 2)
+            # Cada línea es (descripción, cuenta, debe, haber); nunca sumar el registro account.account.
+            debits = round(sum(float(v[2]) for v in lines), 2)
+            credits = round(sum(float(v[3]) for v in lines), 2)
             if abs(debits - credits) > 0.001:
                 raise UserError(_('El asiento %s no está equilibrado.') % ref)
+            existing_entry = Move.search([('company_id', '=', company.id), ('ref', '=', ref),
+                                          ('move_type', '=', 'entry')], limit=1)
+            if existing_entry:
+                return existing_entry
             move = Move.create({'move_type':'entry','company_id':company.id,'journal_id':general.id,
                  'date':date,'ref':ref,'line_ids':[(0,0,{'name':label,'account_id':acct.id,
                     'debit':debit,'credit':credit}) for label,acct,debit,credit in lines]})
             move.action_post()
         def invoice(ref, date, kind, partner, journal_record, expense_account, amount, label):
+            existing_invoice = Move.search([('company_id', '=', company.id), ('ref', '=', ref),
+                                            ('move_type', '=', kind)], limit=1)
+            if existing_invoice:
+                return existing_invoice
             move=Move.create({'company_id':company.id,'journal_id':journal_record.id,
                 'move_type':kind,'partner_id':partner.id,'invoice_date':date,'date':date,
                 'ref':ref,'invoice_line_ids':[(0,0,{'name':label,'quantity':1,

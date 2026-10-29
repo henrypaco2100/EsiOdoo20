@@ -1,4 +1,4 @@
-# Precios de venta y tarifas — 20.0.6.0.0
+# Precios de venta y tarifas — 20.0.7.0.0
 
 Fuente: PRECIOS PRODUCTO TERMINADO.xlsx, Hoja1, columnas C (modelo), D (minorista), E (mayorista). Se conservan las 77 filas y su número de origen en data/sale_prices.json. Importes en BOB por par.
 
