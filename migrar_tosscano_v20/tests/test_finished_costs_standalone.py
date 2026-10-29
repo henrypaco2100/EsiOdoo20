@@ -45,7 +45,7 @@ class FinishedCostsTests(unittest.TestCase):
             if row['product'].startswith('pt:'):
                 sums[row['branch']] += row['qty']
                 self.assertGreater(row['cost'], 0)
-        self.assertEqual(sums, {'FABRICA CALZADO':3840, 'CBBA':2141, 'SCZ':421})
+        self.assertEqual(sums, {'FABRICA CALZADO':4156, 'CBBA':1874, 'SCZ':419})
 
     def test_no_alias_in_stock_targets(self):
         for row in D['stock']:

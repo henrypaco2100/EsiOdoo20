@@ -8,8 +8,8 @@ class Migration(models.Model):
     _name = 'tosscano.migration'
     _description = 'Preparación de migración Tosscano'
 
-    name = fields.Char(default='Migración Tosscano — 23/10/2026', required=True)
-    cutoff = fields.Date(default='2026-10-23', readonly=True)
+    name = fields.Char(default='Migración Tosscano — 28/10/2026', required=True)
+    cutoff = fields.Date(default='2026-10-28', readonly=True)
     root_id = fields.Many2one('res.company', string='Matriz TOSSCANO GRUP', required=True)
     factory_id = fields.Many2one('res.company', string='FABRICA CALZADO', required=True)
     cbba_id = fields.Many2one('res.company', string='CBBA', required=True)
@@ -129,7 +129,7 @@ class MigrationLine(models.Model):
         migration = self.migration_id
         migration._check_scope()
         # All runs serialize globally, including separate migration records.
-        self.env.cr.execute("SELECT pg_advisory_xact_lock(20261023, 27102026)")
+        self.env.cr.execute("SELECT pg_advisory_xact_lock(20261028, 27102026)")
         self.invalidate_recordset(['state', 'product_id'])
         pending = self.filtered(lambda line: line.state != 'done')
         for line in pending:

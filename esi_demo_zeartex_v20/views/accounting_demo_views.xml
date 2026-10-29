@@ -6,6 +6,9 @@
     <field name="inherit_id" ref="view_esi_zeartex_demo_form"/>
     <field name="arch" type="xml">
       <xpath expr="//header" position="inside">
+        <button name="action_prepare_demo_accounts" type="object"
+          string="Preparar cuentas contables Zeartex"
+          confirm="Se reutilizarán las cuentas existentes y, si falta, se creará una cuenta de costo comercial SOLO para la compañía seleccionada. No se publicarán asientos. ¿Continuar?"/>
         <button name="action_post_accounting_demo" type="object"
           string="7. Publicar escenario CONTABLE de prueba"
           confirm="ATENCIÓN: publicará 7 documentos ficticios en la contabilidad real de la compañía elegida. SOLO para una BASE DE PRUEBAS AISLADA. No genera ni valora stock. ¿Confirma?"/>

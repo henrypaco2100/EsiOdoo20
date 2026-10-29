@@ -1,0 +1,12 @@
+Familia Agrocons - Contabilidad de demostración (Odoo 20)
+
+1. Usar una COPIA AISLADA de la base, nunca una compañía con operaciones reales.
+2. Actualizar el módulo en Aplicaciones.
+3. Abrir Gestión Agrícola ESI > Configuración > Cargar DEMO Agrocons.
+4. Elegir la compañía de pruebas y marcar ambas autorizaciones.
+5. Pulsar Preparar cuentas y PUBLICAR DEMO. Esto crea cuentas DEMO exclusivas y documentos contables publicados.
+6. Revisar Facturación > Contabilidad > Asientos contables y los reportes con período octubre de 2026.
+
+Esta acción NO crea existencias, movimientos de cosecha ni valoración de inventario.
+Los asientos ficticios son independientes de AVCO y sirven solo para ilustración financiera.
+No crea movimientos automáticamente al instalarse; deben autorizarse desde el asistente.

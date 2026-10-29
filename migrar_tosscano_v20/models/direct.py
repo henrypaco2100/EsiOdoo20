@@ -16,6 +16,7 @@ class DirectMigration(models.Model):
     import_log = fields.Text(string='Resultado de importación', readonly=True, copy=False)
     valuation_pending_log = fields.Text(string='Historial de saldos cargados sin costo', readonly=True, copy=False)
     product_count = fields.Integer(string='Productos/variantes vinculados', readonly=True, copy=False)
+    recipe_log = fields.Text(string='Resultado de creación de recetas en Fábrica', readonly=True, copy=False)
 
     def _source(self):
         with file_open('migrar_tosscano_v20/data/direct.json', 'r') as stream:
@@ -23,12 +24,14 @@ class DirectMigration(models.Model):
 
     def _lock(self):
         self._check_scope()
+        if str(self.cutoff) != '2026-10-28':
+            raise UserError(_('Este paquete corresponde al corte 28/10/2026 y está preparado para una base nueva. No reutilice el registro del corte anterior.'))
         required = {'esi_material_type', 'esi_measure', 'esi_component_ok', 'esi_manufacture_ok'}
         if required - set(self.env['product.template']._fields):
             raise UserError(_('Actualice primero esi_calzados_v20 a la versión 20.0.11.2.0 o posterior.'))
         if any(c.currency_id.name != 'BOB' for c in (self.root_id | self.factory_id | self.cbba_id | self.scz_id)):
             raise UserError(_('Los costos de origen están en bolivianos. Las compañías seleccionadas deben usar BOB.'))
-        self.env.cr.execute('SELECT pg_advisory_xact_lock(20261023, 27102026)')
+        self.env.cr.execute('SELECT pg_advisory_xact_lock(20261028, 27102026)')
         self.invalidate_recordset()
 
     def _xmlname(self, key):
@@ -303,7 +306,7 @@ class DirectMigration(models.Model):
         self._accounts(data['accounts'], notes)
         self._configure_category_accounting()
         notes.extend(self._apply_finished_costs(data))
-        self._recipes(data, notes)
+        notes.append('Recetas: use el botón 3. Crear recetas (Fábrica) después de importar los datos.')
         self.write({'data_imported': True, 'loaded': True,
                     'product_count': len(data['materials']) + sum(len(r['sizes']) for r in data['finished']),
                     'import_log': '\n'.join(['DATOS IMPORTADOS', 'Categorías: familia → subfamilia.',
@@ -319,13 +322,26 @@ class DirectMigration(models.Model):
         # and has the same inventory unit. Never silently truncate a recipe.
         by_code = defaultdict(list)
         for row in data['materials']:
-            by_code[row['code']].append(self._ref(row['key']))
+            product = self._ref(row['key'])
+            if product:
+                by_code[row['code']].append(product)
+        created = existing = pending = 0
         for recipe in data['recipes']:
+            targets = [row for row in data['finished'] if row['code'].startswith(recipe['code']+'-')]
+            if not targets:
+                notes.append('LdM '+recipe['code']+' pendiente: no hay producto terminado de ese modelo en los inventarios recibidos.')
+                pending += 1
+                continue
             components = [r for r in data['components'] if r['recipe'] == recipe['code'] and r['qty_per_pair'] > 0]
             lines=[]
             errors=[]
+            if not components:
+                errors.append('sin componentes con cantidad positiva')
             for r in components:
                 products=list({p.id:p for p in by_code.get(r['code'], [])}.values())
+                if not products and r['code']:
+                    products = list(self.env['product.product'].search([
+                        ('default_code','=',r['code']),('company_id','=',self.factory_id.id),('esi_component_ok','=',True)],limit=2))
                 if len(products)!=1:
                     errors.append(str(r['code'] or r['name'])+' sin correspondencia única')
                     continue
@@ -340,21 +356,47 @@ class DirectMigration(models.Model):
                 lines.append((0,0,{'product_id':product.id,'product_qty':r['qty_per_pair'],'uom_id':uom.id}))
             if errors:
                 notes.append('LdM '+recipe['code']+' no creada: '+', '.join(sorted(set(errors))))
+                pending += 1
                 continue
-            for row in data['finished']:
+            for row in targets:
                 if self._finished_conflict(row):
                     continue
                 if not row['code'].startswith(recipe['code']+'-'):
                     continue
                 key='bom:'+row['key']
-                if self._ref(key):continue
+                if self._ref(key):
+                    existing += 1
+                    continue
                 template=self._ref(row['key'])
+                if not template:
+                    notes.append('Producto sin importar para receta '+recipe['code']+': '+row['code'])
+                    continue
+                matches = self.env['mrp.bom'].with_context(active_test=False).search([
+                    ('company_id','=',self.factory_id.id),('product_tmpl_id','=',template.id),('code','=',recipe['code'])],limit=1)
+                if matches:
+                    notes.append('Ya existe una LdM manual para '+row['code']+' en Fábrica; no se duplicó ni se modificó.')
+                    existing += 1
+                    continue
                 bom=self.env['mrp.bom'].with_company(self.factory_id).create({
                     'product_tmpl_id':template.id,'company_id':self.factory_id.id,'product_qty':1,
                     'uom_id':template.uom_id.id,'type':'normal','code':recipe['code'],
                     'esi_multi_variant':True,'esi_allowed_variant_ids':[(6,0,template.product_variant_ids.ids)],
                     'bom_line_ids':lines})
                 self._bind(key,bom)
+                created += 1
+        notes.insert(0, 'Fábrica: %s. %s LdM creadas, %s ya existentes, %s fichas pendientes.' % (self.factory_id.display_name,created,existing,pending))
+
+    def action_create_recipes(self):
+        self._lock()
+        if not self.data_imported:
+            raise UserError(_('Primero pulse 1. Importar datos.'))
+        if not self.env.user.has_group('mrp.group_mrp_manager'):
+            raise UserError(_('Se requieren permisos de administrador de Fabricación.'))
+        notes = []
+        self._recipes(self._source(),notes)
+        self.recipe_log = '\n'.join(notes)
+        self.import_log = (self.import_log or '')+'\n\nRECETAS EN FÁBRICA\n'+self.recipe_log
+        return True
 
     def action_import_stock(self):
         self._lock()
@@ -416,7 +458,7 @@ class DirectMigration(models.Model):
                     continue
             if qty:
                 quant=quants.create({'product_id':product.id,'location_id':warehouse.lot_stock_id.id,'inventory_quantity':qty})
-                result=quant.with_context(inventory_name='Apertura Tosscano — saldo al 23/10/2026').action_apply_inventory()
+                result=quant.with_context(inventory_name='Apertura Tosscano — saldo al 28/10/2026').action_apply_inventory()
                 if isinstance(result,dict):
                     raise UserError(_('Odoo requiere resolver un conflicto de inventario: %s',product.display_name))
             self._bind(mark,product)
@@ -428,7 +470,7 @@ class DirectMigration(models.Model):
         self.write({'stock_imported':not notes,'import_log':(self.import_log or '')+'\n\nSALDOS: %s posiciones aplicadas en esta ejecución.\n'%applied+'\n'.join(notes)+
                     '\nTerminados cargados en esta ejecución: '+', '.join('%s: %s pares' % (b, q) for b, q in sorted(applied_quantities.items()))+
                     ('\nHay saldos de terminados cargados sin costo. Consulte Saldos cargados sin costo de apertura.' if self.valuation_pending_log else '')+
-                    '\nFecha de movimientos: fecha de ejecución nativa. Corte de origen: 23/10/2026. No se reescriben fechas.'})
+                    '\nFecha de movimientos: fecha de ejecución nativa. Corte de origen: 28/10/2026. No se reescriben fechas.'})
         return True
 
     def _apply_finished_costs(self, data):

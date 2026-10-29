@@ -103,55 +103,78 @@ class AgroAccountingDemoWizard(models.TransientModel):
         previous = Move.search([('company_id', '=', company.id), ('ref', 'like', tag + '%')], limit=1)
         if previous:
             return self._action_open_posted_demo(company)
-        # Evitar mezclar contabilidad ficticia con datos ajenos en compañías activas.
-        # Confirmación expresa, preflight y ausencia de cambios sobre cuentas compartidas.
-        products = env['product.product'].sudo().search([('default_code', '=like', 'DEMO-AGC-%')])
-        if not products:
-            raise UserError(_('Primero ejecute Crear datos de DEMO y verifique AVCO.'))
-        for category in products.mapped('categ_id'):
-            key = 'cost_method' if 'cost_method' in category._fields else 'property_cost_method' if 'property_cost_method' in category._fields else None
-            if not key or getattr(category.with_company(company), key) != 'average':
-                raise UserError(_('AVCO pendiente en %s. No se publicaron asientos.') % category.display_name)
-        # account.account usa company_ids en Odoo 20; las cuentas se buscan en contexto empresa.
-        def account(types, keywords=()):
+        # Escenario contable INDEPENDIENTE de stock y valoración AVCO.
+        # Solo debe ejecutarse en base de pruebas, con autorización explícita.
+        # Provisión de cuentas aislada a compañía: no altera ni reasigna cuentas existentes.
+        def account(types, label, code):
             domain = [('account_type', 'in', types), ('active', '=', True)]
             if 'company_ids' in Account._fields:
                 domain.append(('company_ids', 'in', [company.id]))
             elif 'company_id' in Account._fields:
                 domain.append(('company_id', '=', company.id))
-            matches = Account.search(domain, limit=200)
-            for keyword in keywords:
-                found = matches.filtered(lambda a: keyword.lower() in a.name.lower())
-                if found:
-                    return found[0]
-            return matches[:1]
-        bank = account(['asset_cash'], ('banco', 'caja'))
-        capital = account(['equity'], ('capital social', 'capital'))
-        income = account(['income'], ('ventas', 'ingreso'))
-        direct = account(['expense_direct_cost', 'expense'], ('insumo', 'costo', 'material'))
-        operating = account(['expense', 'expense_other'], ('administraci', 'servicio', 'gasto'))
-        missing = [name for name, item in [('Banco/Caja',bank),('Patrimonio/Capital',capital),('Ingresos',income),('Costos o gastos',direct),('Gastos operativos',operating)] if not item]
-        if missing:
-            raise UserError(_('Faltan cuentas compatibles para: %s. Revise el plan de cuentas de la empresa.') % ', '.join(missing))
-        def journal(kind):
+            existing = Account.search(domain, limit=100)
+            # Prefiere una cuenta específica creada anteriormente para esta DEMO.
+            specific = existing.filtered(lambda a: a.name == label)
+            if specific:
+                return specific[0]
+            # Para no mezclar partidas ficticias con cuentas operativas,
+            # crea una cuenta exclusiva en lugar de tomar la primera que encuentre.
+            values = {'name': label, 'account_type': types[0], 'code': code,
+                      'reconcile': types[0] in ('asset_receivable', 'liability_payable')}
+            if 'company_ids' in Account._fields:
+                values['company_ids'] = [(6, 0, [company.id])]
+            elif 'company_id' in Account._fields:
+                values['company_id'] = company.id
+            # Evita colisiones de códigos en cualquier ámbito contable relevante.
+            for number in range(0, 90):
+                candidate = str(int(code) + number)
+                clash_domain = [('code', '=', candidate)]
+                if 'company_ids' in Account._fields:
+                    clash_domain.append(('company_ids', 'in', [company.id]))
+                elif 'company_id' in Account._fields:
+                    clash_domain.append(('company_id', '=', company.id))
+                if not Account.search(clash_domain, limit=1):
+                    values['code'] = candidate
+                    return Account.create(values)
+            raise UserError(_('No hay código contable libre para %s. No se publicó nada.') % label)
+
+        bank = account(['asset_cash'], 'DEMO Agrocons - Caja y bancos', '119910')
+        capital = account(['equity'], 'DEMO Agrocons - Capital', '319910')
+        income = account(['income'], 'DEMO Agrocons - Ventas de soya', '419910')
+        direct = account(['expense_direct_cost'], 'DEMO Agrocons - Costos de campaña', '519910')
+        operating = account(['expense'], 'DEMO Agrocons - Gastos operativos', '539910')
+        receivable = account(['asset_receivable'], 'DEMO Agrocons - Clientes por cobrar', '129910')
+        payable = account(['liability_payable'], 'DEMO Agrocons - Proveedores por pagar', '219910')
+
+        def journal(kind, label, code):
             j = Journal.search([('company_id', '=', company.id), ('type', '=', kind)], limit=1)
-            if not j:
-                raise UserError(_('No existe diario de tipo %s para la compañía seleccionada.') % kind)
-            return j
-        general, sales, purchases = journal('general'), journal('sale'), journal('purchase')
-        customer = Partner.search([('name', '=', 'DEMO - Industria Aceitera del Oriente')], limit=1)
-        supplier = Partner.search([('name', '=', 'DEMO - Agroinsumos Oriente SRL')], limit=1)
-        contractor = Partner.search([('name', '=', 'DEMO - Servicio Agrícola del Norte')], limit=1)
-        if not customer or not supplier or not contractor:
-            raise UserError(_('Faltan clientes/proveedores ficticios. Ejecute primero Crear datos de DEMO.'))
-        # Validación previa de cuentas de tercero; Odoo generará CxC y CxP por factura.
-        for partner, expected_type in [(customer,'asset_receivable'),(supplier,'liability_payable'),(contractor,'liability_payable')]:
-            field = 'property_account_receivable_id' if expected_type == 'asset_receivable' else 'property_account_payable_id'
-            acc = getattr(partner.with_company(company), field, False)
-            if not acc or acc.account_type != expected_type:
-                raise UserError(_('Configure la cuenta de tercero para %s antes de continuar.') % partner.name)
-        # Todos los importes son ficticios en la moneda principal de la compañía.
-        # Fechas de octubre 2026 para que los reportes filtrados a ese mes tengan datos.
+            if j:
+                return j
+            for index in range(0, 30):
+                candidate = code if index == 0 else (code[:3] + str(index))[:5]
+                if not Journal.search([('company_id', '=', company.id), ('code', '=', candidate)], limit=1):
+                    return Journal.create({'name': label, 'code': candidate,
+                                           'type': kind, 'company_id': company.id})
+            raise UserError(_('No se pudo preparar el diario %s.') % label)
+        general = journal('general', 'DEMO Agrocons Misceláneo', 'AGCM')
+        sales = journal('sale', 'DEMO Agrocons Ventas', 'AGCV')
+        purchases = journal('purchase', 'DEMO Agrocons Compras', 'AGCP')
+
+        def demo_partner(name, is_customer):
+            record = Partner.search([('name', '=', name)], limit=1)
+            if not record:
+                record = Partner.create({'name': name, 'comment': 'DEMO ficticia Familia Agrocons - ESI'})
+            record = record.with_company(company)
+            acc_field = 'property_account_receivable_id' if is_customer else 'property_account_payable_id'
+            expected = receivable if is_customer else payable
+            current = getattr(record, acc_field)
+            if not current or current.account_type != expected.account_type:
+                # Solo afecta contactos con nombre DEMO, nunca terceros reales.
+                record.write({acc_field: expected.id})
+            return record
+        customer = demo_partner('DEMO - Industria Aceitera del Oriente', True)
+        supplier = demo_partner('DEMO - Agroinsumos Oriente SRL', False)
+        contractor = demo_partner('DEMO - Servicio Agrícola del Norte', False)
         def entry(ref, date, lines):
             debits = round(sum(v[1] for v in lines), 2)
             credits = round(sum(v[2] for v in lines), 2)
@@ -181,6 +204,10 @@ class AgroAccountingDemoWizard(models.TransientModel):
         invoice(tag+'-05-VENTA','2026-10-20','out_invoice',customer,sales,income,185000,
             'Ingreso demostrativo por comercialización de soya (sin salida de stock)')
         return self._action_open_posted_demo(company)
+
+    def action_prepare_and_post_demo(self):
+        """Publica el escenario tras preparar cuentas aisladas; conserva las confirmaciones."""
+        return self.action_create_posted_finance_demo()
 
     def _action_open_posted_demo(self, company):
         """Muestra lo publicado para la compañía seleccionada (no toda la contabilidad)."""

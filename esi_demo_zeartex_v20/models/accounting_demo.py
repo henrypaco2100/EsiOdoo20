@@ -17,6 +17,54 @@ class EsiZeartexAccountingDemo(models.Model):
         string='Autorizo publicar asientos y facturas ficticias en una base exclusivamente de pruebas',
         default=False, copy=False)
 
+    def _prepare_demo_cost_account(self, company):
+        """Reuse existing cost-of-sales account, or create ONE dedicated account.
+
+        Do not change shared accounts, journal defaults or prior entries.
+        Must be called only for an explicitly selected, authorized company.
+        """
+        Account = self.env['account.account'].sudo().with_company(company)
+        company_domain = [('company_ids', 'in', [company.id])] if 'company_ids' in Account._fields else [('company_id', '=', company.id)]
+        existing = Account.search(company_domain + [('account_type', '=', 'expense_direct_cost'), ('active', '=', True)], limit=1)
+        if existing:
+            return existing
+        # A new account is created ONLY if no cost-of-sales account exists for this company.
+        # Search globally (including inactive accounts) to avoid colliding with codes of other companies.
+        code = None
+        for number in range(519901, 520000):
+            candidate = str(number)
+            if not Account.with_context(active_test=False).search([('code', '=', candidate)], limit=1):
+                code = candidate
+                break
+        if not code:
+            raise UserError(_('No hay códigos libres entre 519901 y 519999 para crear la cuenta de costo comercial de Zeartex.'))
+        vals = {
+            'code': code,
+            'name': 'Costo mercadería vendida - Zeartex DEMO',
+            'account_type': 'expense_direct_cost',
+            'reconcile': False,
+        }
+        if 'company_ids' in Account._fields:
+            vals['company_ids'] = [(6, 0, [company.id])]
+        else:
+            vals['company_id'] = company.id
+        return Account.create(vals)
+
+    def action_prepare_demo_accounts(self):
+        """Explicitly prepare accounting prerequisites; never post a transaction."""
+        self.ensure_one()
+        company = self._company()
+        if company not in self.env.companies:
+            raise UserError(_('Active primero la compañía seleccionada.'))
+        if not self.confirm_posted_accounting:
+            raise UserError(_('Marque la autorización de DEMO en base de pruebas para preparar cuentas.'))
+        account = self._prepare_demo_cost_account(company)
+        return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': {
+            'title': _('Cuentas Zeartex listas'),
+            'message': _('Cuenta de costo comercial disponible: %s - %s. No se publicó ningún asiento.') % (account.code, account.name),
+            'type': 'success', 'sticky': True,
+        }}
+
     def action_post_accounting_demo(self):
         self.ensure_one()
         company = self._company()
@@ -61,10 +109,9 @@ class EsiZeartexAccountingDemo(models.Model):
         equity = account_by_type(('equity',), ('310100',), ('Capital',))
         sales = account_by_type(('income',), ('410100',), ('Ventas',))
         expense = account_by_type(('expense', 'expense_other'), ('530080',), ('Administración', 'Gastos'))
-        direct = account_by_type(('expense_direct_cost',), (), ('Costo de ventas', 'Mercaderías vendidas'))
-        # No sustituimos costo de ventas por una cuenta arbitraria de inventarios.
-        if not direct:
-            direct = account_by_type(('expense',), (), ('Costo de ventas', 'Costos de mercadería', 'Compras de mercadería'))
+        # Always use the correct account type for COGS; never substitute a generic expense.
+        # The explicit posting authorization above also permits creating the missing DEMO account.
+        direct = self._prepare_demo_cost_account(company)
         missing = [label for label, rec in [('Caja/Banco', bank), ('Capital', equity),
                     ('Ventas', sales), ('Gastos operativos', expense), ('Costo comercial', direct)] if not rec]
         if missing:

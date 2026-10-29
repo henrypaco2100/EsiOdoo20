@@ -1,85 +1,14 @@
-# Costos confirmados de apertura — 28/10/2026
+# Costos de apertura — corte 28/10/2026
 
-Costos por par en BOB. No son precios de venta. Los saldos de origen corresponden al corte del 23/10/2026.
-
-| Sucursal | Pares | Valor de origen Bs |
+| Sucursal | Pares | Valor fuente BOB |
 |---|---:|---:|
-| FABRICA CALZADO | 3840 | 594683.18 |
-| CBBA | 2141 | 315851.91 |
-| SCZ | 421 | 61700.55 |
-| TOTAL | 6402 | 972235.64 |
+| Fábrica | 4.156 | 645.791,33 |
+| CBBA | 1.874 | 275.267,91 |
+| SCZ | 419 | 61.338,29 |
+| Total | 6.449 | 982.397,53 |
 
-Estos son valores de las cantidades fuente, no una conciliación ni asientos ya registrados en su base. Si hubo movimientos posteriores, el ajuste nativo valora la cantidad actual.
+Materia prima: valor fuente normalizado Bs 341.745,4436666667, después de excluir la repetición idéntica de HILO CAFÉ #20 (Bs 1.863). La fila de PEKA DELGADA −18 m tiene valor cero y queda pendiente. Las unidades de materias primas son heterogéneas; no se suman sus cantidades como si fueran una sola unidad.
 
-Los 30 costos antes pendientes están completos. Los otros 34 códigos proceden del inventario Fábrica con PU; las dos versiones Planta Piloto conservan productos separados y el costo 152 indicado en origen.
+Todos los terminados con saldo positivo tienen costo. Se conservan los PU confirmados de las tiendas cuando sus archivos nuevos no aportan una columna de costo. Las diferencias de redondeo de la valoración nativa deben conciliarse después de importar. Estos son valores de origen, no asientos contables ya registrados.
 
-Códigos oficiales: M-W-01-10 y M-BT-01-10. Solo estas dos equivalencias fueron autorizadas; no se eliminan ceros de otros códigos.
-
-| Código oficial | Producto | Costo por par Bs |
-|---|---|---:|
-| C-CLK-01-01 | CLARK CON HUATO NEGRO | 100.00 |
-| C-PLY-01-08 | PLAYERA CON HUATO PLOMO | 90.00 |
-| C-PLY-01-11 | PLAYERA CON HUATO AZUL | 90.00 |
-| C-PLY-01-12 | PLAYERA CON HUATO AMARILLO | 90.00 |
-| E-V-06-07 | ZAPATO DE VESTIR COSTURA EXTERNA ELEGANTE GUINDO | 100.00 |
-| E-V-12-01 | ZAPATO DE VESTIR SUELA COSIDA ELEGANTE NEGRO | 100.00 |
-| EL-V-01-01 | ZAPATO DE VESTIR ELEGANTE MODELO 01 NEGRO | 100.00 |
-| EL-V-01-06 | ZAPATO DE VESTIR ELEGANTE MODELO 01 CAFE | 100.00 |
-| EL-V-01-11 | ZAPATO DE VESTIR ELEGANTE MODELO 01 AZUL | 100.00 |
-| EL-V-02-06 | ZAPATO DE VESTIR PIEL LISA ELEGANTE CAFÉ | 100.00 |
-| ES-M-03-01 | ZAPATO ESCOLAR MUJER MODELO REFORZADO NEGRO | 70.00 |
-| ES-M-04-01 | ZAPATO ESCOLAR MUJER MODELO ELEGANTE NEGRO | 90.00 |
-| ES-V-01-01 | ZAPATO ESCOLAR VARÓN MODELO BÁSICO NEGRO | 70.00 |
-| ES-V-02-01 | ZAPATO ESCOLAR VARÓN MODELO REFORZADO NEGRO | 70.00 |
-| ES-V-03-01 | ZAPATO ESCOLAR VARÓN MODELO RESISTENTE NEGRO | 70.00 |
-| ES-V-03-01-01 | ZAPATO ESCOLAR VARÓN MODELO RESISTENTE NEGRO | 90.00 |
-| ES-V-04-01 | ZAPATO ESCOLAR VARÓN MODELO DIARIO NEGRO | 70.00 |
-| ES-V-04-01-01 | ZAPATO ESCOLAR VARÓN MODELO DIARIO NEGRO | 90.00 |
-| I-B-01-06 | BOMBERO NORMAL CAFÉ | 234.41 |
-| I-CH-01-06-0A | CHOCOLATERA CAFÉ PUNTA DE ACERO | 235.00 |
-| I-CL-01-01 | MODELO ARAÑA NEGRO PUNTA DE ACERO | 165.00 |
-| I-CL-01-06-0A | MODELO ARAÑA CAFÉ PUNTA DE ACERO | 165.00 |
-| I-CL-01-06-0D | MODELO ARAÑA CAFÉ PUNTA DIELECTRICA | 165.00 |
-| I-CL-02-06-0A | MODELO NORMAL CAFÉ PUNTA DE ACERO | 165.00 |
-| I-CL-03-06-0A | MODELO DE MUJER CAFÉ PUNTA DE ACERO | 165.00 |
-| I-CL-06-06-0A | MODELO CLASICO  NORMAL CAFÉ PUNTA DE ACERO | 165.00 |
-| I-CL-08-06-0A | MODELO CHAVO CAFÉ PUNTA DE ACERO | 165.00 |
-| I-CT-01-07 | MODELO CAT CON PUNTERA DE GOMA WISKY | 266.40 |
-| M-BT-01-09 | BOTIN CON LIGA ANTIGUO CHAROL NEGRO | 160.26 |
-| M-BT-01-10 | BOTIN CON LIGA ANTIGUO LUSTRABLE NEGRO | 160.26 |
-| M-BT-02-09 | BOTIN CON LIGA NUEVO CHAROL NEGRO | 160.26 |
-| M-BT-04-01 | CABALLERIA NEGRO | 420.00 |
-| M-L-01-01-00 | LONA NORMAL NEGRO SIN FORRO | 152.00 |
-| M-L-01-02-00 | LONA NORMAL VERDOSO SIN FORRO | 152.00 |
-| M-L-01-02-00-PILOTO | LONA NORMAL VERDOSO SIN FORRO PLANTA PILOTO | 152.00 |
-| M-L-01-02-01 | LONA NORMAL VERDOSO CON FORRO | 152.00 |
-| M-L-01-03-00 | LONA NORMAL COYOTE  SIN FORRO | 152.00 |
-| M-L-01-03-00-PILOTO | LONA NORMAL COYOTE  SIN FORRO PLANTA PILOTO | 152.00 |
-| M-L-01-03-01 | LONA NORMAL COYOTE  CON FORRO | 152.00 |
-| M-L-01-04-00 | LONA NORMAL BEIGE SIN FORRO | 152.00 |
-| M-L-01-05-00 | LONA NORMAL COYOTE CLARO SIN FORRO | 152.00 |
-| M-L-02-01-00 | LONA CAÑA CORTA S/CIERRE NEGRO SIN FORRO | 152.00 |
-| M-L-02-02-00 | LONA CAÑA CORTA S/CIERRE VERDOSO SIN FORRO | 152.00 |
-| M-L-03-03 | LONA CAÑA CORTA C/CIERRE COYOTE | 153.52 |
-| M-P-01-01 | PILOTO NORMAL NEGRO | 195.63 |
-| M-P-01-02 | PILOTO NORMAL VERDOSO | 195.63 |
-| M-P-01-03 | PILOTO NORMAL COYOTE | 195.63 |
-| M-P-01-08 | PILOTO NORMAL PLOMO | 195.63 |
-| M-PC-01-01 | PURO CUERO NEGRO | 181.13 |
-| M-PC-01-03 | PURO CUERO COYOTE | 181.13 |
-| M-RG-01-01 | RANGER NEGRO | 193.52 |
-| M-RG-01-03 | RANGER COYOTE | 193.52 |
-| M-RG-01-04 | RANGER BEIGE | 194.00 |
-| M-RG-01-08 | RANGER PLOMO | 194.00 |
-| M-TAR-01-02 | ARMADA SIN CIERRE VERDOSO | 194.00 |
-| M-TAR-01-03 | ARMADA SIN CIERRE COYOTE | 194.00 |
-| M-TAR-01-04 | ARMADA SIN CIERRE BEIGE | 194.00 |
-| M-TAR-02-04 | ARMADA CON CIERRE BEIGE | 194.00 |
-| M-TCS-01-01 | SPORT NEGRO | 194.00 |
-| M-TDP-01-02 | DEPORTIVO VERDE | 194.00 |
-| M-TDP-01-03 | DEPORTIVO COYOTE | 193.52 |
-| M-TDP-01-04 | DEPORTIVO BEIGE | 194.00 |
-| M-TDP-01-08 | DEPORTIVO PLOMO | 193.52 |
-| M-W-01-09 | WALCOBER CHAROL NEGRO | 148.33 |
-| M-W-01-10 | WALCOBER LUSTRABLE NEGRO | 148.33 |
-| TK-CL-03A-012 | CLASICO CUELLO 45° AMARILLO | 291.40 |
+La fecha contable/operativa efectiva será la de ejecución nativa, no una fecha reescrita al corte.
