@@ -1,15 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
- <record id="action_agro_balance_estructurado" model="ir.actions.act_window">
-  <field name="name">Balance General - Agrícola</field>
+ <record id="action_agro_fin_balance" model="ir.actions.act_window">
+  <field name="name">Balance General - Agrocons</field>
   <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
-  <field name="context">{'default_kind':'balance', 'default_posted_only':True, 'default_esi_structured':True}</field>
+  <field name="context">{'default_kind':'balance','default_posted_only':True,'default_esi_structured':True}</field>
  </record>
- <record id="action_agro_resultados_estructurado" model="ir.actions.act_window">
-  <field name="name">Estado de Resultados - Agrícola</field>
+ <menuitem id="menu_agro_fin_balance" name="Balance General" parent="menu_esi_agro_reports" action="action_agro_fin_balance" sequence="50" groups="account.group_account_user"/>
+ <record id="action_agro_fin_profit" model="ir.actions.act_window">
+  <field name="name">Estado de Resultados - Agrocons</field>
   <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
-  <field name="context">{'default_kind':'profit', 'default_posted_only':True, 'default_esi_structured':True}</field>
+  <field name="context">{'default_kind':'profit','default_posted_only':True,'default_esi_structured':True}</field>
  </record>
- <menuitem id="menu_agro_balance_estructurado" name="Balance General - Agrícola" parent="menu_esi_agro_reports" action="action_agro_balance_estructurado" sequence="50" groups="account.group_account_user"/>
- <menuitem id="menu_agro_resultados_estructurado" name="Estado de Resultados - Agrícola" parent="menu_esi_agro_reports" action="action_agro_resultados_estructurado" sequence="51" groups="account.group_account_user"/>
+ <menuitem id="menu_agro_fin_profit" name="Estado de Resultados" parent="menu_esi_agro_reports" action="action_agro_fin_profit" sequence="51" groups="account.group_account_user"/>
+ <record id="action_agro_fin_trial" model="ir.actions.act_window">
+  <field name="name">Sumas y Saldos - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'trial','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_trial" name="Sumas y Saldos" parent="menu_esi_agro_reports" action="action_agro_fin_trial" sequence="52" groups="account.group_account_user"/>
+ <record id="action_agro_fin_ledger" model="ir.actions.act_window">
+  <field name="name">Libro Mayor - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'ledger','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_ledger" name="Libro Mayor" parent="menu_esi_agro_reports" action="action_agro_fin_ledger" sequence="53" groups="account.group_account_user"/>
+ <record id="action_agro_fin_cash" model="ir.actions.act_window">
+  <field name="name">Caja y Bancos - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'cash','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_cash" name="Caja y Bancos" parent="menu_esi_agro_reports" action="action_agro_fin_cash" sequence="54" groups="account.group_account_user"/>
+ <record id="action_agro_fin_statement" model="ir.actions.act_window">
+  <field name="name">Estado de Cuenta - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'statement','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_statement" name="Estado de Cuenta" parent="menu_esi_agro_reports" action="action_agro_fin_statement" sequence="55" groups="account.group_account_user"/>
+ <record id="action_agro_fin_receivable" model="ir.actions.act_window">
+  <field name="name">Cuentas por Cobrar Vencidas - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'receivable','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_receivable" name="Cuentas por Cobrar Vencidas" parent="menu_esi_agro_reports" action="action_agro_fin_receivable" sequence="56" groups="account.group_account_user"/>
+ <record id="action_agro_fin_payable" model="ir.actions.act_window">
+  <field name="name">Cuentas por Pagar Vencidas - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'payable','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_payable" name="Cuentas por Pagar Vencidas" parent="menu_esi_agro_reports" action="action_agro_fin_payable" sequence="57" groups="account.group_account_user"/>
+ <record id="action_agro_fin_analytic" model="ir.actions.act_window">
+  <field name="name">Reporte Analítico - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'analytic','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_analytic" name="Reporte Analítico" parent="menu_esi_agro_reports" action="action_agro_fin_analytic" sequence="58" groups="account.group_account_user"/>
+ <record id="action_agro_fin_executive" model="ir.actions.act_window">
+  <field name="name">Resumen Ejecutivo - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'executive','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_executive" name="Resumen Ejecutivo" parent="menu_esi_agro_reports" action="action_agro_fin_executive" sequence="59" groups="account.group_account_user"/>
+ <record id="action_agro_fin_tax" model="ir.actions.act_window">
+  <field name="name">Resumen de Impuestos - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'tax','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_tax" name="Resumen de Impuestos" parent="menu_esi_agro_reports" action="action_agro_fin_tax" sequence="60" groups="account.group_account_user"/>
+ <record id="action_agro_fin_cashflow" model="ir.actions.act_window">
+  <field name="name">Flujo de Efectivo - Agrocons</field>
+  <field name="res_model">esi.finance.report</field><field name="view_mode">form</field>
+  <field name="context">{'default_kind':'cashflow','default_posted_only':True,'default_esi_structured':True}</field>
+ </record>
+ <menuitem id="menu_agro_fin_cashflow" name="Flujo de Efectivo" parent="menu_esi_agro_reports" action="action_agro_fin_cashflow" sequence="61" groups="account.group_account_user"/>
 </odoo>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Presentación agrupada de informes ESI sin alterar asientos publicados.
-Solo se activa al seleccionar la opción de presentación estructurada del informe.
+"""Reportes de Familia Agrocons. No modifica el código de esi_finanzas_v20.
+Los movimientos y saldos se leen de account.move.line; nunca se altera un asiento.
 """
 from collections import defaultdict
 from html import escape
@@ -8,148 +8,157 @@ from odoo import fields, models, _
 from odoo.exceptions import UserError
 
 
-class ZeartexStructuredFinancialReport(models.TransientModel):
+class AgroconsFinancialPresentation(models.TransientModel):
     _inherit = 'esi.finance.report'
 
     esi_structured = fields.Boolean(
-        string='Presentación estructurada (Activo, Pasivo, Patrimonio y Resultados)',
-        default=False,
-        help='Agrupa cuentas y subtotales a partir de apuntes contables; no crea ni modifica asientos.')
-
-    def _html(self, title, headers, rows):
-        if not self.esi_structured or self.kind not in ('balance', 'profit'):
-            return super()._html(title, headers, rows)
-        esc = lambda x: escape(str(x if x is not None else ''))
-        header = ''.join('<th style="background:#072955;color:white;padding:8px;text-align:left">%s</th>' % esc(h) for h in headers)
-        body = []
-        for code, name, typ, value in rows:
-            is_section = typ == 'Sección'
-            is_total = typ == 'Subtotal / Total'
-            bg = '#e7edf2' if is_section else '#f2f5f7' if is_total else '#ffffff'
-            weight = 'bold' if is_section or is_total else 'normal'
-            amount = '' if is_section else ('{:,.2f}'.format(float(value)))
-            cells = (code, name, '' if is_section else typ, amount)
-            body.append('<tr style="background:%s;font-weight:%s">%s</tr>' % (
-                bg, weight, ''.join('<td style="padding:6px;border-bottom:1px solid #ddd">%s</td>' % esc(c) for c in cells)))
-        return '<h3>%s</h3><table style="width:100%%;border-collapse:collapse"><thead><tr>%s</tr></thead><tbody>%s</tbody></table>' % (esc(title), header, ''.join(body))
+        string='Presentación contable detallada - Familia Agrocons', default=False,
+        help='Muestra informes por cuenta y grupos, sin crear ni alterar movimientos.')
 
     def _report_data(self):
         self.ensure_one()
-        if not self.esi_structured or self.kind not in ('balance', 'profit'):
+        if not self.esi_structured:
+            return super()._report_data()
+        # Otros informes (caja, flujo, vencimientos, analítico, impuestos y resumen)
+        # utilizan la lógica original de ESI, sin cambios ni duplicación de cifras.
+        if self.kind not in ('balance', 'profit', 'trial', 'ledger'):
             return super()._report_data()
         if self.company_id not in self.env.companies or self.date_from > self.date_to:
-            raise UserError(_('Revise compañía y rango de fechas.'))
-        if self.analytic_id or self.partner_id or self.account_ids or self.store_id:
-            raise UserError(_('Para el estado financiero completo, deje vacíos los filtros de cuenta, contacto, analítica y sucursal.'))
+            raise UserError(_('Revise la compañía y las fechas del informe.'))
         companies = self.company_id._accessible_branches() if self.include_branches else self.company_id
-        domain = [
-            ('company_id', 'in', companies.ids),
-            ('date', '<=', self.date_to),
-            ('display_type', 'not in', ['line_section', 'line_note']),
-            ('parent_state', '=', 'posted' if self.posted_only else 'draft'),
-        ]
-        if not self.posted_only:
-            domain[-1] = ('parent_state', '!=', 'cancel')
-        entries = self.env['account.move.line'].with_company(self.company_id).search(domain, order='account_id, date, id', limit=100001)
-        if len(entries) > 100000:
-            raise UserError(_('El informe supera los 100.000 apuntes. Reduzca el período o consulte los informes estándar.'))
-        balances = defaultdict(float)
-        results_period = defaultdict(float)
-        names = {}
-        for line in entries:
-            account = line.account_id
-            names[account.id] = account
-            balances[account.id] += line.balance
-            if self.date_from <= line.date <= self.date_to:
-                results_period[account.id] += line.balance
-
+        domain = [('company_id', 'in', companies.ids), ('date', '<=', self.date_to),
+                  ('display_type', 'not in', ['line_section', 'line_note'])]
+        domain.append(('parent_state', '=', 'posted') if self.posted_only else ('parent_state', '!=', 'cancel'))
+        if self.account_ids:
+            domain.append(('account_id', 'in', self.account_ids.ids))
+        if self.partner_id:
+            domain.append(('partner_id', '=', self.partner_id.id))
+        if self.store_id and not self.include_branches:
+            if 'esi_store_id' in self.env['account.move.line']._fields:
+                domain.append(('esi_store_id', '=', self.store_id.id))
+        lines = self.env['account.move.line'].with_company(self.company_id).search(domain, order='date,id', limit=100001)
+        if len(lines) > 100000:
+            raise UserError(_('Demasiados apuntes. Reduzca las fechas o las cuentas.'))
+        company_currency = self.company_id.currency_id
+        accounts = {}
+        opening, debits, credits = defaultdict(float), defaultdict(float), defaultdict(float)
+        grouped = defaultdict(list)
+        for line in lines:
+            aid = line.account_id.id
+            accounts[aid] = line.account_id
+            if line.date < self.date_from:
+                opening[aid] += line.balance
+            else:
+                debits[aid] += line.debit
+                credits[aid] += line.credit
+                grouped[aid].append(line)
+        balance = {i: opening[i] + debits[i] - credits[i] for i in accounts}
+        sorted_ids = sorted(accounts, key=lambda i: accounts[i].code or '')
         title = '%s · %s · %s · %s' % (
-            'Balance general' if self.kind == 'balance' else 'Estado de resultados',
+            dict(self._fields['kind'].selection).get(self.kind, self.kind),
             self.company_id.display_name,
-            'al %s' % self.date_to if self.kind == 'balance' else '%s a %s' % (self.date_from, self.date_to),
-            self.company_id.currency_id.name)
-        # La advertencia se muestra una sola vez, NO en cada movimiento o producto.
-
-        headers = ['Código', 'Cuenta / agrupación', 'Clasificación', 'Importe']
+            ('Al %s' % self.date_to) if self.kind == 'balance' else ('%s a %s' % (self.date_from, self.date_to)),
+            company_currency.name)
+        rnd = company_currency.round
+        if self.kind == 'trial':
+            rows = [[accounts[i].code or '', accounts[i].name, rnd(opening[i]),
+                     rnd(debits[i]), rnd(credits[i]), rnd(balance[i])] for i in sorted_ids]
+            rows.append(['', 'TOTAL', rnd(sum(opening.values())), rnd(sum(debits.values())),
+                         rnd(sum(credits.values())), rnd(sum(balance.values()))])
+            return title, ['Código', 'Cuenta', 'Saldo inicial', 'Débito', 'Crédito', 'Saldo final'], rows
+        if self.kind == 'ledger':
+            rows = []
+            for i in sorted_ids:
+                acc = accounts[i]
+                running = opening[i]
+                rows.append([acc.code or '', acc.name, '', '', 'Saldo inicial', '', 0.0, 0.0, rnd(running)])
+                for line in grouped[i]:
+                    running += line.balance
+                    rows.append([acc.code or '', acc.name, str(line.date),
+                                 line.journal_id.code or '', line.move_id.name or '',
+                                 line.partner_id.display_name or '', rnd(line.debit),
+                                 rnd(line.credit), rnd(running)])
+            return title, ['Código', 'Cuenta', 'Fecha', 'Diario', 'Asiento', 'Contacto', 'Débito', 'Crédito', 'Saldo'], rows
         rows = []
-        currency = self.company_id.currency_id
-
-        def section(name):
-            rows.append(['', name.upper(), 'Sección', 0.0])
-
-        def total(name, amount):
-            rows.append(['', name, 'Subtotal / Total', currency.round(amount)])
-
-        def account_name(account):
-            # Solo en la visualización: no cambia nombres ni asientos contables.
-            name = account.name
-            if account.code == '519901' and 'Zeartex' in name:
-                return 'Costo de mercaderías vendidas'
-            return name
-
-        def add_accounts(account_ids, source, sign=1):
+        headers = ['Código', 'Cuenta / título', 'Débito', 'Crédito', 'Monto']
+        def section(label):
+            rows.append(['', label.upper(), '', '', ''])
+        def add_accounts(filterfunc, sign=1.0, period=False):
             amount = 0.0
-            for aid in sorted(account_ids, key=lambda i: names[i].code or ''):
-                value = currency.round(sign * source[aid])
-                if currency.is_zero(value):
+            for i in sorted_ids:
+                acc = accounts[i]
+                if not filterfunc(acc.account_type):
                     continue
-                account = names[aid]
-                rows.append([account.code or '', account_name(account), account.account_type, value])
+                dr = debits[i] if period else opening[i] + debits[i]
+                cr = credits[i] if period else credits[i]
+                value = rnd(sign * (dr - cr))
+                if company_currency.is_zero(value):
+                    continue
+                rows.append([acc.code or '', acc.name, rnd(dr), rnd(cr), value])
                 amount += value
-            return currency.round(amount)
-
+            return rnd(amount)
+        def subtotal(label, value):
+            rows.append(['', label, '', '', rnd(value)])
         if self.kind == 'profit':
-            typ = lambda aid: names[aid].account_type
-            income = [i for i in names if typ(i) in ('income', 'income_other')]
-            cost = [i for i in names if typ(i) == 'expense_direct_cost']
-            operating = [i for i in names if typ(i) in ('expense', 'expense_depreciation', 'expense_other')]
-            section('Ingresos operativos y otros ingresos')
-            revenue = add_accounts(income, results_period, -1)
-            total('TOTAL INGRESOS', revenue)
+            section('Ingresos')
+            income = add_accounts(lambda t: t in ('income','income_other'), -1, True)
+            subtotal('TOTAL INGRESOS', income)
             section('Costo de ventas')
-            cogs = add_accounts(cost, results_period, 1)
-            total('TOTAL COSTO DE VENTAS', cogs)
-            gross = currency.round(revenue-cogs)
-            total('UTILIDAD BRUTA', gross)
-            section('Gastos de operación y otros gastos')
-            expenses = add_accounts(operating, results_period, 1)
-            total('TOTAL GASTOS', expenses)
-            total('RESULTADO DEL PERÍODO (antes de ajustes e impuestos no registrados)', gross-expenses)
+            cost = add_accounts(lambda t: t == 'expense_direct_cost', 1, True)
+            subtotal('TOTAL COSTO DE VENTAS', cost)
+            subtotal('UTILIDAD BRUTA', income-cost)
+            section('Gastos operativos y depreciaciones')
+            expenses = add_accounts(lambda t: t in ('expense','expense_depreciation','expense_other'), 1, True)
+            subtotal('TOTAL GASTOS', expenses)
+            subtotal('RESULTADO DEL PERÍODO', income-cost-expenses)
             return title, headers, rows
-
-        typ = lambda aid: names[aid].account_type
-        assets = [i for i in names if typ(i).startswith('asset')]
-        liabilities = [i for i in names if typ(i).startswith('liability')]
-        equity = [i for i in names if typ(i).startswith('equity')]
-        income = [i for i in names if typ(i).startswith('income')]
-        expenses = [i for i in names if typ(i).startswith('expense')]
-        current_assets = [i for i in assets if typ(i) not in ('asset_fixed', 'asset_non_current')]
-        fixed_assets = [i for i in assets if typ(i) in ('asset_fixed', 'asset_non_current')]
-        short_liab = [i for i in liabilities if typ(i) not in ('liability_non_current',)]
-        long_liab = [i for i in liabilities if typ(i) == 'liability_non_current']
-        section('ACTIVO')
+        section('Activo')
         section('Activo corriente')
-        ac = add_accounts(current_assets, balances)
-        total('TOTAL ACTIVO CORRIENTE', ac)
+        ac = add_accounts(lambda t: t.startswith('asset') and t not in ('asset_fixed','asset_non_current'))
+        subtotal('TOTAL ACTIVO CORRIENTE', ac)
         section('Activo no corriente')
-        anc = add_accounts(fixed_assets, balances)
-        total('TOTAL ACTIVO NO CORRIENTE', anc)
-        total('TOTAL ACTIVO', ac+anc)
-        section('PASIVO')
+        anc = add_accounts(lambda t: t in ('asset_fixed','asset_non_current'))
+        subtotal('TOTAL ACTIVO NO CORRIENTE', anc)
+        subtotal('TOTAL ACTIVO', ac+anc)
+        section('Pasivo')
         section('Pasivo corriente')
-        pc = add_accounts(short_liab, balances, -1)
-        total('TOTAL PASIVO CORRIENTE', pc)
+        pc = add_accounts(lambda t: t.startswith('liability') and t != 'liability_non_current', -1)
+        subtotal('TOTAL PASIVO CORRIENTE', pc)
         section('Pasivo no corriente')
-        pnc = add_accounts(long_liab, balances, -1)
-        total('TOTAL PASIVO NO CORRIENTE', pnc)
-        total('TOTAL PASIVO', pc+pnc)
-        section('PATRIMONIO')
-        eq = add_accounts(equity, balances, -1)
-        earnings = currency.round(-sum(balances[i] for i in income + expenses))
-        if not currency.is_zero(earnings):
-            rows.append(['', 'Resultado acumulado sin cierre contable', 'Resultado', earnings])
-        total('TOTAL PATRIMONIO (incluye resultado sin cierre)', eq+earnings)
-        total('TOTAL PASIVO Y PATRIMONIO', pc+pnc+eq+earnings)
-        diff = currency.round(ac+anc-pc-pnc-eq-earnings)
-        total('DIFERENCIA DE CUADRE (debe ser cero)', diff)
+        pnc = add_accounts(lambda t: t == 'liability_non_current', -1)
+        subtotal('TOTAL PASIVO NO CORRIENTE', pnc)
+        subtotal('TOTAL PASIVO', pc+pnc)
+        section('Patrimonio')
+        equity = add_accounts(lambda t: t.startswith('equity'), -1)
+        pl = -sum(balance[i] for i in sorted_ids if accounts[i].account_type.startswith(('income','expense')))
+        if not company_currency.is_zero(pl):
+            rows.append(['', 'Resultado acumulado pendiente de cierre', '', '', rnd(pl)])
+        subtotal('TOTAL PATRIMONIO', equity+pl)
+        subtotal('TOTAL PASIVO Y PATRIMONIO', pc+pnc+equity+pl)
+        subtotal('DIFERENCIA DE CUADRE', ac+anc-pc-pnc-equity-pl)
         return title, headers, rows
+
+    def _html(self, title, headers, rows):
+        self.ensure_one()
+        if not self.esi_structured:
+            return super()._html(title, headers, rows)
+        e = lambda val: escape(str(val if val is not None else ''))
+        chunks = ['<div style="font-family:Arial,sans-serif">',
+                  '<h2 style="text-align:center;color:#072955">%s</h2>' % e(title),
+                  '<p style="text-align:center">Expresado en %s</p>' % e(self.company_id.currency_id.name),
+                  '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr>']
+        for header in headers:
+            chunks.append('<th style="background:#072955;color:white;padding:7px;border:1px solid #ddd">%s</th>' % e(header))
+        chunks.append('</tr></thead><tbody>')
+        for values in rows:
+            heading = len(values) == 5 and values[0] == '' and values[2] == '' and values[3] == ''
+            total = (values[1] or '').upper().startswith(('TOTAL','UTILIDAD','RESULTADO','DIFERENCIA'))
+            bg = '#e6edf4' if heading else ('#f5f7f8' if total else 'white')
+            chunks.append('<tr style="background:%s;font-weight:%s">' % (bg, 'bold' if heading or total else 'normal'))
+            for val in values:
+                form = '{:,.2f}'.format(val) if isinstance(val,(float,int)) else e(val)
+                chunks.append('<td style="border:1px solid #ddd;padding:6px;text-align:%s">%s</td>' %
+                              ('right' if isinstance(val,(float,int)) else 'left', form))
+            chunks.append('</tr>')
+        chunks.append('</tbody></table></div>')
+        return ''.join(chunks)
