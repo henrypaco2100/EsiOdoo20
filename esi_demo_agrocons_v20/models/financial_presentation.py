@@ -15,14 +15,33 @@ class AgroconsFinancialPresentation(models.TransientModel):
         string='Presentación contable detallada - Familia Agrocons', default=False,
         help='Muestra informes por cuenta y grupos, sin crear ni alterar movimientos.')
 
+    def _use_agro_format(self):
+        """Aplica el formato al menú original de Finanzas SOLO en la compañía
+        que tiene un escenario contable Agrocons publicado. El código de
+        esi_finanzas_v20 permanece sin modificaciones.
+        """
+        self.ensure_one()
+        if self.esi_structured:
+            return True
+        if self.kind not in ('balance', 'profit', 'trial', 'ledger'):
+            return False
+        if self.analytic_id:
+            return False  # No mostrar una distribución analítica incompleta
+        return bool(self.env['account.move'].search_count([
+            ('company_id', '=', self.company_id.id),
+            ('state', '=', 'posted'),
+            ('ref', 'like', 'AGC-CONT-DEMO-2026%'),
+        ]))
+
     def _report_data(self):
         self.ensure_one()
-        if not self.esi_structured:
+        if not self._use_agro_format():
             return super()._report_data()
         # Otros informes (caja, flujo, vencimientos, analítico, impuestos y resumen)
         # utilizan la lógica original de ESI, sin cambios ni duplicación de cifras.
         if self.kind not in ('balance', 'profit', 'trial', 'ledger'):
             return super()._report_data()
+        self.check_access('read')
         if self.company_id not in self.env.companies or self.date_from > self.date_to:
             raise UserError(_('Revise la compañía y las fechas del informe.'))
         companies = self.company_id._accessible_branches() if self.include_branches else self.company_id
@@ -140,7 +159,7 @@ class AgroconsFinancialPresentation(models.TransientModel):
 
     def _html(self, title, headers, rows):
         self.ensure_one()
-        if not self.esi_structured:
+        if not self._use_agro_format():
             return super()._html(title, headers, rows)
         e = lambda val: escape(str(val if val is not None else ''))
         chunks = ['<div style="font-family:Arial,sans-serif">',

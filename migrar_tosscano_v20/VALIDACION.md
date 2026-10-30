@@ -21,3 +21,14 @@ La fuente de recetas conserva las 12 fichas aprobadas. Los 9 modelos con product
 La fuente no proporciona capacidad física para algunos empaques heredados (por ejemplo LATA, CONO, BOTE, PAQUETE o ROLLO) mientras la ficha consume litros, gramos o metros. Cuando Odoo no dispone de conversión nativa, la migración calcula una fracción del producto inventariado que conserva el **costo aprobado por par**. Esto permite materializar la LdM sin inventar una capacidad física, pero la cantidad física de esos empaques debe validarse con Tosscano antes de usar la receta en producción real.
 
 Las pruebas locales no sustituyen una actualización real en una copia de la base Odoo 20. Se recomienda probar primero el botón de recetas y una OF de cada familia antes de producción.
+
+## Producción estricta — 30/10/2026
+- Fuente de recetas: `FICHAS DE COSTO MILITAR APROBADO(3).xlsx`.
+- 12 fichas, 290 filas de componentes; 288 con cantidad positiva.
+- `M-BT-01 / PEG-PVC-CEM-EST` conserva `0.0455 L` por par.
+- Máximo de decimales requerido por Cant./par: 4. El módulo eleva `Product Unit` a mínimo 4 decimales antes de crear LdM.
+- No hay expansión de suelas/plantillas/etiquetas por talla.
+- No hay conversiones de costo ni de envases: LITRO≠LATA/BOTE, GRAMO≠CONO, KG≠ROLLO salvo que el catálogo sea corregido explícitamente.
+- Código + nombre + UDM deben coordinar; de lo contrario la LdM completa queda pendiente.
+- Cada LdM creada enlaza los centros existentes: CORTE, APARADO, CONFORMADO, SOLADO, TERMINADO.
+- No se crean centros de trabajo automáticamente y los costos de mano de obra de la ficha no se usan como minutos.

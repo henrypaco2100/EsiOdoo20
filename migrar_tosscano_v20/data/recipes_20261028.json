@@ -10,40 +10,40 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 160.25958,
       "reported_total": 160.25958,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-BT-02",
@@ -55,40 +55,40 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 160.25958,
       "reported_total": 160.25958,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-BT-03",
@@ -100,40 +100,40 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 163.63157999999999,
       "reported_total": 163.63158,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-L-00",
@@ -145,40 +145,40 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 153.24686,
       "reported_total": 153.24686,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-L-01",
@@ -190,40 +190,44 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
+        ],
+        [
+          "Costo total lote (10 pares)",
+          1520.1866
         ]
       ],
-      "calculated_total": 152.01866,
+      "calculated_total": 1672.20526,
       "reported_total": 152.01866,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-L-02",
@@ -235,40 +239,40 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 152.01866,
       "reported_total": 152.01866,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-L-03",
@@ -280,40 +284,40 @@
       "overhead": [
         [
           "Cortado",
-          6
+          6.0
         ],
         [
           "Aparado",
-          15
+          15.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 153.51855999999998,
       "reported_total": 153.51856,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-P-01",
@@ -321,44 +325,44 @@
       "lot": 1.0,
       "components": 26,
       "positive_components": 26,
-      "material_cost": 149.62779999999998,
+      "material_cost": 149.6278,
       "overhead": [
         [
           "Cortado",
-          6
+          6.0
         ],
         [
           "Aparado",
-          18
+          18.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          2
+          2.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
-      "calculated_total": 195.62779999999998,
+      "calculated_total": 195.6278,
       "reported_total": 195.6278,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-P-02",
@@ -366,44 +370,44 @@
       "lot": 1.0,
       "components": 27,
       "positive_components": 27,
-      "material_cost": 162.34795999999997,
+      "material_cost": 162.34796,
       "overhead": [
         [
           "Cortado",
-          6
+          6.0
         ],
         [
           "Aparado",
-          18
+          18.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          2
+          2.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
-      "calculated_total": 208.34795999999997,
+      "calculated_total": 208.34796,
       "reported_total": 208.34796,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-PC-01",
@@ -415,19 +419,19 @@
       "overhead": [
         [
           "Cortado",
-          8
+          8.0
         ],
         [
           "Aparado",
-          16
+          16.0
         ],
         [
           "Conformado",
-          5
+          5.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
@@ -435,65 +439,65 @@
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 181.13315,
       "reported_total": 181.13315,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-RG-01",
       "title": "COSTO DE PRODUCCIÓN — M-RG-01 · RANGER",
       "lot": 1.0,
-      "components": 28,
-      "positive_components": 27,
-      "material_cost": 135.51606,
+      "components": 26,
+      "positive_components": 25,
+      "material_cost": 128.34606,
       "overhead": [
         [
           "Cortado",
-          8
+          8.0
         ],
         [
           "Aparado",
-          25
+          25.0
         ],
         [
           "Conformado",
-          8
+          8.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
-      "calculated_total": 193.51606,
+      "calculated_total": 186.34606,
       "reported_total": 193.51606,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     },
     {
       "code": "M-W-01",
@@ -505,40 +509,40 @@
       "overhead": [
         [
           "Cortado",
-          4
+          4.0
         ],
         [
           "Aparado",
-          14
+          14.0
         ],
         [
           "Conformado",
-          4
+          4.0
         ],
         [
           "Solado",
-          8
+          8.0
         ],
         [
           "Terminado",
-          1
+          1.0
         ],
         [
           "Gastos administrativos",
-          5
+          5.0
         ],
         [
           "Energía",
-          1
+          1.0
         ],
         [
           "Gastos de maquinaria",
-          2
+          2.0
         ]
       ],
       "calculated_total": 148.32758,
       "reported_total": 148.32758,
-      "source_file": "FICHAS DE COSTO MILITAR APROBADO(1).xlsx"
+      "source_file": "FICHAS DE COSTO MILITAR APROBADO(3).xlsx"
     }
   ],
   "components": [
@@ -550,7 +554,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -562,10 +566,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -576,7 +580,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0125,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.5875,
       "lot_qty": 0.0125,
       "lot_cost": 0.5875
@@ -602,7 +606,7 @@
       "code": "CUE-CHA-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 2.4,
-      "unit_price": 22,
+      "unit_price": 22.0,
       "cost_per_pair": 52.8,
       "lot_qty": 2.4,
       "lot_cost": 52.8
@@ -615,7 +619,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.004,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.188,
       "lot_qty": 0.004,
       "lot_cost": 0.188
@@ -628,7 +632,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -680,7 +684,7 @@
       "code": "CUE-NAP-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 1.5,
-      "unit_price": 5,
+      "unit_price": 5.0,
       "cost_per_pair": 7.5,
       "lot_qty": 1.5,
       "lot_cost": 7.5
@@ -692,10 +696,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -706,7 +710,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -718,11 +722,11 @@
       "name": "PLANTA FLEXSOLE",
       "code": "SUE-FLE-EST-NEG",
       "uom": "uni",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-BT-01",
@@ -732,7 +736,7 @@
       "code": "ACC-PLTX-SF-2",
       "uom": "m2",
       "qty_per_pair": 0.045,
-      "unit_price": 30,
+      "unit_price": 30.0,
       "cost_per_pair": 1.35,
       "lot_qty": 0.045,
       "lot_cost": 1.35
@@ -744,10 +748,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -757,10 +761,10 @@
       "name": "PLASTISOL WATERPROF",
       "code": "ACC-PLA-WAT-AMA",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.7,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.7
     },
     {
@@ -771,7 +775,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -784,7 +788,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -797,7 +801,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -809,10 +813,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -823,7 +827,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0125,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.5875,
       "lot_qty": 0.0125,
       "lot_cost": 0.5875
@@ -849,7 +853,7 @@
       "code": "CUE-CHA-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 2.4,
-      "unit_price": 22,
+      "unit_price": 22.0,
       "cost_per_pair": 52.8,
       "lot_qty": 2.4,
       "lot_cost": 52.8
@@ -862,7 +866,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.004,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.188,
       "lot_qty": 0.004,
       "lot_cost": 0.188
@@ -875,7 +879,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -927,7 +931,7 @@
       "code": "CUE-NAP-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 1.5,
-      "unit_price": 5,
+      "unit_price": 5.0,
       "cost_per_pair": 7.5,
       "lot_qty": 1.5,
       "lot_cost": 7.5
@@ -939,10 +943,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -953,7 +957,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -965,11 +969,11 @@
       "name": "PLANTA FLEXSOLE",
       "code": "SUE-FLE-EST-NEG",
       "uom": "uni",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-BT-02",
@@ -979,7 +983,7 @@
       "code": "ACC-PLTX-SF-2",
       "uom": "m2",
       "qty_per_pair": 0.045,
-      "unit_price": 30,
+      "unit_price": 30.0,
       "cost_per_pair": 1.35,
       "lot_qty": 0.045,
       "lot_cost": 1.35
@@ -991,10 +995,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -1004,10 +1008,10 @@
       "name": "PLASTISOL WATERPROF",
       "code": "ACC-PLA-WAT-AMA",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.7,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.7
     },
     {
@@ -1018,7 +1022,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -1031,7 +1035,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -1044,7 +1048,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -1056,10 +1060,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -1069,10 +1073,10 @@
       "name": "CHAPITAS H8 NEGRO",
       "code": "ACC-CHA-CIE-NEG",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.7,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.7
     },
     {
@@ -1096,7 +1100,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0125,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.5875,
       "lot_qty": 0.0125,
       "lot_cost": 0.5875
@@ -1122,7 +1126,7 @@
       "code": "CUE-CHA-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 2.6,
-      "unit_price": 22,
+      "unit_price": 22.0,
       "cost_per_pair": 57.2,
       "lot_qty": 2.6,
       "lot_cost": 57.2
@@ -1135,7 +1139,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.004,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.188,
       "lot_qty": 0.004,
       "lot_cost": 0.188
@@ -1148,7 +1152,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -1187,7 +1191,7 @@
       "code": "CUE-NAP-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 1.5,
-      "unit_price": 5,
+      "unit_price": 5.0,
       "cost_per_pair": 7.5,
       "lot_qty": 1.5,
       "lot_cost": 7.5
@@ -1199,10 +1203,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -1213,7 +1217,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -1225,11 +1229,11 @@
       "name": "PLANTA FLEXSOLE",
       "code": "SUE-FLE-EST-NEG",
       "uom": "uni",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-BT-03",
@@ -1239,7 +1243,7 @@
       "code": "ACC-PLTX-SF-2",
       "uom": "m2",
       "qty_per_pair": 0.045,
-      "unit_price": 30,
+      "unit_price": 30.0,
       "cost_per_pair": 1.35,
       "lot_qty": 0.045,
       "lot_cost": 1.35
@@ -1251,10 +1255,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -1264,10 +1268,10 @@
       "name": "PLASTISOL WATERPROF",
       "code": "ACC-PLA-WAT-AMA",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.7,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.7
     },
     {
@@ -1278,7 +1282,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -1291,7 +1295,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -1304,7 +1308,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -1316,10 +1320,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -1356,7 +1360,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0195,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.9165,
       "lot_qty": 0.0195,
       "lot_cost": 0.9165
@@ -1395,7 +1399,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -1408,7 +1412,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -1420,10 +1424,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 20,
+      "qty_per_pair": 20.0,
       "unit_price": 0.41,
       "cost_per_pair": 8.2,
-      "lot_qty": 20,
+      "lot_qty": 20.0,
       "lot_cost": 8.2
     },
     {
@@ -1459,10 +1463,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -1473,7 +1477,7 @@
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
       "qty_per_pair": 1.9,
-      "unit_price": 14,
+      "unit_price": 14.0,
       "cost_per_pair": 26.6,
       "lot_qty": 1.9,
       "lot_cost": 26.6
@@ -1486,7 +1490,7 @@
       "code": "TEX-LOB-MAR-EST",
       "uom": "m",
       "qty_per_pair": 0.1426,
-      "unit_price": 28,
+      "unit_price": 28.0,
       "cost_per_pair": 3.9928,
       "lot_qty": 0.1426,
       "lot_cost": 3.9928
@@ -1499,7 +1503,7 @@
       "code": "TEX-LON-NOR-VER",
       "uom": "m",
       "qty_per_pair": 0.11,
-      "unit_price": 20,
+      "unit_price": 20.0,
       "cost_per_pair": 2.2,
       "lot_qty": 0.11,
       "lot_cost": 2.2
@@ -1511,10 +1515,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -1524,10 +1528,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -1537,10 +1541,10 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 8,
+      "qty_per_pair": 8.0,
       "unit_price": 0.15,
       "cost_per_pair": 1.2,
-      "lot_qty": 8,
+      "lot_qty": 8.0,
       "lot_cost": 1.2
     },
     {
@@ -1551,7 +1555,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -1563,11 +1567,11 @@
       "name": "PLANTA JUNGLA",
       "code": "SUE-JUN-EST-VER",
       "uom": "par",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-L-00",
@@ -1576,10 +1580,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -1590,7 +1594,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -1616,7 +1620,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.0371,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 1.8921,
       "lot_qty": 0.0371,
       "lot_cost": 1.8921
@@ -1629,7 +1633,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -1642,7 +1646,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.12,
       "lot_cost": 11.4
@@ -1654,10 +1658,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 10,
+      "lot_qty": 10.0,
       "lot_cost": 3.5
     },
     {
@@ -1670,7 +1674,7 @@
       "qty_per_pair": 0.3,
       "unit_price": 2.83,
       "cost_per_pair": 0.849,
-      "lot_qty": 3,
+      "lot_qty": 3.0,
       "lot_cost": 8.49
     },
     {
@@ -1683,7 +1687,7 @@
       "qty_per_pair": 0.4,
       "unit_price": 6.37,
       "cost_per_pair": 2.548,
-      "lot_qty": 4,
+      "lot_qty": 4.0,
       "lot_cost": 25.48
     },
     {
@@ -1694,7 +1698,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0195,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.9165,
       "lot_qty": 0.195,
       "lot_cost": 9.165
@@ -1722,7 +1726,7 @@
       "qty_per_pair": 0.5,
       "unit_price": 7.3,
       "cost_per_pair": 3.65,
-      "lot_qty": 5,
+      "lot_qty": 5.0,
       "lot_cost": 36.5
     },
     {
@@ -1733,7 +1737,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.05499999999999999,
       "lot_cost": 2.585
@@ -1746,7 +1750,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.12,
       "lot_cost": 32.28
@@ -1759,7 +1763,7 @@
       "code": "TEX-FIB-ESP-BLA-008",
       "uom": "m",
       "qty_per_pair": 0.0107,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.107,
       "lot_qty": 0.107,
       "lot_cost": 1.07
@@ -1771,11 +1775,11 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 20,
+      "qty_per_pair": 20.0,
       "unit_price": 0.41,
       "cost_per_pair": 8.2,
-      "lot_qty": 200,
-      "lot_cost": 82
+      "lot_qty": 200.0,
+      "lot_cost": 82.0
     },
     {
       "recipe": "M-L-01",
@@ -1800,7 +1804,7 @@
       "qty_per_pair": 0.9,
       "unit_price": 0.32,
       "cost_per_pair": 0.288,
-      "lot_qty": 9,
+      "lot_qty": 9.0,
       "lot_cost": 2.88
     },
     {
@@ -1810,10 +1814,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 10,
+      "lot_qty": 10.0,
       "lot_cost": 20.7
     },
     {
@@ -1824,10 +1828,10 @@
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
       "qty_per_pair": 1.9,
-      "unit_price": 14,
+      "unit_price": 14.0,
       "cost_per_pair": 26.6,
-      "lot_qty": 19,
-      "lot_cost": 266
+      "lot_qty": 19.0,
+      "lot_cost": 266.0
     },
     {
       "recipe": "M-L-01",
@@ -1837,7 +1841,7 @@
       "code": "TEX-LOB-MAR-EST",
       "uom": "m",
       "qty_per_pair": 0.1161,
-      "unit_price": 28,
+      "unit_price": 28.0,
       "cost_per_pair": 3.2508,
       "lot_qty": 1.161,
       "lot_cost": 32.508
@@ -1850,7 +1854,7 @@
       "code": "TEX-LON-NOR-VER",
       "uom": "m",
       "qty_per_pair": 0.1426,
-      "unit_price": 20,
+      "unit_price": 20.0,
       "cost_per_pair": 2.852,
       "lot_qty": 1.426,
       "lot_cost": 28.52
@@ -1862,10 +1866,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 10,
+      "lot_qty": 10.0,
       "lot_cost": 1.9
     },
     {
@@ -1875,10 +1879,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 20,
+      "lot_qty": 20.0,
       "lot_cost": 7.4
     },
     {
@@ -1888,11 +1892,11 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 8,
+      "qty_per_pair": 8.0,
       "unit_price": 0.15,
       "cost_per_pair": 1.2,
-      "lot_qty": 80,
-      "lot_cost": 12
+      "lot_qty": 80.0,
+      "lot_cost": 12.0
     },
     {
       "recipe": "M-L-01",
@@ -1902,7 +1906,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.698,
       "lot_cost": 16.054
@@ -1914,11 +1918,11 @@
       "name": "PLANTA JUNGLA",
       "code": "SUE-JUN-EST-VER",
       "uom": "par",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 10,
-      "lot_cost": 350
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 10.0,
+      "lot_cost": 350.0
     },
     {
       "recipe": "M-L-01",
@@ -1927,11 +1931,11 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 10,
-      "lot_cost": 66
+      "lot_qty": 10.0,
+      "lot_cost": 66.0
     },
     {
       "recipe": "M-L-01",
@@ -1941,7 +1945,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.455,
       "lot_cost": 22.75
@@ -1967,7 +1971,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.0371,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 1.8921,
       "lot_qty": 0.371,
       "lot_cost": 18.921
@@ -1980,7 +1984,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.496,
       "lot_cost": 34.72
@@ -1993,7 +1997,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -2005,10 +2009,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -2045,7 +2049,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0195,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.9165,
       "lot_qty": 0.0195,
       "lot_cost": 0.9165
@@ -2084,7 +2088,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -2097,7 +2101,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -2110,7 +2114,7 @@
       "code": "TEX-FIB-ESP-BLA-008",
       "uom": "m",
       "qty_per_pair": 0.0107,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.107,
       "lot_qty": 0.0107,
       "lot_cost": 0.107
@@ -2122,10 +2126,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 20,
+      "qty_per_pair": 20.0,
       "unit_price": 0.41,
       "cost_per_pair": 8.2,
-      "lot_qty": 20,
+      "lot_qty": 20.0,
       "lot_cost": 8.2
     },
     {
@@ -2161,10 +2165,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -2175,7 +2179,7 @@
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
       "qty_per_pair": 1.9,
-      "unit_price": 14,
+      "unit_price": 14.0,
       "cost_per_pair": 26.6,
       "lot_qty": 1.9,
       "lot_cost": 26.6
@@ -2188,7 +2192,7 @@
       "code": "TEX-LOB-MAR-EST",
       "uom": "m",
       "qty_per_pair": 0.1161,
-      "unit_price": 28,
+      "unit_price": 28.0,
       "cost_per_pair": 3.2508,
       "lot_qty": 0.1161,
       "lot_cost": 3.2508
@@ -2201,7 +2205,7 @@
       "code": "TEX-LON-NOR-VER",
       "uom": "m",
       "qty_per_pair": 0.1426,
-      "unit_price": 20,
+      "unit_price": 20.0,
       "cost_per_pair": 2.852,
       "lot_qty": 0.1426,
       "lot_cost": 2.852
@@ -2213,10 +2217,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -2226,10 +2230,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -2239,10 +2243,10 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 8,
+      "qty_per_pair": 8.0,
       "unit_price": 0.15,
       "cost_per_pair": 1.2,
-      "lot_qty": 8,
+      "lot_qty": 8.0,
       "lot_cost": 1.2
     },
     {
@@ -2253,7 +2257,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -2265,11 +2269,11 @@
       "name": "PLANTA JUNGLA",
       "code": "SUE-JUN-EST-VER",
       "uom": "par",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-L-02",
@@ -2278,10 +2282,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -2292,7 +2296,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -2318,7 +2322,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.0371,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 1.8921,
       "lot_qty": 0.0371,
       "lot_cost": 1.8921
@@ -2331,7 +2335,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -2344,7 +2348,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -2356,11 +2360,11 @@
       "name": "BANDERITA BRASSIL",
       "code": "ACC-BAN-BRA-EST",
       "uom": "uni",
-      "qty_per_pair": 0,
+      "qty_per_pair": 0.0,
       "unit_price": 0.14,
-      "cost_per_pair": 0,
-      "lot_qty": 0,
-      "lot_cost": 0
+      "cost_per_pair": 0.0,
+      "lot_qty": 0.0,
+      "lot_cost": 0.0
     },
     {
       "recipe": "M-L-03",
@@ -2369,10 +2373,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -2382,10 +2386,10 @@
       "name": "CHAPITAS H8 NEGRO",
       "code": "ACC-CHA-CIE-NEG",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.7,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.7
     },
     {
@@ -2435,7 +2439,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0195,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.9165,
       "lot_qty": 0.0195,
       "lot_cost": 0.9165
@@ -2474,7 +2478,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -2487,7 +2491,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -2500,7 +2504,7 @@
       "code": "TEX-FIB-ESP-BLA-008",
       "uom": "m",
       "qty_per_pair": 0.0107,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.107,
       "lot_qty": 0.0107,
       "lot_cost": 0.107
@@ -2512,10 +2516,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 20,
+      "qty_per_pair": 20.0,
       "unit_price": 0.41,
       "cost_per_pair": 8.2,
-      "lot_qty": 20,
+      "lot_qty": 20.0,
       "lot_cost": 8.2
     },
     {
@@ -2551,10 +2555,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -2565,7 +2569,7 @@
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
       "qty_per_pair": 1.9,
-      "unit_price": 14,
+      "unit_price": 14.0,
       "cost_per_pair": 26.6,
       "lot_qty": 1.9,
       "lot_cost": 26.6
@@ -2578,7 +2582,7 @@
       "code": "TEX-LOB-MAR-EST",
       "uom": "m",
       "qty_per_pair": 0.1426,
-      "unit_price": 28,
+      "unit_price": 28.0,
       "cost_per_pair": 3.9928,
       "lot_qty": 0.1426,
       "lot_cost": 3.9928
@@ -2591,7 +2595,7 @@
       "code": "TEX-LON-NOR-VER",
       "uom": "m",
       "qty_per_pair": 0.1396,
-      "unit_price": 20,
+      "unit_price": 20.0,
       "cost_per_pair": 2.792,
       "lot_qty": 0.1396,
       "lot_cost": 2.792
@@ -2603,10 +2607,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -2616,10 +2620,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -2629,10 +2633,10 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 8,
+      "qty_per_pair": 8.0,
       "unit_price": 0.15,
       "cost_per_pair": 1.2,
-      "lot_qty": 8,
+      "lot_qty": 8.0,
       "lot_cost": 1.2
     },
     {
@@ -2643,7 +2647,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -2655,11 +2659,11 @@
       "name": "PLANTA JUNGLA",
       "code": "SUE-JUN-EST-VER",
       "uom": "par",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-L-03",
@@ -2668,10 +2672,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -2682,7 +2686,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -2708,7 +2712,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.0371,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 1.8921,
       "lot_qty": 0.0371,
       "lot_cost": 1.8921
@@ -2721,7 +2725,7 @@
       "code": "TEX-TUB-06-BL",
       "uom": "m",
       "qty_per_pair": 0.0187,
-      "unit_price": 17,
+      "unit_price": 17.0,
       "cost_per_pair": 0.3179,
       "lot_qty": 0.0187,
       "lot_cost": 0.3179
@@ -2734,7 +2738,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -2746,10 +2750,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -2760,7 +2764,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.028,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 1.316,
       "lot_qty": 0.028,
       "lot_cost": 1.316
@@ -2799,7 +2803,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -2812,7 +2816,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -2838,7 +2842,7 @@
       "code": "TEX-FIB-ESP-BLA-05",
       "uom": "m",
       "qty_per_pair": 0.06,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.6,
       "lot_qty": 0.06,
       "lot_cost": 0.6
@@ -2850,10 +2854,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 16,
+      "qty_per_pair": 16.0,
       "unit_price": 0.41,
       "cost_per_pair": 6.56,
-      "lot_qty": 16,
+      "lot_qty": 16.0,
       "lot_cost": 6.56
     },
     {
@@ -2902,10 +2906,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -2915,11 +2919,11 @@
       "name": "HUNTING HIDROFUGADO MILITAR 1.9 MM",
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
-      "qty_per_pair": 3,
-      "unit_price": 14,
-      "cost_per_pair": 42,
-      "lot_qty": 3,
-      "lot_cost": 42
+      "qty_per_pair": 3.0,
+      "unit_price": 14.0,
+      "cost_per_pair": 42.0,
+      "lot_qty": 3.0,
+      "lot_cost": 42.0
     },
     {
       "recipe": "M-P-01",
@@ -2929,7 +2933,7 @@
       "code": "TEX-LON-CAM-COO",
       "uom": "uni",
       "qty_per_pair": 0.1243,
-      "unit_price": 135,
+      "unit_price": 135.0,
       "cost_per_pair": 16.7805,
       "lot_qty": 0.1243,
       "lot_cost": 16.7805
@@ -2941,10 +2945,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -2954,10 +2958,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -2967,11 +2971,11 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 20,
+      "qty_per_pair": 20.0,
       "unit_price": 0.15,
-      "cost_per_pair": 3,
-      "lot_qty": 20,
-      "lot_cost": 3
+      "cost_per_pair": 3.0,
+      "lot_qty": 20.0,
+      "lot_cost": 3.0
     },
     {
       "recipe": "M-P-01",
@@ -2981,7 +2985,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.052,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.196,
       "lot_qty": 0.052,
       "lot_cost": 1.196
@@ -2993,11 +2997,11 @@
       "name": "PLANTA PILOTO",
       "code": "SUE-PIL-EST-COY",
       "uom": "uni",
-      "qty_per_pair": 1,
-      "unit_price": 40,
-      "cost_per_pair": 40,
-      "lot_qty": 1,
-      "lot_cost": 40
+      "qty_per_pair": 1.0,
+      "unit_price": 40.0,
+      "cost_per_pair": 40.0,
+      "lot_qty": 1.0,
+      "lot_cost": 40.0
     },
     {
       "recipe": "M-P-01",
@@ -3006,10 +3010,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -3020,7 +3024,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.055,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.75,
       "lot_qty": 0.055,
       "lot_cost": 2.75
@@ -3046,7 +3050,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -3059,7 +3063,7 @@
       "code": "TEX-FOR-TEX-PLO",
       "uom": "m",
       "qty_per_pair": 0.1396,
-      "unit_price": 55,
+      "unit_price": 55.0,
       "cost_per_pair": 7.678,
       "lot_qty": 0.1396,
       "lot_cost": 7.678
@@ -3072,7 +3076,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -3084,10 +3088,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -3098,7 +3102,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0195,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.9165,
       "lot_qty": 0.0195,
       "lot_cost": 0.9165
@@ -3137,7 +3141,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -3150,7 +3154,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -3176,7 +3180,7 @@
       "code": "TEX-FIB-ESP-BLA-008",
       "uom": "m",
       "qty_per_pair": 0.06,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.6,
       "lot_qty": 0.06,
       "lot_cost": 0.6
@@ -3188,10 +3192,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 16,
+      "qty_per_pair": 16.0,
       "unit_price": 0.41,
       "cost_per_pair": 6.56,
-      "lot_qty": 16,
+      "lot_qty": 16.0,
       "lot_cost": 6.56
     },
     {
@@ -3240,10 +3244,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -3253,11 +3257,11 @@
       "name": "HUNTING HIDROFUGADO MILITAR 1.9 MM",
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
-      "qty_per_pair": 3,
-      "unit_price": 14,
-      "cost_per_pair": 42,
-      "lot_qty": 3,
-      "lot_cost": 42
+      "qty_per_pair": 3.0,
+      "unit_price": 14.0,
+      "cost_per_pair": 42.0,
+      "lot_qty": 3.0,
+      "lot_cost": 42.0
     },
     {
       "recipe": "M-P-02",
@@ -3267,7 +3271,7 @@
       "code": "TEX-LON-CAM-COO",
       "uom": "uni",
       "qty_per_pair": 0.15,
-      "unit_price": 135,
+      "unit_price": 135.0,
       "cost_per_pair": 20.25,
       "lot_qty": 0.15,
       "lot_cost": 20.25
@@ -3279,10 +3283,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -3292,10 +3296,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -3305,10 +3309,10 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 16,
+      "qty_per_pair": 16.0,
       "unit_price": 0.15,
       "cost_per_pair": 2.4,
-      "lot_qty": 16,
+      "lot_qty": 16.0,
       "lot_cost": 2.4
     },
     {
@@ -3319,7 +3323,7 @@
       "code": "TEX-PNP-06",
       "uom": "m",
       "qty_per_pair": 0.04,
-      "unit_price": 28,
+      "unit_price": 28.0,
       "cost_per_pair": 1.12,
       "lot_qty": 0.04,
       "lot_cost": 1.12
@@ -3332,7 +3336,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.03,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 0.69,
       "lot_qty": 0.03,
       "lot_cost": 0.69
@@ -3344,11 +3348,11 @@
       "name": "PLANTA PILOTO",
       "code": "SUE-PIL-EST-COY",
       "uom": "uni",
-      "qty_per_pair": 1,
-      "unit_price": 40,
-      "cost_per_pair": 40,
-      "lot_qty": 1,
-      "lot_cost": 40
+      "qty_per_pair": 1.0,
+      "unit_price": 40.0,
+      "cost_per_pair": 40.0,
+      "lot_qty": 1.0,
+      "lot_cost": 40.0
     },
     {
       "recipe": "M-P-02",
@@ -3357,10 +3361,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -3371,7 +3375,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -3397,7 +3401,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.02,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 1.02,
       "lot_qty": 0.02,
       "lot_cost": 1.02
@@ -3410,7 +3414,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -3423,7 +3427,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -3435,10 +3439,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -3449,7 +3453,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.025,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 1.175,
       "lot_qty": 0.025,
       "lot_cost": 1.175
@@ -3488,7 +3492,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -3501,7 +3505,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -3527,7 +3531,7 @@
       "code": "TEX-FIB-ESP-BLA-008",
       "uom": "m",
       "qty_per_pair": 0.0067,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.067,
       "lot_qty": 0.0067,
       "lot_cost": 0.067
@@ -3539,10 +3543,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 20,
+      "qty_per_pair": 20.0,
       "unit_price": 0.41,
       "cost_per_pair": 8.2,
-      "lot_qty": 20,
+      "lot_qty": 20.0,
       "lot_cost": 8.2
     },
     {
@@ -3578,10 +3582,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -3592,7 +3596,7 @@
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
       "qty_per_pair": 3.8,
-      "unit_price": 14,
+      "unit_price": 14.0,
       "cost_per_pair": 53.2,
       "lot_qty": 3.8,
       "lot_cost": 53.2
@@ -3605,7 +3609,7 @@
       "code": "TEX-LOB-MAR-EST",
       "uom": "m",
       "qty_per_pair": 0.12,
-      "unit_price": 28,
+      "unit_price": 28.0,
       "cost_per_pair": 3.36,
       "lot_qty": 0.12,
       "lot_cost": 3.36
@@ -3617,10 +3621,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -3630,10 +3634,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -3643,10 +3647,10 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 8,
+      "qty_per_pair": 8.0,
       "unit_price": 0.15,
       "cost_per_pair": 1.2,
-      "lot_qty": 8,
+      "lot_qty": 8.0,
       "lot_cost": 1.2
     },
     {
@@ -3657,7 +3661,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -3669,11 +3673,11 @@
       "name": "PLANTA JUNGLA",
       "code": "SUE-JUN-EST-VER",
       "uom": "par",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-PC-01",
@@ -3682,10 +3686,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -3696,7 +3700,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -3722,7 +3726,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.03,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 1.53,
       "lot_qty": 0.03,
       "lot_cost": 1.53
@@ -3735,7 +3739,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
@@ -3748,7 +3752,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -3760,10 +3764,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -3773,10 +3777,10 @@
       "name": "CHAPITAS H8 NEGRO",
       "code": "ACC-CHA-CIE-NEG",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.7,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.7
     },
     {
@@ -3786,11 +3790,11 @@
       "name": "CIERRE H8 COYOTE",
       "code": "ACC-CIE-EST-COY-06",
       "uom": "m",
-      "qty_per_pair": 0,
+      "qty_per_pair": 0.0,
       "unit_price": 0.85,
-      "cost_per_pair": 0,
-      "lot_qty": 0,
-      "lot_cost": 0
+      "cost_per_pair": 0.0,
+      "lot_qty": 0.0,
+      "lot_cost": 0.0
     },
     {
       "recipe": "M-RG-01",
@@ -3800,7 +3804,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.03,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 1.41,
       "lot_qty": 0.03,
       "lot_cost": 1.41
@@ -3839,7 +3843,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.0055,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.2585,
       "lot_qty": 0.0055,
       "lot_cost": 0.2585
@@ -3852,7 +3856,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -3878,7 +3882,7 @@
       "code": "TEX-FIB-ESP-BLA-05",
       "uom": "m",
       "qty_per_pair": 0.035,
-      "unit_price": 10,
+      "unit_price": 10.0,
       "cost_per_pair": 0.35,
       "lot_qty": 0.035,
       "lot_cost": 0.35
@@ -3890,10 +3894,10 @@
       "name": "GANCHOS COYOTE+REMACHES",
       "code": "ACC-JAL-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 12,
+      "qty_per_pair": 12.0,
       "unit_price": 0.41,
       "cost_per_pair": 4.92,
-      "lot_qty": 12,
+      "lot_qty": 12.0,
       "lot_cost": 4.92
     },
     {
@@ -3929,10 +3933,10 @@
       "name": "HUATO coyote",
       "code": "HTO-NOR-COY",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 2.07,
       "cost_per_pair": 2.07,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 2.07
     },
     {
@@ -3943,7 +3947,7 @@
       "code": "CUE-HUN-HID-VER",
       "uom": "ft2",
       "qty_per_pair": 2.7,
-      "unit_price": 14,
+      "unit_price": 14.0,
       "cost_per_pair": 37.8,
       "lot_qty": 2.7,
       "lot_cost": 37.8
@@ -3956,7 +3960,7 @@
       "code": "TEX-LON-CAM-COO",
       "uom": "uni",
       "qty_per_pair": 0.1,
-      "unit_price": 135,
+      "unit_price": 135.0,
       "cost_per_pair": 13.5,
       "lot_qty": 0.1,
       "lot_cost": 13.5
@@ -3968,10 +3972,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -3981,10 +3985,10 @@
       "name": "NUMERACION LENGUA",
       "code": "ACC-ETQ-LEN-MIL-40",
       "uom": "uni",
-      "qty_per_pair": 2,
+      "qty_per_pair": 2.0,
       "unit_price": 0.37,
       "cost_per_pair": 0.74,
-      "lot_qty": 2,
+      "lot_qty": 2.0,
       "lot_cost": 0.74
     },
     {
@@ -3994,10 +3998,10 @@
       "name": "OJALILLO COYOTE-AMAZONAS",
       "code": "ACC-OJA-MET-COY",
       "uom": "uni",
-      "qty_per_pair": 16,
+      "qty_per_pair": 16.0,
       "unit_price": 0.15,
       "cost_per_pair": 2.4,
-      "lot_qty": 16,
+      "lot_qty": 16.0,
       "lot_cost": 2.4
     },
     {
@@ -4008,7 +4012,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.16,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 3.68,
       "lot_qty": 0.16,
       "lot_cost": 3.68
@@ -4020,11 +4024,11 @@
       "name": "PLANTA JUNGLA",
       "code": "SUE-JUN-EST-VER",
       "uom": "par",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-RG-01",
@@ -4033,10 +4037,10 @@
       "name": "PLANTILLAS",
       "code": "ACC-PLA-40",
       "uom": "par",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 6.6,
       "cost_per_pair": 6.6,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 6.6
     },
     {
@@ -4047,23 +4051,10 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
-    },
-    {
-      "recipe": "M-RG-01",
-      "row": 29,
-      "family": "ACCESORIOS",
-      "name": "SELLO SECO",
-      "code": null,
-      "uom": "uni",
-      "qty_per_pair": 8,
-      "unit_price": 0.3,
-      "cost_per_pair": 2.4,
-      "lot_qty": 8,
-      "lot_cost": 2.4
     },
     {
       "recipe": "M-RG-01",
@@ -4073,7 +4064,7 @@
       "code": "TEX-SUE-GAM-BEI",
       "uom": "m",
       "qty_per_pair": 0.003,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 0.153,
       "lot_qty": 0.003,
       "lot_cost": 0.153
@@ -4086,23 +4077,10 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0486,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.402,
       "lot_qty": 0.0486,
       "lot_cost": 3.402
-    },
-    {
-      "recipe": "M-RG-01",
-      "row": 32,
-      "family": "TEXTILES",
-      "name": "TEXTIL NEGRO",
-      "code": null,
-      "uom": "m",
-      "qty_per_pair": 0.159,
-      "unit_price": 30,
-      "cost_per_pair": 4.77,
-      "lot_qty": 0.159,
-      "lot_cost": 4.77
     },
     {
       "recipe": "M-W-01",
@@ -4112,7 +4090,7 @@
       "code": "PEG-ALO-EST-EST",
       "uom": "L",
       "qty_per_pair": 0.012,
-      "unit_price": 95,
+      "unit_price": 95.0,
       "cost_per_pair": 1.14,
       "lot_qty": 0.012,
       "lot_cost": 1.14
@@ -4125,7 +4103,7 @@
       "code": "TEX-PLN-MCR-25",
       "uom": "m",
       "qty_per_pair": 0.051,
-      "unit_price": 110,
+      "unit_price": 110.0,
       "cost_per_pair": 5.609999999999999,
       "lot_qty": 0.051,
       "lot_cost": 5.609999999999999
@@ -4137,10 +4115,10 @@
       "name": "BOLSA 35X50",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.35,
       "cost_per_pair": 0.35,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.35
     },
     {
@@ -4151,7 +4129,7 @@
       "code": "PEG-CLE-LIQ-EST",
       "uom": "L",
       "qty_per_pair": 0.0125,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.5875,
       "lot_qty": 0.0125,
       "lot_cost": 0.5875
@@ -4176,11 +4154,11 @@
       "name": "CUERO CHAROL NEGRO 1,6 MM",
       "code": "CUE-CHA-LIS-NEG",
       "uom": "ft2",
-      "qty_per_pair": 2,
-      "unit_price": 22,
-      "cost_per_pair": 44,
-      "lot_qty": 2,
-      "lot_cost": 44
+      "qty_per_pair": 2.0,
+      "unit_price": 22.0,
+      "cost_per_pair": 44.0,
+      "lot_qty": 2.0,
+      "lot_cost": 44.0
     },
     {
       "recipe": "M-W-01",
@@ -4190,7 +4168,7 @@
       "code": "PEG-DIS-PVC-EST",
       "uom": "L",
       "qty_per_pair": 0.004,
-      "unit_price": 47,
+      "unit_price": 47.0,
       "cost_per_pair": 0.188,
       "lot_qty": 0.004,
       "lot_cost": 0.188
@@ -4203,7 +4181,7 @@
       "code": "PEG-CLE-ESP-EST",
       "uom": "kg",
       "qty_per_pair": 0.012,
-      "unit_price": 269,
+      "unit_price": 269.0,
       "cost_per_pair": 3.228,
       "lot_qty": 0.012,
       "lot_cost": 3.228
@@ -4242,7 +4220,7 @@
       "code": "CUE-NAP-LIS-NEG",
       "uom": "ft2",
       "qty_per_pair": 1.445,
-      "unit_price": 5,
+      "unit_price": 5.0,
       "cost_per_pair": 7.225000000000001,
       "lot_qty": 1.445,
       "lot_cost": 7.225000000000001
@@ -4254,10 +4232,10 @@
       "name": "NUMERACION BOLSA",
       "code": "ACC-BOL-CEL-35",
       "uom": "uni",
-      "qty_per_pair": 1,
+      "qty_per_pair": 1.0,
       "unit_price": 0.19,
       "cost_per_pair": 0.19,
-      "lot_qty": 1,
+      "lot_qty": 1.0,
       "lot_cost": 0.19
     },
     {
@@ -4268,7 +4246,7 @@
       "code": "TEX-PK-0.8-EST",
       "uom": "m",
       "qty_per_pair": 0.0698,
-      "unit_price": 23,
+      "unit_price": 23.0,
       "cost_per_pair": 1.6054,
       "lot_qty": 0.0698,
       "lot_cost": 1.6054
@@ -4280,11 +4258,11 @@
       "name": "PLANTA FLEXSOLE",
       "code": "SUE-FLE-EST-NEG",
       "uom": "uni",
-      "qty_per_pair": 1,
-      "unit_price": 35,
-      "cost_per_pair": 35,
-      "lot_qty": 1,
-      "lot_cost": 35
+      "qty_per_pair": 1.0,
+      "unit_price": 35.0,
+      "cost_per_pair": 35.0,
+      "lot_qty": 1.0,
+      "lot_cost": 35.0
     },
     {
       "recipe": "M-W-01",
@@ -4294,7 +4272,7 @@
       "code": "ACC-PLTX-SF-2",
       "uom": "m2",
       "qty_per_pair": 0.045,
-      "unit_price": 30,
+      "unit_price": 30.0,
       "cost_per_pair": 1.35,
       "lot_qty": 0.045,
       "lot_cost": 1.35
@@ -4307,7 +4285,7 @@
       "code": "PEG-PVC-CEM-EST",
       "uom": "L",
       "qty_per_pair": 0.0455,
-      "unit_price": 50,
+      "unit_price": 50.0,
       "cost_per_pair": 2.275,
       "lot_qty": 0.0455,
       "lot_cost": 2.275
@@ -4320,7 +4298,7 @@
       "code": "TEX-SUE-GAM-NEG",
       "uom": "m",
       "qty_per_pair": 0.015,
-      "unit_price": 51,
+      "unit_price": 51.0,
       "cost_per_pair": 0.765,
       "lot_qty": 0.015,
       "lot_cost": 0.765
@@ -4333,7 +4311,7 @@
       "code": "ACC-TEPL-08-CEL",
       "uom": "m2",
       "qty_per_pair": 0.0496,
-      "unit_price": 70,
+      "unit_price": 70.0,
       "cost_per_pair": 3.472,
       "lot_qty": 0.0496,
       "lot_cost": 3.472
