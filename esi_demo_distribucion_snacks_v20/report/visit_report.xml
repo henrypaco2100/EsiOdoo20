@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_report_snack_visit" model="ir.actions.report">
+    <field name="name">Ficha de visita comercial</field>
+    <field name="model">esi.snack.visit</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">esi_demo_distribucion_snacks_v20.report_snack_visit</field>
+    <field name="report_file">esi_demo_distribucion_snacks_v20.report_snack_visit</field>
+    <field name="binding_model_id" ref="model_esi_snack_visit"/>
+    <field name="binding_type">report</field>
+  </record>
+  <template id="report_snack_visit">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Ficha de visita comercial</h2>
+            <p><strong>Referencia:</strong> <span t-field="o.name"/></p>
+            <p><strong>Cliente:</strong> <span t-field="o.partner_id"/></p>
+            <p><strong>Fecha programada:</strong> <span t-field="o.scheduled_date"/></p>
+            <p><strong>Fecha visitada:</strong> <span t-field="o.visited_date"/></p>
+            <p><strong>Próxima visita:</strong> <span t-field="o.next_visit_date"/></p>
+            <p><strong>Distribuidor:</strong> <span t-field="o.user_id"/></p>
+            <p><strong>Estado:</strong> <span t-field="o.state"/></p>
+            <p><strong>Notas:</strong> <span t-field="o.notes"/></p>
+            <p t-if="o.order_id"><strong>Pedido relacionado:</strong> <span t-field="o.order_id.name"/></p>
+            <p class="mt-4">La nota de venta con productos, cantidades y precios se imprime desde el pedido de Ventas mediante el reporte estándar de Odoo.</p>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>

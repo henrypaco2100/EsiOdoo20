@@ -7,17 +7,54 @@ class StockMove(models.Model):
     _inherit = 'stock.move'
 
     esi_cost_currency_id = fields.Many2one(related='company_id.currency_id')
-    esi_estimated_unit_cost = fields.Monetary(compute='_compute_esi_material_cost', currency_field='esi_cost_currency_id', string='Costo estimado / unidad', groups='mrp.group_mrp_manager')
-    esi_estimated_cost = fields.Monetary(compute='_compute_esi_material_cost', currency_field='esi_cost_currency_id', string='Subtotal estimado', groups='mrp.group_mrp_manager')
+    esi_estimated_unit_cost = fields.Monetary(compute='_compute_esi_material_cost', currency_field='esi_cost_currency_id', string='Costo unitario estimado', groups='mrp.group_mrp_manager')
+    esi_estimated_cost = fields.Monetary(compute='_compute_esi_material_cost', currency_field='esi_cost_currency_id', string='Importe estimado', groups='mrp.group_mrp_manager')
 
-    @api.depends('product_id', 'product_uom_qty', 'uom_id', 'company_id', 'product_id.standard_price')
+    esi_material_family_id = fields.Many2one(related='product_id.categ_id', string='Familia / categoría')
+    esi_qty_per_pair = fields.Float(compute='_compute_esi_per_pair', string='Cant./par', digits='Product Unit')
+    esi_cost_per_pair = fields.Monetary(compute='_compute_esi_cost_per_pair', currency_field='esi_cost_currency_id', string='Costo/par', groups='mrp.group_mrp_manager')
+
+    @api.depends('raw_material_production_id.esi_display_total_qty',
+                 'product_uom_qty', 'state')
+    def _compute_esi_per_pair(self):
+        for move in self:
+            total = move.raw_material_production_id.esi_display_total_qty
+            move.esi_qty_per_pair = move.product_uom_qty / total if total and move.state != 'cancel' else 0
+
+    @api.depends('raw_material_production_id.esi_display_total_qty', 'esi_estimated_cost')
+    @api.depends_context('company')
+    def _compute_esi_cost_per_pair(self):
+        for move in self:
+            total = move.raw_material_production_id.esi_display_total_qty
+            move.esi_cost_per_pair = move.esi_estimated_cost / total if total else 0
+
+    esi_cost_uom_issue = fields.Char(compute='_compute_esi_material_cost', string='Revisar unidad', groups='mrp.group_mrp_manager')
+    esi_remaining_to_consume = fields.Float(compute='_compute_esi_remaining_to_consume', string='Pendiente de consumo', digits='Product Unit')
+
+    @api.depends('state', 'picked', 'quantity', 'product_uom_qty')
+    def _compute_esi_remaining_to_consume(self):
+        for move in self:
+            consumed = move.quantity if move.picked else 0
+            move.esi_remaining_to_consume = (
+                0 if move.state in ('done', 'cancel') else max(0, move.product_uom_qty - consumed))
+
+    @api.depends('product_id', 'product_uom_qty', 'uom_id', 'uom_id.factor',
+                 'product_id.uom_id.factor', 'company_id', 'state', 'product_id.standard_price')
     @api.depends_context('company')
     def _compute_esi_material_cost(self):
         for move in self:
+            move.esi_estimated_unit_cost = 0
+            move.esi_estimated_cost = 0
+            move.esi_cost_uom_issue = False
+            if move.state == 'cancel' or not move.product_id or not move.uom_id:
+                continue
             product = move.product_id.with_company(move.company_id)
-            unit = product.uom_id._compute_price(product.standard_price, move.uom_id) if product and move.uom_id else 0
+            if not product.uom_id._has_common_reference(move.uom_id):
+                move.esi_cost_uom_issue = _('Sin equivalencia entre %s y %s', product.uom_id.name, move.uom_id.name)
+                continue
+            unit = product.uom_id._compute_price(product.standard_price, move.uom_id)
             move.esi_estimated_unit_cost = unit
-            move.esi_estimated_cost = unit * move.product_uom_qty
+            move.esi_estimated_cost = move.company_id.currency_id.round(unit * move.product_uom_qty)
 
 
 class PurchaseLine(models.Model):
@@ -38,12 +75,17 @@ class Production(models.Model):
             mo.esi_display_total_qty = mo.esi_output_total if mo.state == 'draft' and mo.esi_variant_line_mode else mo.esi_total_output_qty
 
     esi_budget_currency_id = fields.Many2one(related='company_id.currency_id')
-    esi_material_estimate = fields.Monetary(compute='_compute_esi_material_estimate', currency_field='esi_budget_currency_id', string='Materiales: costo estimado', groups='mrp.group_mrp_manager')
+    esi_material_estimate = fields.Monetary(compute='_compute_esi_material_estimate', currency_field='esi_budget_currency_id', string='Total estimado de materiales', groups='mrp.group_mrp_manager')
 
-    @api.depends('move_raw_ids.esi_estimated_cost', 'move_raw_ids.state')
+    esi_material_cost_incomplete = fields.Boolean(compute='_compute_esi_material_estimate', groups='mrp.group_mrp_manager')
+
+    @api.depends('move_raw_ids.esi_estimated_cost', 'move_raw_ids.esi_cost_uom_issue', 'move_raw_ids.state')
+    @api.depends_context('company')
     def _compute_esi_material_estimate(self):
         for mo in self:
-            mo.esi_material_estimate = sum(mo.move_raw_ids.filtered(lambda m: m.state != 'cancel').mapped('esi_estimated_cost'))
+            moves = mo.move_raw_ids.filtered(lambda m: m.state != 'cancel')
+            mo.esi_material_estimate = sum(moves.mapped('esi_estimated_cost'))
+            mo.esi_material_cost_incomplete = any(moves.mapped('esi_cost_uom_issue'))
 
     def _esi_purchase_shortages(self):
         """One demand per product, in its stock UoM, at this OF's source.

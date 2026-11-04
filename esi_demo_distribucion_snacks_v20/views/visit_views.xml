@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="seq_esi_snack_visit" model="ir.sequence">
+    <field name="name">Visitas distribución snacks</field>
+    <field name="code">esi.snack.visit</field>
+    <field name="prefix">VIS/</field>
+    <field name="padding">5</field>
+  </record>
+  <record id="view_esi_snack_visit_list" model="ir.ui.view">
+    <field name="name">esi.snack.visit.list</field>
+    <field name="model">esi.snack.visit</field>
+    <field name="arch" type="xml">
+      <list string="Visitas a clientes" decoration-success="state == 'visited'" decoration-warning="state == 'planned'">
+        <field name="name"/>
+        <field name="scheduled_date"/>
+        <field name="partner_id"/>
+        <field name="visited_date"/>
+        <field name="next_visit_date"/>
+        <field name="state"/>
+        <field name="order_id"/>
+        <field name="user_id"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_esi_snack_visit_form" model="ir.ui.view">
+    <field name="name">esi.snack.visit.form</field>
+    <field name="model">esi.snack.visit</field>
+    <field name="arch" type="xml">
+      <form string="Visita a cliente">
+        <header>
+          <button name="action_mark_visited" type="object" string="Marcar visitado" class="btn-primary" invisible="state == 'visited'"/>
+          <button name="action_mark_no_contact" type="object" string="Cliente ausente" invisible="state == 'no_contact'"/>
+          <button name="action_reset_planned" type="object" string="Volver a pendiente" invisible="state == 'planned'"/>
+          <button name="action_create_quotation" type="object" string="Crear / abrir pedido" class="btn-secondary"/>
+          <button name="action_print_visit" type="object" string="Imprimir ficha"/>
+          <field name="state" widget="statusbar" statusbar_visible="planned,visited,no_contact"/>
+        </header>
+        <sheet>
+          <h1><field name="name" readonly="1"/></h1>
+          <group>
+            <group>
+              <field name="company_id" groups="base.group_multi_company"/>
+              <field name="partner_id"/>
+              <field name="user_id"/>
+              <field name="scheduled_date"/>
+            </group>
+            <group>
+              <field name="visited_date"/>
+              <field name="next_visit_date"/>
+              <field name="order_id" readonly="1"/>
+              <field name="order_amount" readonly="1"/>
+            </group>
+          </group>
+          <group><field name="notes" placeholder="Productos solicitados, observaciones y acuerdos..."/></group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="view_esi_snack_visit_search" model="ir.ui.view">
+    <field name="name">esi.snack.visit.search</field>
+    <field name="model">esi.snack.visit</field>
+    <field name="arch" type="xml">
+      <search string="Buscar visitas">
+        <field name="name"/>
+        <field name="partner_id"/>
+        <field name="scheduled_date"/>
+        <filter name="planned" string="Pendientes" domain="[('state','=','planned')]"/>
+        <filter name="visited" string="Visitadas" domain="[('state','=','visited')]"/>
+        <group expand="0" string="Agrupar por">
+          <filter name="by_customer" string="Cliente" context="{'group_by':'partner_id'}"/>
+          <filter name="by_date" string="Fecha" context="{'group_by':'scheduled_date'}"/>
+          <filter name="by_user" string="Distribuidor" context="{'group_by':'user_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+  <record id="action_esi_snack_visits" model="ir.actions.act_window">
+    <field name="name">Visitas a clientes</field>
+    <field name="res_model">esi.snack.visit</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="action_esi_snack_sales" model="ir.actions.act_window">
+    <field name="name">Pedidos de snacks</field>
+    <field name="res_model">sale.order</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="action_esi_snack_products" model="ir.actions.act_window">
+    <field name="name">Productos snacks</field>
+    <field name="res_model">product.template</field>
+    <field name="view_mode">kanban,list,form</field>
+  </record>
+  <record id="action_esi_snack_customers" model="ir.actions.act_window">
+    <field name="name">Clientes</field>
+    <field name="res_model">res.partner</field>
+    <field name="view_mode">kanban,list,form</field>
+  </record>
+  <menuitem id="menu_esi_snack_root" name="Distribución Snacks" sequence="80" groups="sales_team.group_sale_salesman"/>
+  <menuitem id="menu_esi_snack_visits" name="Visitas a clientes" parent="menu_esi_snack_root" action="action_esi_snack_visits" sequence="10"/>
+  <menuitem id="menu_esi_snack_sales" name="Pedidos y notas de venta" parent="menu_esi_snack_root" action="action_esi_snack_sales" sequence="20"/>
+  <menuitem id="menu_esi_snack_customers" name="Clientes" parent="menu_esi_snack_root" action="action_esi_snack_customers" sequence="30"/>
+  <menuitem id="menu_esi_snack_products" name="Productos" parent="menu_esi_snack_root" action="action_esi_snack_products" sequence="40"/>
+</odoo>

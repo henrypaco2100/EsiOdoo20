@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_esi_snack_wizard_form" model="ir.ui.view">
+    <field name="name">esi.snack.wizard.form</field>
+    <field name="model">esi.snack.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Cargar catálogo de ejemplo">
+        <sheet>
+          <group>
+            <field name="company_id"/>
+            <field name="confirm_test"/>
+          </group>
+          <div class="alert alert-warning" role="alert">Cargar solamente en una base de pruebas. No genera existencias ni publica facturas.</div>
+        </sheet>
+        <footer>
+          <button name="action_load" type="object" class="btn-primary" string="Crear productos, clientes y visitas"/>
+          <button special="cancel" string="Cancelar"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+  <record id="action_esi_snack_wizard" model="ir.actions.act_window">
+    <field name="name">Cargar catálogo de ejemplo</field>
+    <field name="res_model">esi.snack.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+  <menuitem id="menu_esi_snack_demo" name="Cargar ejemplos" parent="menu_esi_snack_root" action="action_esi_snack_wizard" sequence="70" groups="base.group_system"/>
+</odoo>

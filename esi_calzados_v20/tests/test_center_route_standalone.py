@@ -92,6 +92,25 @@ class RouteTests(unittest.TestCase):
         with self.assertRaises(RouteError):
             method('Workorder', '_esi_check_previous_centers')(Records([self.stages[0]]))
 
+    def test_partial_handoff_keeps_both_centers_visible(self):
+        first, second, third = self.stages
+        self.production.product_qty = 100
+        first.esi_center_transferred_qty = 80
+        second.esi_center_transferred_qty = 0
+        third.esi_center_transferred_qty = 0
+        def amounts(stage):
+            records = Records([stage])
+            records.ensure_one = lambda: None
+            return method('Workorder', '_esi_center_amounts')(records)
+        self.assertEqual(amounts(first), (100, 20))
+        self.assertEqual(amounts(second), (80, 80))
+        self.assertEqual(amounts(third), (0, 0))
+        second.esi_center_transferred_qty = 35
+        self.assertEqual(amounts(second), (80, 45))
+        self.assertEqual(amounts(third), (35, 35))
+        first.state = 'done'
+        self.assertEqual(amounts(second), (100, 65))
+
     def test_standard_workorders_are_unchanged(self):
         self.stages[0].esi_center_step = 0
         self.production.state = 'draft'

@@ -1,0 +1,70 @@
+<odoo>
+<template id="tosscano_document_header">
+  <table style="width:100%;border-bottom:2px solid #74262b;margin-bottom:12px">
+    <tr><td style="width:22%"><img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height:52px;max-width:135px"/></td>
+    <td style="text-align:center;color:#74262b"><strong t-field="o.company_id.name"/><br/><strong t-out="title"/></td>
+    <td style="width:26%;text-align:right">Folio: <strong t-field="o.name"/><br/><span t-out="date_label"/> <span t-out="document_date" t-options="{'widget':'date'}"/></td></tr>
+  </table>
+</template>
+<template id="tosscano_signatures">
+  <table style="width:100%;margin-top:48px;text-align:center;page-break-inside:avoid">
+    <tr><td style="width:33%">____________________<br/>Solicitante</td><td style="width:34%">____________________<br/>Revisado por</td><td style="width:33%">____________________<br/>Autorizado por</td></tr>
+  </table>
+</template>
+<record id="print_purchase_tosscano" model="ir.actions.report">
+ <field name="name">Compra / Solicitud · Tosscano</field><field name="model">purchase.order</field>
+ <field name="report_type">qweb-pdf</field><field name="report_name">esi_calzados_v20.tosscano_purchase_document</field>
+ <field name="binding_model_id" ref="purchase.model_purchase_order"/><field name="binding_type">report</field>
+</record>
+<template id="tosscano_purchase_document">
+ <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page">
+  <t t-set="title" t-value="'Orden de compra' if o.state in ('purchase','done') else ('Solicitud interna de compra' if o.esi_material_request else 'Solicitud de presupuesto')"/><t t-set="date_label" t-value="'Fecha:'"/><t t-set="document_date" t-value="o.date_order"/>
+  <t t-call="esi_calzados_v20.tosscano_document_header"/>
+  <p>Proveedor: <span t-field="o.partner_id"/> · Origen: <span t-field="o.origin"/></p>
+  <table class="table table-sm table-bordered" style="width:100%;font-size:11px">
+   <thead style="display:table-header-group;background:#ededed"><tr><th>N.º</th><th>Cantidad</th><th>Descripción</th><th>Unidad</th><th>Precio unitario</th><th>Importe</th></tr></thead>
+   <tbody><tr t-foreach="o.order_line.filtered(lambda l: not l.display_type)" t-as="l" style="page-break-inside:avoid"><t t-set="idx" t-value="l_index"/><td><span t-out="idx + 1"/></td><td><span t-field="l.product_qty"/></td><td><span t-out="l.name"/></td><td><span t-out="l.uom_id.name"/></td><td><span t-field="l.price_unit"/></td><td><span t-field="l.price_subtotal"/></td></tr></tbody>
+  </table><p class="text-end">Subtotal: <span t-field="o.amount_untaxed"/> · Impuestos: <span t-field="o.amount_tax"/> · <strong>Total: <span t-field="o.amount_total"/></strong></p>
+  <div t-if="o.esi_material_request" style="border:1px solid #aaa;padding:8px;margin-top:18px;page-break-inside:avoid">
+    <strong>Uso interno</strong><br/>
+    Área solicitante: ____________________ · Proyecto: ____________________<br/>
+    Cargo: ____________________ · Cuenta: ____________________
+  </div>
+  <t t-call="esi_calzados_v20.tosscano_signatures"/>
+ </div></t></t>
+</template>
+<record id="print_transfer_tosscano" model="ir.actions.report">
+ <field name="name">Traslado · Tosscano</field><field name="model">stock.picking</field>
+ <field name="report_type">qweb-pdf</field><field name="report_name">esi_calzados_v20.tosscano_transfer_document</field>
+ <field name="binding_model_id" ref="stock.model_stock_picking"/><field name="binding_type">report</field>
+</record>
+<template id="tosscano_transfer_document">
+ <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page">
+  <t t-set="title" t-value="'Orden de traslado'"/><t t-set="date_label" t-value="'Fecha:'"/><t t-set="document_date" t-value="o.scheduled_date"/>
+  <t t-call="esi_calzados_v20.tosscano_document_header"/>
+  <p>Origen: <span t-field="o.location_id"/> · Destino: <span t-field="o.location_dest_id"/></p>
+  <table class="table table-sm table-bordered" style="width:100%;font-size:11px">
+   <thead style="display:table-header-group;background:#ededed"><tr><th>N.º</th><th>Cantidad prevista</th><th>Descripción</th><th>Unidad</th><th>Cantidad registrada</th></tr></thead>
+   <tbody><tr t-foreach="o.move_ids.filtered(lambda l: l.state != 'cancel')" t-as="l" style="page-break-inside:avoid"><t t-set="idx" t-value="l_index"/><td><span t-out="idx + 1"/></td><td><span t-field="l.product_uom_qty"/></td><td><span t-out="l.product_id.display_name"/></td><td><span t-out="l.uom_id.name"/></td><td><span t-field="l.quantity"/></td></tr></tbody>
+  </table>
+  <t t-call="esi_calzados_v20.tosscano_signatures"/>
+ </div></t></t>
+</template>
+<record id="print_manufacture_tosscano" model="ir.actions.report">
+ <field name="name">Fabricación · Tosscano</field><field name="model">mrp.production</field>
+ <field name="report_type">qweb-pdf</field><field name="report_name">esi_calzados_v20.tosscano_manufacture_document</field>
+ <field name="binding_model_id" ref="mrp.model_mrp_production"/><field name="binding_type">report</field>
+</record>
+<template id="tosscano_manufacture_document">
+ <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page">
+  <t t-set="title" t-value="'Orden de fabricación'"/><t t-set="date_label" t-value="'Fecha:'"/><t t-set="document_date" t-value="o.date_start"/>
+  <t t-call="esi_calzados_v20.tosscano_document_header"/>
+  <p>Producto: <span t-field="o.product_id"/> · Cantidad total: <span t-field="o.esi_display_total_qty"/> <span t-field="o.uom_id"/></p>
+  <table class="table table-sm table-bordered" style="width:100%;font-size:11px">
+   <thead style="display:table-header-group;background:#ededed"><tr><th>N.º</th><th>Familia</th><th>Material</th><th>Unidad</th><th>Cant./par</th><th>Cant. total</th><th>Pendiente</th><th groups="mrp.group_mrp_manager">Precio unitario</th><th groups="mrp.group_mrp_manager">Costo/par</th><th groups="mrp.group_mrp_manager">Costo total</th><th groups="mrp.group_mrp_manager">Revisar unidad</th></tr></thead>
+   <tbody><tr t-foreach="o.move_raw_ids.filtered(lambda l: l.state != 'cancel')" t-as="l" style="page-break-inside:avoid"><t t-set="idx" t-value="l_index"/><td><span t-out="idx + 1"/></td><td><span t-out="l.esi_material_family_id.display_name"/></td><td><span t-out="l.product_id.display_name"/></td><td><span t-out="l.uom_id.name"/></td><td><span t-field="l.esi_qty_per_pair"/></td><td><span t-field="l.product_uom_qty"/></td><td><span t-field="l.esi_remaining_to_consume"/></td><td groups="mrp.group_mrp_manager"><span t-field="l.esi_estimated_unit_cost"/></td><td groups="mrp.group_mrp_manager"><span t-field="l.esi_cost_per_pair"/></td><td groups="mrp.group_mrp_manager"><span t-field="l.esi_estimated_cost"/></td><td groups="mrp.group_mrp_manager"><span t-field="l.esi_cost_uom_issue"/></td></tr></tbody>
+  </table><p groups="mrp.group_mrp_manager" class="text-end">Total estimado: <span t-field="o.esi_material_estimate"/> <strong t-if="o.esi_material_cost_incomplete"> (parcial: revisar unidades)</strong></p>
+  <t t-call="esi_calzados_v20.tosscano_signatures"/>
+ </div></t></t>
+</template>
+</odoo>

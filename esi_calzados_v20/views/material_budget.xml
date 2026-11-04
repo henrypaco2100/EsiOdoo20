@@ -6,16 +6,29 @@
       <xpath expr="//header" position="inside">
         <button name="action_esi_material_purchase" type="object" string="Comprar faltantes" invisible="state in ('done', 'cancel')" groups="purchase.group_purchase_user"/>
       </xpath>
-      <!-- Campo qty nativo conservado para todas las OF. -->
+      <xpath expr="//field[@name='move_raw_ids']/list/field[@name='product_uom_qty']" position="attributes"><attribute name="string">Cant. total prevista</attribute></xpath>
+      <xpath expr="//field[@name='move_raw_ids']/list/field[@name='quantity']" position="attributes"><attribute name="string">Reservado / consumido</attribute></xpath>
+      <xpath expr="//field[@name='move_raw_ids']/list/field[@name='product_id']" position="before">
+        <field name="esi_material_family_id" optional="show"/>
+      </xpath>
+      <xpath expr="//field[@name='move_raw_ids']/list/field[@name='product_id']" position="attributes">
+        <attribute name="string">Material</attribute>
+      </xpath>
       <xpath expr="//field[@name='move_raw_ids']/list" position="inside">
+        <field name="esi_qty_per_pair" optional="show"/>
+        <field name="esi_cost_per_pair" optional="show" groups="mrp.group_mrp_manager"/>
+        <field name="esi_remaining_to_consume" optional="show"/>
+        <field name="esi_cost_uom_issue" optional="show" groups="mrp.group_mrp_manager"/>
         <field name="esi_cost_currency_id" column_invisible="True"/>
         <field name="esi_estimated_unit_cost" optional="show" groups="mrp.group_mrp_manager"/>
-        <field name="esi_estimated_cost" optional="show" sum="Total estimado" groups="mrp.group_mrp_manager"/>
+        <field name="esi_estimated_cost" optional="show" groups="mrp.group_mrp_manager"/>
       </xpath>
       <xpath expr="//field[@name='move_raw_ids']" position="after">
         <group groups="mrp.group_mrp_manager">
           <field name="esi_budget_currency_id" invisible="1"/>
+          <field name="esi_material_cost_incomplete" invisible="1"/>
           <field name="esi_material_estimate"/>
+          <div class="text-danger" colspan="2" invisible="not esi_material_cost_incomplete">Total parcial: hay componentes sin equivalencia de unidades. Revise la unidad de la receta y la unidad de inventario.</div>
           <div class="text-muted" colspan="2">Estimación al costo actual de los productos en esta compañía, por las cantidades planificadas. No incluye mano de obra, gastos ni impuestos; no sustituye la valoración real.</div>
         </group>
       </xpath>

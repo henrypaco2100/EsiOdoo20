@@ -1,3 +1,5 @@
+from math import isfinite
+
 from odoo import api, fields, models, Command, _
 from odoo.exceptions import UserError, ValidationError
 
@@ -54,6 +56,14 @@ class Production(models.Model):
     esi_current_center_workorder_id = fields.Many2one('mrp.workorder',
         compute='_compute_esi_current_center', store=True)
     esi_current_center_state = fields.Selection(related='esi_current_center_workorder_id.state')
+    esi_center_stage_ids = fields.One2many('mrp.workorder', compute='_compute_esi_center_stages',
+        string='Cantidades por centro')
+
+    @api.depends('workorder_ids.esi_center_step')
+    def _compute_esi_center_stages(self):
+        for production in self:
+            production.esi_center_stage_ids = production.workorder_ids.filtered('esi_center_step').sorted('esi_center_step')
+
     esi_center_progress = fields.Char(string='Recorrido', compute='_compute_esi_current_center')
 
     @api.depends('state', 'workorder_ids.esi_center_step', 'workorder_ids.state', 'workorder_ids.workcenter_id')
@@ -98,20 +108,10 @@ class Production(models.Model):
     def action_esi_advance_center(self):
         self.ensure_one()
         self.check_access('write')
-        # Serialize two clicks on the same MO; concurrent transactions retry through Odoo.
-        self.write({'esi_center_revision': self.esi_center_revision + 1})
-        self.flush_recordset(['esi_center_revision'])
         stage = self.esi_current_center_workorder_id
-        if not stage or self.state not in ('confirmed', 'progress'):
+        if not stage:
             raise UserError(_('No hay un centro pendiente para avanzar en esta orden.'))
-        if stage.state != 'progress':
-            raise UserError(_('Inicie el centro actual antes de finalizarlo. El siguiente centro está pendiente de inicio.'))
-        stage.button_finish()
-        following = self.esi_current_center_workorder_id
-        self.message_post(body=_('Lote completo terminado en %(center)s. Siguiente centro: %(next)s.',
-            center=stage.workcenter_id.name,
-            next=following.workcenter_id.name if following else _('Recorrido terminado; pendiente finalizar fabricación')))
-        return True
+        return stage.action_esi_advance_center()
 
     def action_esi_start_center(self):
         self.ensure_one()
@@ -163,6 +163,78 @@ class Workorder(models.Model):
     esi_size_quantities_display = fields.Char(
         related='production_id.esi_size_quantities_display', readonly=True)
 
+    esi_center_transferred_qty = fields.Float(string='Avanzado', digits='Product Unit', readonly=True, copy=False)
+    esi_center_received_qty = fields.Float(string='Recibido', compute='_compute_esi_center_quantities', digits='Product Unit')
+    esi_center_available_qty = fields.Float(string='Pendiente en el centro', compute='_compute_esi_center_quantities', digits='Product Unit')
+
+    @api.model
+    def action_esi_center_dashboard(self):
+        return self.env['ir.actions.actions']._for_xml_id('esi_calzados_v20.center_advance_report_action')
+
+    def _esi_center_amounts(self):
+        self.ensure_one()
+        if not self.esi_center_step:
+            return 0, 0
+        mo = self.production_id
+        previous = mo.workorder_ids.filtered(
+            lambda w: w.esi_center_step and w.esi_center_step < self.esi_center_step
+        ).sorted('esi_center_step')[-1:]
+        received = (mo.product_qty if not previous or previous.state == 'done'
+                    else previous.esi_center_transferred_qty)
+        sent = mo.product_qty if self.state == 'done' else self.esi_center_transferred_qty
+        return received, max(0, received - sent) if self.state != 'cancel' else 0
+
+    @api.depends('esi_center_step', 'state', 'esi_center_transferred_qty',
+                 'production_id.product_qty', 'production_id.workorder_ids.state',
+                 'production_id.workorder_ids.esi_center_step',
+                 'production_id.workorder_ids.esi_center_transferred_qty')
+    def _compute_esi_center_quantities(self):
+        for stage in self:
+            stage.esi_center_received_qty, stage.esi_center_available_qty = stage._esi_center_amounts()
+
+    def _esi_transfer_center_qty(self, qty):
+        self.ensure_one()
+        self.check_access('write')
+        mo = self.production_id
+        mo.check_access('write')
+        # Serialize transfers for the entire route, including concurrent transfers at different stages.
+        mo.write({'esi_center_revision': mo.esi_center_revision + 1})
+        mo.flush_recordset(['esi_center_revision'])
+        if not self.esi_center_step or self.state in ('done', 'cancel') or mo.state not in ('confirmed', 'progress', 'to_close'):
+            raise UserError(_('Esta etapa ya no admite avances.'))
+        uom = mo.uom_id
+        if not isfinite(qty) or uom.compare(qty, 0) <= 0:
+            raise UserError(_('Ingrese una cantidad mayor que cero.'))
+        qty = uom.round(qty)
+        received, available = self._esi_center_amounts()
+        if uom.compare(qty, available) > 0:
+            raise UserError(_('Solo hay %(qty)s disponibles en este centro.', qty=available))
+        transferred = uom.round(self.esi_center_transferred_qty + qty)
+        super().write({'esi_center_transferred_qty': transferred})
+        if uom.compare(transferred, mo.product_qty) == 0:
+            # Close the work order without native button_finish, which also marks
+            # raw moves and byproducts as picked. Progress is not a stock posting.
+            self._esi_check_previous_centers()
+            self.end_all()
+            now = fields.Datetime.now()
+            self.with_context(bypass_duration_calculation=True, bypass_change_producing=True).write({
+                'state': 'done', 'qty_produced': mo.product_qty,
+                'date_start': self.date_start or now, 'date_finished': now,
+                'costs_hour': self.workcenter_id.costs_hour,
+            })
+        following = mo.workorder_ids.filtered(
+            lambda w: w.esi_center_step > self.esi_center_step).sorted('esi_center_step')[:1]
+        self.env['esi.center.advance'].sudo().create({
+            'company_id': mo.company_id.id, 'workorder_id': self.id,
+            'workcenter_id': self.workcenter_id.id, 'quantity': qty,
+            'uom_id': uom.id, 'operator_id': self.env.uid,
+        })
+        mo.message_post(body=_('Avance: %(qty)s %(unit)s · %(source)s → %(destination)s. Quedan %(remaining)s en el centro de origen.',
+            qty=qty, unit=uom.name, source=self.workcenter_id.display_name,
+            destination=following.workcenter_id.display_name if following else _('Recorrido terminado'),
+            remaining=self._esi_center_amounts()[1]))
+        return {'type': 'ir.actions.act_window_close'}
+
     def unlink(self):
         if self.filtered(lambda w: w.esi_center_step and w.production_id.state not in ('draft', 'cancel')):
             raise UserError(_('No elimine etapas de un recorrido confirmado. Cancele la orden si necesita rehacer el recorrido.'))
@@ -183,10 +255,19 @@ class Workorder(models.Model):
         return super().button_start(raise_on_invalid_state=raise_on_invalid_state)
 
     def button_finish(self):
+        if self.filtered(lambda w: w.esi_center_step and w.state not in ('done', 'cancel')):
+            raise UserError(_('Use Registrar avance para indicar la cantidad terminada en el centro.'))
         self._esi_check_previous_centers()
         return super().button_finish()
 
     def write(self, values):
+        if 'esi_center_transferred_qty' in values:
+            raise UserError(_('Use Registrar avance para modificar la cantidad trasladada.'))
+        if values.get('state') == 'done':
+            for stage in self.filtered(lambda w: w.esi_center_step and w.state != 'done'):
+                mo = stage.production_id
+                if mo.uom_id.compare(stage.esi_center_transferred_qty, mo.product_qty) != 0:
+                    raise UserError(_('Registre toda la cantidad de este centro antes de cerrarlo.'))
         if values.get('state') in ('progress', 'done'):
             self._esi_check_previous_centers()
         if 'workcenter_id' in values:
@@ -205,6 +286,23 @@ class Workorder(models.Model):
 
     def action_esi_advance_center(self):
         self.ensure_one()
-        if self != self.production_id.esi_current_center_workorder_id:
-            raise UserError(_('Esta etapa ya cambió. Actualice la pantalla y continúe desde el centro actual.'))
-        return self.production_id.action_esi_advance_center()
+        self.check_access('write')
+        if not self.esi_center_step or self.esi_center_available_qty <= 0 or self.production_id.state not in ('confirmed', 'progress', 'to_close'):
+            raise UserError(_('No hay cantidad pendiente disponible en este centro.'))
+        wizard = self.env['esi.center.transfer'].create({'workorder_id': self.id, 'quantity': self.esi_center_available_qty})
+        return {'type': 'ir.actions.act_window', 'name': _('Registrar avance'),
+                'res_model': wizard._name, 'res_id': wizard.id, 'view_mode': 'form', 'target': 'new'}
+
+
+class CenterTransfer(models.TransientModel):
+    _name = 'esi.center.transfer'
+    _description = 'Avance parcial por centro de trabajo'
+
+    workorder_id = fields.Many2one('mrp.workorder', required=True, readonly=True, ondelete='cascade')
+    available_qty = fields.Float(related='workorder_id.esi_center_available_qty', string='Pendiente en este centro')
+    quantity = fields.Float(string='Cantidad a avanzar', required=True, digits='Product Unit')
+
+    def action_transfer(self):
+        self.ensure_one()
+        self.check_access('write')
+        return self.workorder_id._esi_transfer_center_qty(self.quantity)

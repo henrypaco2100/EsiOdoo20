@@ -29,3 +29,5 @@ from . import purchase_material_request
 from . import material_specification
 
 from . import production_lots
+
+from . import center_report

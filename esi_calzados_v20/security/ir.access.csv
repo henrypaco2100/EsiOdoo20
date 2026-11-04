@@ -11,3 +11,6 @@ access_esi_material_purchase,esi.material.purchase,model_esi_material_purchase,p
 access_esi_material_purchase_line,esi.material.purchase.line,model_esi_material_purchase_line,purchase.group_purchase_user,crud,
 access_esi_bom_center_user,esi.bom.center.user,model_esi_bom_center,mrp.group_mrp_user,r,
 access_esi_bom_center_manager,esi.bom.center.manager,model_esi_bom_center,mrp.group_mrp_manager,crud,
+access_esi_center_transfer,esi.center.transfer,model_esi_center_transfer,mrp.group_mrp_user,crud,
+access_esi_center_advance,esi.center.advance,model_esi_center_advance,mrp.group_mrp_user,r,
+access_esi_center_advance_report,esi.center.advance.report,model_esi_center_advance_report,mrp.group_mrp_user,crud,

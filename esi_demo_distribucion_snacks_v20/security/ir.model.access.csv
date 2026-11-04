@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_esi_snack_visit_salesman,esi.snack.visit sales,model_esi_snack_visit,sales_team.group_sale_salesman,1,1,1,0
+access_esi_snack_visit_manager,esi.snack.visit manager,model_esi_snack_visit,sales_team.group_sale_manager,1,1,1,1
+access_esi_snack_wizard_manager,esi.snack.wizard manager,model_esi_snack_wizard,base.group_system,1,1,1,1
