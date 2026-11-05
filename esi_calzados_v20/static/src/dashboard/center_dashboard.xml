@@ -1,0 +1,51 @@
+<templates xml:space="preserve">
+  <t t-name="esi_calzados_v20.CenterChart">
+    <div class="esi-center-chart"><canvas t-ref="this.chart.ref"/></div>
+  </t>
+  <t t-name="esi_calzados_v20.CenterDashboard">
+    <div class="esi-center-dashboard h-100 overflow-auto p-3">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <div><h2 class="mb-0">Fabricación por centros</h2><span class="text-muted">Producción y carga de trabajo por área</span></div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary" t-on-click="() => this.openAnalysis('graph')" t-att-disabled="this.state.loading || !this.state.data?.filters.uom_id">Gráficos Odoo</button>
+          <button class="btn btn-outline-primary" t-on-click="() => this.openAnalysis('pivot')" t-att-disabled="this.state.loading || !this.state.data?.filters.uom_id">Tabla dinámica</button>
+          <button class="btn btn-outline-secondary" t-on-click="this.openMatrix">Matriz</button>
+        </div>
+      </div>
+      <div t-if="this.state.error" class="alert alert-danger" role="alert" t-out="this.state.error"/>
+      <t t-if="this.state.data">
+        <div class="esi-center-filters card p-3 mb-3 d-flex flex-row flex-wrap gap-3 align-items-end">
+          <label>Compañía<select class="form-select" t-on-change="(ev) => this.changeFilter('company_id', ev)">
+            <option t-foreach="this.state.data.companies" t-as="company" t-key="company.id" t-att-value="company.id" t-att-selected="company.id === this.state.filters.company_id" t-out="company.name"/>
+          </select></label>
+          <label>Unidad<select class="form-select" t-on-change="(ev) => this.changeFilter('uom_id', ev)">
+            <option t-foreach="this.state.data.units" t-as="unit" t-key="unit.id" t-att-value="unit.id" t-att-selected="unit.id === this.state.filters.uom_id" t-out="unit.name"/>
+          </select></label>
+          <label>Período<select class="form-select" t-on-change="this.quickRange">
+            <option value="">Personalizado</option><option value="1">Hoy</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option>
+          </select></label>
+          <label>Desde<input class="form-control" type="date" t-att-value="this.state.filters.date_from" t-on-change="(ev) => this.changeFilter('date_from', ev)"/></label>
+          <label>Hasta<input class="form-control" type="date" t-att-value="this.state.filters.date_to" t-on-change="(ev) => this.changeFilter('date_to', ev)"/></label>
+          <label>Agrupar<select class="form-select" t-on-change="(ev) => this.changeFilter('grouping', ev)">
+            <option value="day" t-att-selected="this.state.filters.grouping === 'day'">Día</option><option value="week" t-att-selected="this.state.filters.grouping === 'week'">Semana</option><option value="month" t-att-selected="this.state.filters.grouping === 'month'">Mes</option><option value="year" t-att-selected="this.state.filters.grouping === 'year'">Año</option>
+          </select></label>
+          <button class="btn btn-primary" t-on-click="this.load" t-att-disabled="this.state.loading">Actualizar</button>
+        </div>
+        <div class="esi-center-kpis mb-3">
+          <div class="card p-3"><strong>Avances en áreas</strong><div class="esi-kpi-value" t-out="this.format(this.state.data.kpis.advances)"/><small>Suma de pasos del período</small></div>
+          <div class="card p-3"><strong>Finalizados en último centro</strong><div class="esi-kpi-value" t-out="this.format(this.state.data.kpis.finished)"/><small>Recorrido terminado en el período</small></div>
+          <div class="card p-3"><strong>Órdenes con avances</strong><div class="esi-kpi-value" t-out="this.format(this.state.data.kpis.orders)"/><small>OF distintas del período</small></div>
+          <div class="card p-3"><strong>Pendientes actuales</strong><div class="esi-kpi-value" t-out="this.format(this.state.data.kpis.pending)"/><small>En todas las áreas · situación actual</small></div>
+        </div>
+        <div t-if="this.state.loading" class="alert alert-info">Actualizando…</div>
+        <div class="card p-3 mb-3"><h4>Evolución de avances por área · <t t-out="this.state.data.unit"/></h4><CenterChart config="this.config('trend')"/></div>
+        <div class="esi-center-panels">
+          <div class="card p-3"><h4>Avances por centro · <t t-out="this.state.data.unit"/></h4><CenterChart config="this.config('volume')"/></div>
+          <div class="card p-3"><h4>Pendientes actuales por área · <t t-out="this.state.data.unit"/></h4><CenterChart config="this.config('pending')"/></div>
+        </div>
+        <p class="text-muted mt-3">Cada par puede pasar por varias áreas: avances no equivale a producto terminado. Finalizado en el último centro no implica entrada al almacén. El historial comienza al registrar avances con esta función.</p>
+      </t>
+      <div t-elif="this.state.loading" class="alert alert-info">Cargando tablero…</div>
+    </div>
+  </t>
+</templates>

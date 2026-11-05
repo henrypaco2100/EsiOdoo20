@@ -26,7 +26,7 @@
     <field name="view_mode">form</field>
     <field name="view_id" ref="center_advance_report_form"/>
   </record>
-  <menuitem id="center_advance_report_menu" name="Tablero de fabricación por centros"
+  <menuitem id="center_advance_report_menu" name="Matriz de producción por centro"
     parent="mrp.menu_mrp_manufacturing" action="center_advance_report_action"
     sequence="26" groups="mrp.group_mrp_user"/>
   <record id="center_advance_pivot" model="ir.ui.view">

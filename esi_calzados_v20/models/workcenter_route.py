@@ -167,9 +167,8 @@ class Workorder(models.Model):
     esi_center_received_qty = fields.Float(string='Recibido', compute='_compute_esi_center_quantities', digits='Product Unit')
     esi_center_available_qty = fields.Float(string='Pendiente en el centro', compute='_compute_esi_center_quantities', digits='Product Unit')
 
-    @api.model
     def action_esi_center_dashboard(self):
-        return self.env['ir.actions.actions']._for_xml_id('esi_calzados_v20.center_advance_report_action')
+        return self.env['ir.actions.actions']._for_xml_id('esi_calzados_v20.center_dashboard_action')
 
     def _esi_center_amounts(self):
         self.ensure_one()

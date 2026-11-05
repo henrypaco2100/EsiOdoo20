@@ -1,0 +1,13 @@
+.esi-center-dashboard {
+  background: #f5f7f8;
+  .card { border: 1px solid #e1e7ec; border-radius: 8px; box-shadow: 0 2px 5px rgba(7,41,85,.05); }
+  h2, h4, .esi-kpi-value { color: #072955; }
+  .esi-center-kpis { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
+  .esi-kpi-value { font-size: 34px; line-height: 1.5; font-weight: 600; }
+  .esi-center-kpis strong { color: #007e73; }
+  .esi-center-kpis small { color: #64748b; }
+  .esi-center-panels { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+  .esi-center-chart { position: relative; height: 330px; min-width: 0; }
+  @media (max-width: 1000px) { .esi-center-kpis { grid-template-columns: repeat(2,minmax(0,1fr)); } .esi-center-panels { grid-template-columns: 1fr; } }
+  @media (max-width: 550px) { .esi-center-kpis { grid-template-columns: 1fr; } }
+}

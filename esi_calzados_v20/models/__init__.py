@@ -31,3 +31,5 @@ from . import material_specification
 from . import production_lots
 
 from . import center_report
+
+from . import center_dashboard

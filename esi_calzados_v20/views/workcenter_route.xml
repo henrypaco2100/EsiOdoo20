@@ -81,7 +81,7 @@
     <field name="model">mrp.workorder</field>
     <field name="arch" type="xml">
       <kanban default_group_by="workcenter_id" create="0" records_draggable="false" groups_draggable="false" group_create="false" group_edit="false" group_delete="false">
-        <header><button name="action_esi_center_dashboard" type="object" string="Tablero y tabla dinámica" display="always" groups="mrp.group_mrp_user"/></header>
+        <header><button name="%(center_dashboard_action)d" type="action" string="Tablero de producción" display="always" groups="mrp.group_mrp_user"/></header>
         <templates>
           <t t-name="card">
             <div class="d-flex justify-content-between"><strong><field name="production_id"/></strong><field name="state" widget="badge"/></div>
