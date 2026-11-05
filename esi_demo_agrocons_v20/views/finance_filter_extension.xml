@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="agro_finance_filter_extension" model="ir.ui.view">
+    <field name="name">esi.finance.report.agrocons.filters</field>
+    <field name="model">esi.finance.report</field>
+    <field name="inherit_id" ref="esi_finanzas_v20.report_form"/>
+    <field name="arch" type="xml">
+      <field name="account_ids" position="after">
+        <field name="esi_structured" string="Presentación detallada (Agrocons)"/>
+        <field name="esi_journal_ids" widget="many2many_tags" invisible="kind not in ('balance','profit','trial','ledger')"/>
+        <field name="esi_account_visibility" invisible="kind not in ('balance','profit','trial','ledger')"/>
+        <field name="esi_include_opening" invisible="kind != 'ledger'"/>
+        <field name="esi_ledger_order" invisible="kind != 'ledger'"/>
+      </field>
+    </field>
+  </record>
+</odoo>

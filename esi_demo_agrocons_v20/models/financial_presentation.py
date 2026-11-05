@@ -11,6 +11,15 @@ from odoo.exceptions import UserError
 class AgroconsFinancialPresentation(models.TransientModel):
     _inherit = 'esi.finance.report'
 
+    esi_journal_ids = fields.Many2many('account.journal', string='Diarios contables',
+        help='Vacío: todos los diarios de las compañías seleccionadas.')
+    esi_account_visibility = fields.Selection([
+        ('movements', 'Solo cuentas con movimientos del período'),
+        ('nonzero', 'Cuentas con saldo o movimientos'),
+        ('all', 'Todas las cuentas')], default='nonzero', string='Mostrar cuentas')
+    esi_include_opening = fields.Boolean(string='Incluir saldo inicial en Libro Mayor', default=True)
+    esi_ledger_order = fields.Selection([('date', 'Fecha'), ('journal', 'Diario y contacto')],
+        default='date', string='Orden del Libro Mayor')
     esi_structured = fields.Boolean(
         string='Presentación contable detallada - Familia Agrocons', default=False,
         help='Muestra informes por cuenta y grupos, sin crear ni alterar movimientos.')
@@ -21,8 +30,6 @@ class AgroconsFinancialPresentation(models.TransientModel):
         esi_finanzas_v20 permanece sin modificaciones.
         """
         self.ensure_one()
-        if self.esi_structured:
-            return True
         if self.kind not in ('balance', 'profit', 'trial', 'ledger'):
             return False
         if self.analytic_id:
@@ -30,7 +37,8 @@ class AgroconsFinancialPresentation(models.TransientModel):
         return bool(self.env['account.move'].search_count([
             ('company_id', '=', self.company_id.id),
             ('state', '=', 'posted'),
-            ('ref', 'like', 'AGC-CONT-DEMO-2026%'),
+            '|', ('ref', '=like', 'AGC-CONT-DEMO-2026%'),
+                 ('ref', '=like', 'AGC-AMPLIACION-2026-%'),
         ]))
 
     def _report_data(self):
@@ -48,6 +56,8 @@ class AgroconsFinancialPresentation(models.TransientModel):
         domain = [('company_id', 'in', companies.ids), ('date', '<=', self.date_to),
                   ('display_type', 'not in', ['line_section', 'line_note'])]
         domain.append(('parent_state', '=', 'posted') if self.posted_only else ('parent_state', '!=', 'cancel'))
+        if self.esi_journal_ids:
+            domain.append(('journal_id', 'in', self.esi_journal_ids.ids))
         if self.account_ids:
             domain.append(('account_id', 'in', self.account_ids.ids))
         if self.partner_id:
@@ -55,7 +65,10 @@ class AgroconsFinancialPresentation(models.TransientModel):
         if self.store_id and not self.include_branches:
             if 'esi_store_id' in self.env['account.move.line']._fields:
                 domain.append(('esi_store_id', '=', self.store_id.id))
-        lines = self.env['account.move.line'].with_company(self.company_id).search(domain, order='date,id', limit=100001)
+        order = ('journal_id,date,id' if self.kind == 'ledger' and self.esi_ledger_order == 'journal'
+                 else 'date,id')
+        lines = self.env['account.move.line'].with_company(self.company_id).search(
+            domain, order=order, limit=100001)
         if len(lines) > 100000:
             raise UserError(_('Demasiados apuntes. Reduzca las fechas o las cuentas.'))
         company_currency = self.company_id.currency_id
@@ -71,8 +84,24 @@ class AgroconsFinancialPresentation(models.TransientModel):
                 debits[aid] += line.debit
                 credits[aid] += line.credit
                 grouped[aid].append(line)
+        if self.esi_account_visibility == 'all' and not self.account_ids and not self.partner_id:
+            Account = self.env['account.account'].with_company(self.company_id)
+            adomain = [('active', '=', True)]
+            if 'company_ids' in Account._fields:
+                adomain += [('company_ids', 'in', companies.ids)]
+            elif 'company_id' in Account._fields:
+                adomain += [('company_id', 'in', companies.ids)]
+            for account in Account.search(adomain):
+                accounts.setdefault(account.id, account)
         balance = {i: opening[i] + debits[i] - credits[i] for i in accounts}
-        sorted_ids = sorted(accounts, key=lambda i: accounts[i].code or '')
+        def visible(i):
+            if self.esi_account_visibility == 'all':
+                return True
+            if self.esi_account_visibility == 'movements':
+                return not (company_currency.is_zero(debits[i]) and company_currency.is_zero(credits[i]))
+            return not (company_currency.is_zero(opening[i]) and company_currency.is_zero(debits[i])
+                        and company_currency.is_zero(credits[i]))
+        sorted_ids = sorted((i for i in accounts if visible(i)), key=lambda i: accounts[i].code or '')
         title = '%s · %s · %s · %s' % (
             dict(self._fields['kind'].selection).get(self.kind, self.kind),
             self.company_id.display_name,
@@ -82,22 +111,29 @@ class AgroconsFinancialPresentation(models.TransientModel):
         if self.kind == 'trial':
             rows = [[accounts[i].code or '', accounts[i].name, rnd(opening[i]),
                      rnd(debits[i]), rnd(credits[i]), rnd(balance[i])] for i in sorted_ids]
-            rows.append(['', 'TOTAL', rnd(sum(opening.values())), rnd(sum(debits.values())),
-                         rnd(sum(credits.values())), rnd(sum(balance.values()))])
+            rows.append(['', 'TOTAL', rnd(sum(opening[i] for i in sorted_ids)),
+                         rnd(sum(debits[i] for i in sorted_ids)),
+                         rnd(sum(credits[i] for i in sorted_ids)), rnd(sum(balance[i] for i in sorted_ids))])
             return title, ['Código', 'Cuenta', 'Saldo inicial', 'Débito', 'Crédito', 'Saldo final'], rows
         if self.kind == 'ledger':
             rows = []
             for i in sorted_ids:
                 acc = accounts[i]
                 running = opening[i]
-                rows.append([acc.code or '', acc.name, '', '', 'Saldo inicial', '', 0.0, 0.0, rnd(running)])
+                # Distinguish account headings from the individual posted lines.
+                rows.append([acc.code or '', acc.name, '', '', '', '', 'CUENTA', 0.0, 0.0, ''])
+                if self.esi_include_opening:
+                    rows.append(['', '', '', '', '', '', 'Saldo inicial', 0.0, 0.0, rnd(running)])
                 for line in grouped[i]:
                     running += line.balance
-                    rows.append([acc.code or '', acc.name, str(line.date),
-                                 line.journal_id.code or '', line.move_id.name or '',
-                                 line.partner_id.display_name or '', rnd(line.debit),
+                    rows.append(['', '', str(line.date), line.journal_id.code or '',
+                                 line.move_id.name or '', line.partner_id.display_name or '',
+                                 line.name or line.move_id.ref or '', rnd(line.debit),
                                  rnd(line.credit), rnd(running)])
-            return title, ['Código', 'Cuenta', 'Fecha', 'Diario', 'Asiento', 'Contacto', 'Débito', 'Crédito', 'Saldo'], rows
+                rows.append(['', '', '', '', '', '', 'Saldo final', rnd(debits[i]),
+                             rnd(credits[i]), rnd(running)])
+            return title, ['Código', 'Cuenta', 'Fecha', 'Diario', 'Asiento', 'Contacto',
+                           'Concepto', 'Débito', 'Crédito', 'Saldo'], rows
         rows = []
         headers = ['Código', 'Cuenta / título', 'Débito', 'Crédito', 'Monto']
         def section(label):
@@ -111,7 +147,7 @@ class AgroconsFinancialPresentation(models.TransientModel):
                 dr = debits[i] if period else opening[i] + debits[i]
                 cr = credits[i] if period else credits[i]
                 value = rnd(sign * (dr - cr))
-                if company_currency.is_zero(value):
+                if company_currency.is_zero(value) and self.esi_account_visibility != 'all':
                     continue
                 rows.append([acc.code or '', acc.name, rnd(dr), rnd(cr), value])
                 amount += value
@@ -149,7 +185,8 @@ class AgroconsFinancialPresentation(models.TransientModel):
         subtotal('TOTAL PASIVO', pc+pnc)
         section('Patrimonio')
         equity = add_accounts(lambda t: t.startswith('equity'), -1)
-        pl = -sum(balance[i] for i in sorted_ids if accounts[i].account_type.startswith(('income','expense')))
+        pl = -sum(balance[i] for i in accounts
+                  if accounts[i].account_type.startswith(('income','expense')))
         if not company_currency.is_zero(pl):
             rows.append(['', 'Resultado acumulado pendiente de cierre', '', '', rnd(pl)])
         subtotal('TOTAL PATRIMONIO', equity+pl)
