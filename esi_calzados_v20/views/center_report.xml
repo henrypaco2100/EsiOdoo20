@@ -26,10 +26,7 @@
     <field name="view_mode">form</field>
     <field name="view_id" ref="center_advance_report_form"/>
   </record>
-  <menuitem id="center_advance_report_menu" name="Matriz de producción por centro"
-    parent="mrp.menu_mrp_manufacturing" action="center_advance_report_action"
-    sequence="26" groups="mrp.group_mrp_user"/>
-  <record id="center_advance_pivot" model="ir.ui.view">
+  <record id="center_advance_report_menu" model="ir.ui.menu"><field name="name">Análisis de centros</field><field name="active" eval="False"/></record><record id="center_advance_pivot" model="ir.ui.view">
     <field name="name">esi.center.advance.pivot</field>
     <field name="model">esi.center.advance</field>
     <field name="arch" type="xml">

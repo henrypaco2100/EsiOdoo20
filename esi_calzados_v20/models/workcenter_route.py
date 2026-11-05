@@ -163,9 +163,9 @@ class Workorder(models.Model):
     esi_size_quantities_display = fields.Char(
         related='production_id.esi_size_quantities_display', readonly=True)
 
-    esi_center_transferred_qty = fields.Float(string='Avanzado', digits='Product Unit', readonly=True, copy=False)
-    esi_center_received_qty = fields.Float(string='Recibido', compute='_compute_esi_center_quantities', digits='Product Unit')
-    esi_center_available_qty = fields.Float(string='Pendiente en el centro', compute='_compute_esi_center_quantities', digits='Product Unit')
+    esi_center_transferred_qty = fields.Float(string='Avanzado', digits=(16, 2), readonly=True, copy=False)
+    esi_center_received_qty = fields.Float(string='Recibido', compute='_compute_esi_center_quantities', store=True, digits=(16, 2))
+    esi_center_available_qty = fields.Float(string='Pendiente en el centro', compute='_compute_esi_center_quantities', store=True, digits=(16, 2))
 
     def action_esi_center_dashboard(self):
         return self.env['ir.actions.actions']._for_xml_id('esi_calzados_v20.center_dashboard_action')
@@ -297,9 +297,9 @@ class CenterTransfer(models.TransientModel):
     _name = 'esi.center.transfer'
     _description = 'Avance parcial por centro de trabajo'
 
-    workorder_id = fields.Many2one('mrp.workorder', required=True, readonly=True, ondelete='cascade')
-    available_qty = fields.Float(related='workorder_id.esi_center_available_qty', string='Pendiente en este centro')
-    quantity = fields.Float(string='Cantidad a avanzar', required=True, digits='Product Unit')
+    workorder_id = fields.Many2one('mrp.workorder', string='Centro de la orden', required=True, readonly=True, ondelete='cascade')
+    available_qty = fields.Float(related='workorder_id.esi_center_available_qty', digits=(16, 2), string='Pendiente en este centro')
+    quantity = fields.Float(string='Cantidad a avanzar', required=True, digits=(16, 2))
 
     def action_transfer(self):
         self.ensure_one()

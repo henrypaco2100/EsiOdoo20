@@ -3,8 +3,7 @@
     <field name="name">Tablero de fabricación por centros</field>
     <field name="tag">esi_center_dashboard</field>
   </record>
-  <menuitem id="center_dashboard_menu" name="Tablero de fabricación por centros" parent="mrp.menu_mrp_manufacturing" action="center_dashboard_action" sequence="24" groups="mrp.group_mrp_user"/>
-  <record id="center_advance_graph" model="ir.ui.view">
+  <record id="center_dashboard_menu" model="ir.ui.menu"><field name="name">Tablero de centros</field><field name="active" eval="False"/></record><record id="center_advance_graph" model="ir.ui.view">
     <field name="name">esi.center.advance.graph</field>
     <field name="model">esi.center.advance</field>
     <field name="arch" type="xml"><graph string="Avances por centro" type="bar">

@@ -26,7 +26,7 @@ class CenterAdvance(models.Model):
     workorder_id = fields.Many2one('mrp.workorder', ondelete='restrict', required=True)
     workcenter_id = fields.Many2one('mrp.workcenter', ondelete='restrict', required=True)
     advanced_at = fields.Datetime(required=True, default=fields.Datetime.now, index=True)
-    quantity = fields.Float(required=True, digits='Product Unit')
+    quantity = fields.Float(required=True, digits=(16, 2))
     uom_id = fields.Many2one('uom.uom', required=True, ondelete='restrict')
     operator_id = fields.Many2one('res.users', required=True)
 
