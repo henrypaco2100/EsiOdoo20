@@ -1,6 +1,6 @@
 {
     'name': 'ESI | Demo Corporacion ESI - Multisucursal Agro',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.0.1',
     'category': 'Industries/Agriculture',
     'summary': 'Demo multisucursal con plan contable compartido, AVCO, valoracion automatica, productos y saldos fuente',
     'author': 'ESI - Especialistas en Sistemas Integrados',

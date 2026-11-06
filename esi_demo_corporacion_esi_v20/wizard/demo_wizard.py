@@ -12,15 +12,19 @@ from odoo.exceptions import UserError
 
 ACCOUNT_SPECS = [
     # code, name, type, parent
+# Odoo 20 no permite compartir cuentas de tipo asset_cash entre varias companias.
+# Como esta demo usa un unico plan compartido entre matriz y sucursales, las cuentas
+# Caja/Bancos del plan fuente se clasifican como asset_current, conservando codigo,
+# nombre y saldo. Los diarios por sucursal siguen siendo independientes.
     ('1', 'ACTIVO', 'asset_current', False),
     ('11', 'ACTIVO CORRIENTE', 'asset_current', '1'),
-    ('111', 'DISPONIBLE', 'asset_cash', '11'),
-    ('11101', 'CAJA', 'asset_cash', '111'),
-    ('1110101', 'CAJA GENERAL', 'asset_cash', '11101'),
-    ('1110102', 'CAJA CHICA', 'asset_cash', '11101'),
-    ('11102', 'BANCOS', 'asset_cash', '111'),
-    ('1110201', 'BANCO MONEDA NACIONAL', 'asset_cash', '11102'),
-    ('1110202', 'BANCO MONEDA EXTRANJERA', 'asset_cash', '11102'),
+    ('111', 'DISPONIBLE', 'asset_current', '11'),
+    ('11101', 'CAJA', 'asset_current', '111'),
+    ('1110101', 'CAJA GENERAL', 'asset_current', '11101'),
+    ('1110102', 'CAJA CHICA', 'asset_current', '11101'),
+    ('11102', 'BANCOS', 'asset_current', '111'),
+    ('1110201', 'BANCO MONEDA NACIONAL', 'asset_current', '11102'),
+    ('1110202', 'BANCO MONEDA EXTRANJERA', 'asset_current', '11102'),
     ('112', 'EXIGIBLE / CUENTAS POR COBRAR', 'asset_current', '11'),
     ('1120101', 'CLIENTES POR COBRAR', 'asset_receivable', '112'),
     ('1120201', 'ANTICIPOS A PROVEEDORES', 'asset_prepayments', '112'),

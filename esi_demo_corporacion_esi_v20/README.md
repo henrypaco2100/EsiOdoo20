@@ -65,3 +65,9 @@ El modulo usa los modelos reales entregados en el paquete del usuario:
 - `esi_compras_report_v20`
 
 No modifica `esi_finanzas_v20`.
+
+## Compatibilidad Odoo 20 - revisión 20.0.1.0.1
+
+- Seguridad migrada al formato nativo de Odoo 20: `security/ir.access.csv` usa `operation=crud`.
+- Se eliminó el formato antiguo `perm_read/perm_write/perm_create/perm_unlink`, que ya no existe en `ir.access` de Odoo 20.
+- Para mantener un plan contable único compartido por matriz y sucursales, Caja/Bancos del plan fuente se clasifican técnicamente como Activo Corriente. Odoo 20 impide que una cuenta de tipo `asset_cash` sea compartida entre varias compañías.
