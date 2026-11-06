@@ -1,12 +1,1 @@
-{'application': False,
- 'author': 'ESI',
- 'data': ['security/groups.xml', 'security/ir.access.csv', 'views/report.xml'],
- 'depends': ['esi_reportes_base_v20',
-             'esi_tiendas_v20',
-             'account',
-             'esi_sucursales_v20'],
- 'installable': True,
- 'license': 'LGPL-3',
- 'maintainer': 'ESI',
- 'name': 'Informes financieros',
- 'version': '20.0.4.0.0'}
+{'application': False, 'author': 'ESI', 'data': ['security/groups.xml', 'security/ir.access.csv', 'security/classic_scope.xml', 'views/retire_extension.xml', 'views/report.xml', 'views/classic_order.xml', 'views/classic_wizard.xml', 'data/account_types.xml', 'views/layout.xml', 'views/advanced_wizard.xml', 'views/financial_settings.xml', 'report/classic_document.xml'], 'depends': ['esi_reportes_base_v20', 'esi_tiendas_v20', 'account', 'esi_sucursales_v20'], 'installable': True, 'license': 'LGPL-3', 'maintainer': 'ESI', 'name': 'Informes financieros', 'version': '20.0.6.0.0'}

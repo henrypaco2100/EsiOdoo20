@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+  <data noupdate="1">
+    <record id="financial_type_asset_receivable" model="esi.finance.account.type">
+      <field name="name">Por cobrar</field>
+      <field name="code">asset_receivable</field>
+    </record>
+    <record id="financial_type_asset_cash" model="esi.finance.account.type">
+      <field name="name">Banco y caja</field>
+      <field name="code">asset_cash</field>
+    </record>
+    <record id="financial_type_asset_current" model="esi.finance.account.type">
+      <field name="name">Activo corriente</field>
+      <field name="code">asset_current</field>
+    </record>
+    <record id="financial_type_asset_non_current" model="esi.finance.account.type">
+      <field name="name">Activo no corriente</field>
+      <field name="code">asset_non_current</field>
+    </record>
+    <record id="financial_type_asset_prepayments" model="esi.finance.account.type">
+      <field name="name">Anticipos</field>
+      <field name="code">asset_prepayments</field>
+    </record>
+    <record id="financial_type_asset_fixed" model="esi.finance.account.type">
+      <field name="name">Activo fijo</field>
+      <field name="code">asset_fixed</field>
+    </record>
+    <record id="financial_type_liability_payable" model="esi.finance.account.type">
+      <field name="name">Por pagar</field>
+      <field name="code">liability_payable</field>
+    </record>
+    <record id="financial_type_liability_credit_card" model="esi.finance.account.type">
+      <field name="name">Tarjeta de crédito</field>
+      <field name="code">liability_credit_card</field>
+    </record>
+    <record id="financial_type_liability_current" model="esi.finance.account.type">
+      <field name="name">Pasivo corriente</field>
+      <field name="code">liability_current</field>
+    </record>
+    <record id="financial_type_liability_non_current" model="esi.finance.account.type">
+      <field name="name">Pasivo no corriente</field>
+      <field name="code">liability_non_current</field>
+    </record>
+    <record id="financial_type_equity" model="esi.finance.account.type">
+      <field name="name">Patrimonio</field>
+      <field name="code">equity</field>
+    </record>
+    <record id="financial_type_equity_unaffected" model="esi.finance.account.type">
+      <field name="name">Resultado del ejercicio</field>
+      <field name="code">equity_unaffected</field>
+    </record>
+    <record id="financial_type_income" model="esi.finance.account.type">
+      <field name="name">Ingresos</field>
+      <field name="code">income</field>
+    </record>
+    <record id="financial_type_income_other" model="esi.finance.account.type">
+      <field name="name">Otros ingresos</field>
+      <field name="code">income_other</field>
+    </record>
+    <record id="financial_type_expense" model="esi.finance.account.type">
+      <field name="name">Gastos</field>
+      <field name="code">expense</field>
+    </record>
+    <record id="financial_type_expense_other" model="esi.finance.account.type">
+      <field name="name">Otros gastos</field>
+      <field name="code">expense_other</field>
+    </record>
+    <record id="financial_type_expense_depreciation" model="esi.finance.account.type">
+      <field name="name">Depreciación</field>
+      <field name="code">expense_depreciation</field>
+    </record>
+    <record id="financial_type_expense_direct_cost" model="esi.finance.account.type">
+      <field name="name">Costos directos</field>
+      <field name="code">expense_direct_cost</field>
+    </record>
+    <record id="financial_type_off_balance" model="esi.finance.account.type">
+      <field name="name">Fuera de balance</field>
+      <field name="code">off_balance</field>
+    </record>
+  </data>
+</odoo>

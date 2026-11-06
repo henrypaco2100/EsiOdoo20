@@ -1,0 +1,14 @@
+<odoo>
+  <record id="classic_wizard_form" model="ir.ui.view"><field name="name">esi.finance.report.classic.wizard</field><field name="model">esi.finance.report</field><field name="inherit_id" ref="esi_finanzas_v20.report_form"/><field name="arch" type="xml">
+    <xpath expr="//header" position="replace"/>
+    <field name="company_id" position="before"><field name="classic_assigned_ids" invisible="1"/></field>
+    <field name="company_id" position="after"><field name="classic_branch_id" domain="[('id','child_of',company_id),('id','in',classic_assigned_ids)]" options="{'no_create':True}"/></field>
+    <field name="posted_only" position="after"><field name="classic_depth" invisible="kind not in ['balance','profit','trial']"/><field name="classic_show_zero" invisible="kind not in ['balance','profit','trial']"/><field name="classic_journal_ids" widget="many2many_tags" domain="[('company_id','in',report_company_ids)]" context="{'allowed_company_ids':report_company_ids}" invisible="kind not in ['balance','profit','trial']" options="{'no_create':True}"/></field>
+    <field name="analytic_id" position="attributes"><attribute name="invisible">kind != 'analytic'</attribute></field>
+    <xpath expr="//sheet/group" position="after"><p invisible="kind not in ['balance','profit','trial']">La matriz consolida sus sucursales autorizadas. El Balance incluye el saldo acumulado hasta la fecha final; Resultados usa únicamente el período. La estructura, las cuentas, fórmulas, orden y títulos se configuran en Configuración → Ajustes → Reportes financieros.</p></xpath>
+    <xpath expr="//form" position="inside"><footer><button name="action_preview" type="object" string="Consultar" class="btn-primary"/><button name="action_pdf" type="object" string="Imprimir PDF"/><button name="action_xlsx" type="object" string="Exportar Excel"/><button string="Cerrar" special="cancel"/></footer></xpath>
+  </field></record>
+  <record id="esi_finanzas_v20.action_balance" model="ir.actions.act_window"><field name="target">new</field></record>
+  <record id="esi_finanzas_v20.action_profit" model="ir.actions.act_window"><field name="target">new</field></record>
+  <record id="esi_finanzas_v20.action_trial" model="ir.actions.act_window"><field name="target">new</field></record>
+</odoo>

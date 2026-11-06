@@ -37,7 +37,7 @@ class FinanceReport(models.TransientModel):
         if self.kind in ('receivable','payable'):
             domain += [('account_id.account_type','=', 'asset_receivable' if self.kind=='receivable' else 'liability_payable')]
         if self.kind in ('cash','cashflow'):domain += [('account_id.account_type','=','asset_cash')]
-        if self.kind in ('profit','analytic'):domain += [('account_id.account_type','in',['income','income_other','expense','expense_depreciation','expense_direct_cost'])]
+        if self.kind in ('profit','analytic'):domain += [('account_id.account_type','in',['income','income_other','expense','expense_other','expense_depreciation','expense_direct_cost'])]
         if self.kind=='analytic' and not self.analytic_id:raise UserError(_('Seleccione una cuenta analítica.'))
         if self.kind=='statement':
             if not self.partner_id:raise UserError(_('Seleccione un contacto.'))
