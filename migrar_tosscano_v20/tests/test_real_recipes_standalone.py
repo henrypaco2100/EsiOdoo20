@@ -16,11 +16,20 @@ class RealRecipeTests(unittest.TestCase):
         self.assertIn("'esi_allowed_variant_ids':[(6,0,template.product_variant_ids.ids)]",S)
         self.assertIn("'uom_id':product.uom_id.id",S)
         self.assertIn("'product_qty':line.inventory_qty_per_pair",S)
-    def test_unknown_conversions_not_assumed(self):
-        self.assertIn("quantity=0",S)
-        self.assertIn("_has_common_reference",S)
-        self.assertIn("_compute_quantity",S)
-        self.assertIn("line.inventory_qty_per_pair <= 0",S)
+    def test_confirmed_quantities_and_numeric_codes(self):
+        tree = ast.parse(S)
+        functions = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name in ('name_key', 'code_key')]
+        import re, unicodedata
+        scope = {'re': re, 'unicodedata': unicodedata}
+        exec(compile(ast.Module(body=functions, type_ignores=[]), '<matching>', 'exec'), scope)
+        self.assertEqual(scope['code_key']('ABC-010'), scope['code_key']('ABC-10'))
+        self.assertNotEqual(scope['code_key']('ABC-10'), scope['code_key']('ABC-11'))
+        self.assertEqual(scope['name_key']('Termoplástico 0.8'), scope['name_key']('TERMOPLASTICO 08'))
+        self.assertIn("quantity = row['qty_per_pair']", S)
+        self.assertNotIn('_compute_quantity', S)
+        self.assertIn('len(candidates)==1', S)
+        self.assertIn('config.action_create_bom()', S)
+        self.assertNotIn('if not self.reviewed:', S)
     def test_existing_demo_creation_button_removed(self):
         root=etree.parse(str(P/'views/migration.xml'))
         self.assertFalse(root.xpath("//button[@name='action_create_demo_recipes']"))

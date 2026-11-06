@@ -1,0 +1,7 @@
+Cantidades: 3 decimales. Precios y costos: 2 decimales (precisiones Product Unit y Product Price).
+Botón 3 importa directamente las recetas completas, con todas las tallas y cinco centros.
+Se conservan las cantidades numéricas confirmadas en la unidad del catálogo; no es una conversión física.
+Se reutilizan referencias existentes: 010 equivale a 10 en segmentos numéricos. Nombres se comparan sin acentos, puntuación ni mayúsculas. No se usan coincidencias aproximadas ambiguas.
+Las recetas con materiales no encontrados permanecen sin crear y detallan sus faltantes. Véase pendientes_catalogo.csv.
+Las recetas existentes no se duplican ni sobrescriben. Los tiempos iniciales de centros son provisionales (1 minuto por par); no son tiempos medidos.
+Validación local: 69 pruebas y sintaxis Python/XML. No se probó instalación en servidor Odoo.

@@ -244,6 +244,8 @@ class DirectMigration(models.Model):
             missing = set(required) - set(line.value_ids.ids)
             if missing:
                 line.write({'value_ids': [(4, value_id) for value_id in sorted(missing)]})
+        if 'product_add_mode' in template._fields and template.product_add_mode != 'matrix':
+            template.write({'product_add_mode': 'matrix'})
         if not template.esi_manufacture_ok:
             template.write({'esi_manufacture_ok': True})
         for product in template.product_variant_ids:

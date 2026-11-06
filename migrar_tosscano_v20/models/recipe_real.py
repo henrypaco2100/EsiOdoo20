@@ -1,4 +1,6 @@
 import math
+import re
+import unicodedata
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 
@@ -27,8 +29,6 @@ class RealRecipe(models.Model):
             raise UserError(_('Se requieren permisos de administrador de Fabricación.'))
         if 'esi_center_route_ids' not in self.env['mrp.bom']._fields:
             raise UserError(_('Actualice ESI Calzados: falta Recorrido por centros.'))
-        if not self.reviewed:
-            raise UserError(_('Revise los productos y las cantidades en la unidad del inventario y marque Correspondencias y aplicación revisadas.'))
         if not self.template_ids:
             raise UserError(_('Seleccione el producto terminado migrado al que corresponde esta ficha.'))
         if not math.isfinite(self.minutes_per_pair) or self.minutes_per_pair <= 0:
@@ -108,15 +108,15 @@ class RealComponent(models.Model):
     source_code = fields.Char(readonly=True, string='Código ficha')
     source_name = fields.Char(readonly=True, string='Material ficha')
     source_unit = fields.Char(readonly=True, string='Unidad ficha')
-    source_qty = fields.Float(readonly=True, digits=(16,6), string='Cantidad ficha por par')
+    source_qty = fields.Float(readonly=True, digits=(16,3), string='Cantidad ficha por par')
     product_id = fields.Many2one('product.product', string='Componente migrado')
     inventory_uom_id = fields.Many2one(related='product_id.uom_id', string='Unidad inventario')
-    inventory_qty_per_pair = fields.Float(digits=(16,6), string='Cantidad inventario por par')
+    inventory_qty_per_pair = fields.Float(digits=(16,3), string='Cantidad inventario por par')
     issue = fields.Char(readonly=True, string='Observación')
 
     @api.onchange('product_id')
     def _onchange_real_product(self):
-        self.inventory_qty_per_pair = 0
+        self.inventory_qty_per_pair = self.source_qty
         self.recipe_id.reviewed = False
 
 
@@ -130,12 +130,28 @@ class RealMigration(models.Model):
         if not self.env.user.has_group('mrp.group_mrp_manager'):
             raise UserError(_('Se requieren permisos de administrador de Fabricación.'))
         self.action_archive_recipe_test_data()
+        for precision_name, digits in [('Product Unit', 3), ('Product Price', 2)]:
+            precision = self.env['decimal.precision'].search([('name', '=', precision_name)])
+            if precision:
+                precision.write({'digits': digits})
         data = self._source()
-        by_code = {}
+        def name_key(value):
+            value = unicodedata.normalize('NFKD', value or '').encode('ascii', 'ignore').decode().upper()
+            return re.sub(r'[^A-Z0-9]', '', value)
+
+        def code_key(value):
+            return '-'.join(str(int(part)) if part.isdigit() else part.upper().strip()
+                            for part in (value or '').split('-'))
+
+        by_code, by_normal_code, by_name = {}, {}, {}
         for row in data['materials']:
             product = self._ref(row['key'])
             if product:
-                by_code.setdefault(row['code'],[]).append(product)
+                for index, key in [(by_code, row['code']), (by_normal_code, code_key(row['code'])),
+                                   (by_name, name_key(row['name'])), (by_name, name_key(product.name))]:
+                    bucket = index.setdefault(key, {})
+                    bucket[product.id] = product
+        notes = []
         configs = self.env['tosscano.recipe.config']
         for recipe in data['recipes']:
             key='real-recipe-config:'+recipe['code']
@@ -146,30 +162,47 @@ class RealMigration(models.Model):
                 config=configs.create({'migration_id':self.id,'code':recipe['code'],'name':recipe['title'],
                                        'template_ids':[(6,0,targets)]})
                 self._bind(key,config)
-            existing_rows = set(config.line_ids.mapped('source_row'))
-            for row in [r for r in data['components'] if r['recipe']==recipe['code'] and r['qty_per_pair']>0 and r['row'] not in existing_rows]:
-                products=by_code.get(row['code'],[])
-                product=products[0] if len(products)==1 else False
-                quantity=0
-                issue='Seleccione el material correspondiente del catálogo migrado.'
-                if row['code']=='ACC-BOL-CEL-35':
-                    # Source code reused for bag and numbering: never decide by code alone.
-                    product=False
-                    issue='El código de la ficha identifica bolsa y numeración; seleccione el material correcto.'
-                if product:
-                    uom=self._uom(row['uom'])
-                    if uom == product.uom_id or uom._has_common_reference(product.uom_id):
-                        quantity=uom._compute_quantity(row['qty_per_pair'],product.uom_id,round=False)
-                        issue='Coincidencia por código y unidad; revise aplicación por talla/color.'
-                    else:
-                        issue='Confirme la cantidad equivalente por par en la unidad de inventario; no se asumió conversión.'
-                self.env['tosscano.recipe.component'].create({
-                    'recipe_id':config.id,'source_row':row['row'],'source_code':row['code'],
-                    'source_name':row['name'],'source_unit':row['uom'],'source_qty':row['qty_per_pair'],
-                    'product_id':product.id if product else False,'inventory_qty_per_pair':quantity,'issue':issue})
+            existing = {line.source_row: line for line in config.line_ids}
+            for row in [r for r in data['components'] if r['recipe']==recipe['code'] and r['qty_per_pair']>0]:
+                candidates = by_code.get(row['code'], {})
+                if not candidates and row['code']:
+                    candidates = by_normal_code.get(code_key(row['code']), {})
+                if not candidates:
+                    candidates = by_name.get(name_key(row['name']), {})
+                product = next(iter(candidates.values())) if len(candidates)==1 else False
+                # Existing explicit correspondence remains authoritative if automatic matching fails.
+                line = existing.get(row['row'])
+                if not product and line and line.product_id:
+                    product = line.product_id
+                quantity = row['qty_per_pair']
+                vals = {
+                    'source_code':row['code'], 'source_name':row['name'],
+                    'source_unit':row['uom'], 'source_qty':quantity,
+                    'product_id':product.id if product else False,
+                    'inventory_qty_per_pair':quantity,
+                    'issue':('Cantidad original confirmada; se utiliza la unidad del componente migrado.'
+                             if product else 'No hay coincidencia única en el catálogo migrado: '+(row['code'] or '')+' / '+row['name'])}
+                if line:
+                    line.write(vals)
+                else:
+                    vals.update(recipe_id=config.id, source_row=row['row'])
+                    self.env['tosscano.recipe.component'].create(vals)
             configs |= config
-        self.recipe_log='Correspondencias preparadas. Las recetas se crearán con los productos y componentes migrados, todas sus tallas y cinco centros. No se crean materiales separados.'
-        return {'type':'ir.actions.act_window','name':_('Recetas de Fábrica'),
+            missing = config.line_ids.filtered(lambda line: not line.product_id)
+            if missing or not config.template_ids:
+                config.result = ('Sin crear: '+('; '.join(line.issue for line in missing)
+                    if missing else 'No existe el producto terminado correspondiente en el catálogo migrado.'))
+                notes.append(config.code+': '+config.result)
+                continue
+            # Savepoint isolates a recipe failure without losing successfully imported recipes.
+            try:
+                with self.env.cr.savepoint():
+                    config.action_create_bom()
+            except (UserError, ValidationError) as error:
+                config.result = str(error)
+            notes.append(config.code+': '+config.result)
+        self.recipe_log='\n'.join(notes)
+        return {'type':'ir.actions.act_window','name':_('Resultado de importación de recetas'),
                 'res_model':'tosscano.recipe.config','view_mode':'list,form',
                 'domain':[('migration_id','=',self.id)]}
 

@@ -7,18 +7,18 @@
   </record>
   <record id="real_recipe_config_list" model="ir.ui.view">
     <field name="name">tosscano.recipe.config.list</field><field name="model">tosscano.recipe.config</field>
-    <field name="arch" type="xml"><list create="0" delete="0"><field name="code"/><field name="name"/><field name="company_id"/><field name="reviewed"/></list></field>
+    <field name="arch" type="xml"><list create="0" delete="0"><field name="code"/><field name="name"/><field name="company_id"/><field name="result"/></list></field>
   </record>
   <record id="real_recipe_config_form" model="ir.ui.view">
     <field name="name">tosscano.recipe.config.form</field><field name="model">tosscano.recipe.config</field>
     <field name="arch" type="xml"><form create="0" delete="0">
       <header><button name="action_create_bom" type="object" string="Crear receta con tallas y centros" class="btn-primary"/></header>
-      <sheet><group><field name="migration_id" readonly="1"/><field name="company_id"/><field name="code"/><field name="name"/><field name="template_ids" widget="many2many_tags" domain="[('esi_manufacture_ok','=',True),('name','not ilike','DEMO |')]" options="{'no_create':True}"/><field name="minutes_per_pair"/><field name="reviewed"/></group>
-      <p>Solo se usarán productos y componentes vinculados a esta migración. Verifique la aplicación por color y talla. La cantidad final de cada componente se expresa en su unidad de inventario. Los centros serán Corte, Aparado, Conformado, Solado y Terminado. El tiempo inicial de un minuto es provisional: cámbielo antes de planificar.</p>
+      <sheet><group><field name="migration_id" readonly="1"/><field name="company_id"/><field name="code"/><field name="name"/><field name="template_ids" widget="many2many_tags" domain="[('esi_manufacture_ok','=',True),('name','not ilike','DEMO |')]" options="{'no_create':True}"/><field name="minutes_per_pair"/></group>
+      <p>Solo se usarán productos y componentes vinculados a esta migración. Las cantidades originales se conservan numéricamente en la unidad de inventario, según confirmación del usuario; no se aplica conversión física entre envases y litros. La cantidad final de cada componente se expresa en su unidad de inventario. Los centros serán Corte, Aparado, Conformado, Solado y Terminado. El tiempo inicial de un minuto es provisional: cámbielo antes de planificar.</p>
       <field name="line_ids" nolabel="1"><list editable="bottom" create="0" delete="0">
-        <field name="source_code"/><field name="source_name"/><field name="source_qty"/><field name="source_unit"/>
+        <field name="source_code"/><field name="source_name"/><field name="source_qty" digits="[16, 3]"/><field name="source_unit"/>
         <field name="product_id" domain="[('esi_component_ok','=',True),('company_id','=',parent.company_id),('name','not ilike','DEMO |')]" options="{'no_create':True}"/>
-        <field name="inventory_uom_id"/><field name="inventory_qty_per_pair"/><field name="issue"/>
+        <field name="inventory_uom_id"/><field name="inventory_qty_per_pair" digits="[16, 3]"/><field name="issue"/>
       </list></field><field name="result" nolabel="1" readonly="1"/></sheet>
     </form></field>
   </record>
