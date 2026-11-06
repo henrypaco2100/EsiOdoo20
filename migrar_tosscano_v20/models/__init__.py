@@ -5,3 +5,5 @@ from . import direct
 from . import accounting_setup
 
 from . import sale_prices
+
+from . import recipe_demo

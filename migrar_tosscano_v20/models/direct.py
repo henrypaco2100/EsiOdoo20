@@ -30,9 +30,9 @@ class DirectMigration(models.Model):
         self._check_scope()
         if str(self.cutoff) != '2026-10-28':
             raise UserError(_('Este paquete corresponde al corte 28/10/2026 y está preparado para una base nueva. No reutilice el registro del corte anterior.'))
-        required = {'esi_material_type', 'esi_measure', 'esi_component_ok', 'esi_manufacture_ok', 'product_add_mode'}
+        required = {'esi_material_type', 'esi_measure', 'esi_component_ok', 'esi_manufacture_ok'}
         if required - set(self.env['product.template']._fields):
-            raise UserError(_('Actualice primero esi_calzados_v20 a la versión 20.0.11.3.0 o posterior y verifique sale_product_matrix.'))
+            raise UserError(_('Actualice primero esi_calzados_v20 a la versión 20.0.11.2.0 o posterior.'))
         if any(c.currency_id.name != 'BOB' for c in (self.root_id | self.factory_id | self.cbba_id | self.scz_id)):
             raise UserError(_('Los costos de origen están en bolivianos. Las compañías seleccionadas deben usar BOB.'))
         self.env.cr.execute('SELECT pg_advisory_xact_lock(20261028, 27102026)')
@@ -175,45 +175,14 @@ class DirectMigration(models.Model):
             attr.esi_group_production = True
         return attr
 
-    @staticmethod
-    def _size_sort_key(value):
-        """Sort footwear sizes numerically, keeping unusual labels after numbers."""
-        text = str(value).strip()
-        try:
-            return (0, float(text.replace(',', '.')), text)
-        except ValueError:
-            return (1, 0.0, text.upper())
-
-    @classmethod
-    def _ordered_attribute_values(cls, name, values):
-        # The source catalogue may arrive in any order.  Talla must always be
-        # presented numerically (34, 35, 36...) in variants and matrices.
-        unique = list(dict.fromkeys(values))
-        if name == 'Talla':
-            return sorted(unique, key=cls._size_sort_key)
-        return unique
-
     def _attribute_line(self, name, values, grouped=False):
         attr = self._attribute(name, grouped)
         ids = []
-        ordered_values = self._ordered_attribute_values(name, values)
-        for position, name_value in enumerate(ordered_values, start=1):
-            value_model = self.env['product.attribute.value']
-            value = value_model.search([('attribute_id', '=', attr.id), ('name', '=', str(name_value))], limit=2)
+        for name_value in values:
+            value = self.env['product.attribute.value'].search([('attribute_id', '=', attr.id), ('name', '=', str(name_value))], limit=2)
             if len(value) > 1:
                 raise UserError(_('Valor de atributo duplicado: %s', name_value))
-            vals = {'attribute_id': attr.id, 'name': str(name_value)}
-            if name == 'Talla' and 'sequence' in value_model._fields:
-                # Sequence is global to the Talla value, so derive it from the
-                # numeric size itself instead of from the current template.
-                try:
-                    vals['sequence'] = int(round(float(str(name_value).replace(',', '.')) * 100))
-                except ValueError:
-                    vals['sequence'] = 100000 + position
-            if not value:
-                value = value_model.create(vals)
-            elif name == 'Talla' and 'sequence' in value._fields and value.sequence != vals.get('sequence'):
-                value.sequence = vals['sequence']
+            value = value or self.env['product.attribute.value'].create({'attribute_id': attr.id, 'name': str(name_value)})
             ids.append(value.id)
         return (0, 0, {'attribute_id': attr.id, 'value_ids': [(6, 0, ids)]})
 
@@ -263,7 +232,6 @@ class DirectMigration(models.Model):
                 'name': row['name'].strip(), 'type': 'consu', 'is_storable': True, 'company_id': False,
                 'uom_id': self._uom('PAR').id, 'categ_id': self._category('CALZADOS ' + row['family'], row['subfamily'], 'Producto terminado').id,
                 'sale_ok': True, 'purchase_ok': False, 'esi_manufacture_ok': True, 'esi_component_ok': False,
-                'product_add_mode': 'matrix',
                 'attribute_line_ids': lines,
             })
             self._bind(row['key'], template)
@@ -276,13 +244,8 @@ class DirectMigration(models.Model):
             missing = set(required) - set(line.value_ids.ids)
             if missing:
                 line.write({'value_ids': [(4, value_id) for value_id in sorted(missing)]})
-        finish_vals = {}
         if not template.esi_manufacture_ok:
-            finish_vals['esi_manufacture_ok'] = True
-        if 'product_add_mode' in template._fields and template.product_add_mode != 'matrix':
-            finish_vals['product_add_mode'] = 'matrix'
-        if finish_vals:
-            template.write(finish_vals)
+            template.write({'esi_manufacture_ok': True})
         for product in template.product_variant_ids:
             size = product.product_template_attribute_value_ids.filtered(lambda v: v.attribute_id.name == 'Talla').name
             key = row['key'] + ':' + size
@@ -348,7 +311,7 @@ class DirectMigration(models.Model):
         self._configure_category_accounting()
         notes.extend(self._apply_finished_costs(data))
         notes.extend(self._import_sale_prices(data))
-        notes.append('Recetas: use el botón 3. Crear recetas (Fábrica) después de importar los datos.')
+        notes.append('Recetas: use 3. Crear recetas DEMO con centros para probar las doce fichas, con materiales separados del inventario real.')
         self.write({'data_imported': True, 'loaded': True,
                     'product_count': len(data['materials']) + sum(len(r['sizes']) for r in data['finished']),
                     'import_log': '\n'.join(['DATOS IMPORTADOS', 'Categorías: familia → subfamilia.',
@@ -359,225 +322,74 @@ class DirectMigration(models.Model):
                     'Costos unitarios de terminados incluidos en BOB, por talla y compañía.'] + notes)})
         return True
 
-    @staticmethod
-    def _recipe_norm_text(value):
-        return ' '.join(str(value or '').upper().split())
-
-    def _recipe_find_component_exact(self, data, row):
-        """Resolve one approved-LDM component without guessing or converting.
-
-        Production rule: the approved Excel is authoritative.  We only accept a
-        unique existing material with the exact code, the same normalized name,
-        and the exact inventory UoM.  Missing products are NOT created here and
-        no alternate code, size expansion or cost-equivalent conversion is used.
-        """
-        code = (row.get('code') or '').strip()
-        if not code:
-            return False, _('fila %s sin código de componente') % row.get('row')
-
-        candidates = []
-        for material in data.get('materials', []):
-            if (material.get('code') or '').strip() != code:
-                continue
-            product = self._ref(material['key'])
-            if product:
-                candidates.append(product)
-        if not candidates:
-            candidates = list(self.env['product.product'].with_context(active_test=False).search([
-                ('default_code', '=', code),
-                ('company_id', '=', self.factory_id.id),
-                ('esi_component_ok', '=', True),
-            ], limit=3))
-        unique = list({product.id: product for product in candidates}.values())
-        if not unique:
-            return False, _('código %s no existe en la materia prima migrada') % code
-        if len(unique) > 1:
-            return False, _('código %s está duplicado en materia prima') % code
-
-        product = unique[0]
-        excel_name = self._recipe_norm_text(row.get('name'))
-        product_name = self._recipe_norm_text(product.name)
-        if excel_name != product_name:
-            return False, _("código %s: nombre Excel '%s' ≠ producto '%s'") % (
-                code, row.get('name') or '', product.name or '')
-
-        source_uom = self._uom(row.get('uom') or '')
-        if product.uom_id != source_uom:
-            return False, _("código %s: UDM Excel '%s' ≠ UDM producto '%s'") % (
-                code, source_uom.name, product.uom_id.name)
-        return product, False
-
-    def _ensure_recipe_quantity_precision(self):
-        """Preserve the approved per-pair quantities down to four decimals.
-
-        ``mrp.bom.line.product_qty`` uses the global ``Product Unit`` decimal
-        precision in Odoo 20.  The approved military sheets contain values such
-        as 0.0455, 0.0698 and 0.0496, so a 2/3-decimal database would silently
-        alter the recipe.  We only raise the precision when needed and never
-        reduce an existing higher precision.
-        """
-        precision = self.env['decimal.precision'].search([('name', '=', 'Product Unit')], limit=1)
-        if not precision:
-            raise UserError(_("No existe la precisión decimal 'Product Unit'; no se crearán LdM porque no se puede garantizar 4 decimales."))
-        if precision.digits < 4:
-            precision.digits = 4
-        return precision.digits
-
-    def _recipe_center_route(self, recipe):
-        """Return the five approved factory work centers for one military BoM.
-
-        The approved cost sheets consistently identify the production stages as
-        Cortado, Aparado, Conformado, Solado and Terminado.  In ESI's factory
-        those stages are the work centers CORTE, APARADO, CONFORMADO, SOLADO and
-        TERMINADO.  We only link existing work centers; they are never created,
-        renamed or guessed by this migration.
-
-        ``minutes_per_unit`` is deliberately omitted so esi_calzados_v20 keeps
-        its own default.  The Excel values beside the stages are COSTS, not
-        minutes, therefore they must never be copied into production duration.
-        """
-        expected = [
-            ('Cortado', 'CORTE'),
-            ('Aparado', 'APARADO'),
-            ('Conformado', 'CONFORMADO'),
-            ('Solado', 'SOLADO'),
-            ('Terminado', 'TERMINADO'),
-        ]
-        source_stages = {self._recipe_norm_text(name) for name, _cost in recipe.get('overhead', [])}
-        errors = []
-        route = []
-        for sequence, (excel_name, center_name) in enumerate(expected, start=1):
-            if self._recipe_norm_text(excel_name) not in source_stages:
-                errors.append(_("la ficha %s no contiene la etapa '%s'") % (recipe.get('code'), excel_name))
-                continue
-
-            # Prefer the center owned by FABRICA.  A global center is accepted
-            # only when there is no company-specific one.  Duplicates are an
-            # explicit configuration error; the migrator never picks one at random.
-            centers = self.env['mrp.workcenter'].with_context(active_test=False).search([
-                ('name', '=ilike', center_name),
-                ('company_id', '=', self.factory_id.id),
-            ])
-            if not centers:
-                centers = self.env['mrp.workcenter'].with_context(active_test=False).search([
-                    ('name', '=ilike', center_name),
-                    ('company_id', '=', False),
-                ])
-            if not centers:
-                errors.append(_("no existe el centro de trabajo '%s' para FABRICA") % center_name)
-                continue
-            if len(centers) > 1:
-                errors.append(_("hay %s centros de trabajo llamados '%s'; deje uno solo para FABRICA") % (
-                    len(centers), center_name))
-                continue
-            if not centers.active:
-                errors.append(_("el centro de trabajo '%s' está archivado") % center_name)
-                continue
-            route.append((0, 0, {
-                'sequence': sequence * 10,
-                'workcenter_id': centers.id,
-            }))
-        return route, errors
-
     def _recipes(self, data, notes):
-        """Create LdM exactly as approved in FICHAS DE COSTO MILITAR.
-
-        - exact component code
-        - exact approved quantity per pair
-        - exact approved UoM
-        - no size-dependent substitutions
-        - no creation of missing materials
-        - no cost-equivalent UoM conversions
-        - no partial BoMs: any mismatch leaves that BoM pending
-        """
+        # A recipe is created only when every positive component is unambiguous
+        # and has the same inventory unit. Never silently truncate a recipe.
+        by_code = defaultdict(list)
+        for row in data['materials']:
+            product = self._ref(row['key'])
+            if product:
+                by_code[row['code']].append(product)
         created = existing = pending = 0
         for recipe in data['recipes']:
-            targets = [row for row in data['finished'] if row['code'].startswith(recipe['code'] + '-')]
+            targets = [row for row in data['finished'] if row['code'].startswith(recipe['code']+'-')]
             if not targets:
-                notes.append('LdM %s pendiente: no hay producto terminado de ese modelo en los inventarios recibidos.' % recipe['code'])
+                notes.append('LdM '+recipe['code']+' pendiente: no hay producto terminado de ese modelo en los inventarios recibidos.')
                 pending += 1
                 continue
-            components = [row for row in data['components']
-                          if row['recipe'] == recipe['code'] and float(row.get('qty_per_pair') or 0) > 0]
+            components = [r for r in data['components'] if r['recipe'] == recipe['code'] and r['qty_per_pair'] > 0]
+            lines=[]
+            errors=[]
             if not components:
-                notes.append('LdM %s no creada: la ficha aprobada no tiene componentes con cantidad positiva.' % recipe['code'])
+                errors.append('sin componentes con cantidad positiva')
+            for r in components:
+                products=list({p.id:p for p in by_code.get(r['code'], [])}.values())
+                if not products and r['code']:
+                    products = list(self.env['product.product'].search([
+                        ('default_code','=',r['code']),('company_id','=',self.factory_id.id),('esi_component_ok','=',True)],limit=2))
+                if len(products)!=1:
+                    errors.append(str(r['code'] or r['name'])+' sin correspondencia única')
+                    continue
+                product=products[0]
+                uom=self._uom(r['uom'])
+                if uom!=product.uom_id or not product.esi_component_ok:
+                    errors.append(str(r['code'])+' unidad o uso pendiente')
+                    continue
+                if r['code'] in ('ACC-PLA-40','ACC-ETQ-LEN-MIL-40','ACC-BOL-CEL-35'):
+                    errors.append(str(r['code'])+' requiere distribución por talla o concepto')
+                    continue
+                lines.append((0,0,{'product_id':product.id,'product_qty':r['qty_per_pair'],'uom_id':uom.id}))
+            if errors:
+                notes.append('LdM '+recipe['code']+' no creada: '+', '.join(sorted(set(errors))))
                 pending += 1
                 continue
-
-            center_route, center_errors = self._recipe_center_route(recipe)
-            if center_errors:
-                notes.append('LdM %s NO CREADA. Corrija primero el recorrido por centros:\n- %s' % (
-                    recipe['code'], '\n- '.join(center_errors)))
-                pending += len(targets)
-                continue
-
             for row in targets:
                 if self._finished_conflict(row):
                     continue
-                key = 'bom:' + row['key']
+                if not row['code'].startswith(recipe['code']+'-'):
+                    continue
+                key='bom:'+row['key']
                 if self._ref(key):
                     existing += 1
                     continue
-                template = self._ref(row['key'])
+                template=self._ref(row['key'])
                 if not template:
-                    notes.append('Producto sin importar para LdM %s: %s' % (recipe['code'], row['code']))
-                    pending += 1
+                    notes.append('Producto sin importar para receta '+recipe['code']+': '+row['code'])
                     continue
                 matches = self.env['mrp.bom'].with_context(active_test=False).search([
-                    ('company_id', '=', self.factory_id.id),
-                    ('product_tmpl_id', '=', template.id),
-                    ('code', '=', recipe['code']),
-                ], limit=1)
+                    ('company_id','=',self.factory_id.id),('product_tmpl_id','=',template.id),('code','=',recipe['code'])],limit=1)
                 if matches:
-                    notes.append('Ya existe una LdM para %s / %s; no se modificó.' % (recipe['code'], row['code']))
+                    notes.append('Ya existe una LdM manual para '+row['code']+' en Fábrica; no se duplicó ni se modificó.')
                     existing += 1
                     continue
-
-                lines = []
-                errors = []
-                for component in components:
-                    product, error = self._recipe_find_component_exact(data, component)
-                    if error:
-                        errors.append('fila %s [%s] %s: %s' % (
-                            component.get('row'), component.get('code') or '', component.get('name') or '', error))
-                        continue
-                    # Product UoM was validated to be exactly the approved Excel UoM.
-                    lines.append((0, 0, {
-                        'product_id': product.id,
-                        'product_qty': float(component['qty_per_pair']),
-                        'uom_id': product.uom_id.id,
-                    }))
-
-                if errors:
-                    notes.append('LdM %s / %s NO CREADA. Corrija primero estas diferencias:\n- %s' % (
-                        recipe['code'], row['code'], '\n- '.join(errors)))
-                    pending += 1
-                    continue
-
-                allowed = template.product_variant_ids
-                if not allowed:
-                    notes.append('LdM %s / %s no creada: plantilla sin variantes almacenables.' % (recipe['code'], row['code']))
-                    pending += 1
-                    continue
-                bom = self.env['mrp.bom'].with_company(self.factory_id).create({
-                    'product_tmpl_id': template.id,
-                    'company_id': self.factory_id.id,
-                    'product_qty': 1,
-                    'uom_id': template.uom_id.id,
-                    'type': 'normal',
-                    'code': recipe['code'],
-                    'esi_multi_variant': True,
-                    'esi_allowed_variant_ids': [(6, 0, allowed.ids)],
-                    'esi_center_route_ids': center_route,
-                    'bom_line_ids': lines,
-                })
-                self._bind(key, bom)
+                bom=self.env['mrp.bom'].with_company(self.factory_id).create({
+                    'product_tmpl_id':template.id,'company_id':self.factory_id.id,'product_qty':1,
+                    'uom_id':template.uom_id.id,'type':'normal','code':recipe['code'],
+                    'esi_multi_variant':True,'esi_allowed_variant_ids':[(6,0,template.product_variant_ids.ids)],
+                    'bom_line_ids':lines})
+                self._bind(key,bom)
                 created += 1
-
-        notes.insert(0, 'Fábrica: %s. %s LdM exactas creadas, %s ya existentes, %s pendientes.' % (
-            self.factory_id.display_name, created, existing, pending))
-        notes.insert(1, 'Fuente autoritativa: FICHAS DE COSTO MILITAR APROBADO(3).xlsx. Cantidades por par conservadas exactamente (p. ej. 0,0455 sigue siendo 0,0455); sin sustituciones por talla ni conversiones automáticas de UDM.')
-        notes.insert(2, 'Cada LdM creada queda con recorrido CORTE → APARADO → CONFORMADO → SOLADO → TERMINADO; si falta o se duplica un centro, la LdM no se crea.')
+        notes.insert(0, 'Fábrica: %s. %s LdM creadas, %s ya existentes, %s fichas pendientes.' % (self.factory_id.display_name,created,existing,pending))
 
     def action_complete_sizes(self):
         self._lock()
@@ -610,8 +422,6 @@ class DirectMigration(models.Model):
         if not self.env.user.has_group('mrp.group_mrp_manager'):
             raise UserError(_('Se requieren permisos de administrador de Fabricación.'))
         notes = []
-        digits = self._ensure_recipe_quantity_precision()
-        notes.append('Precisión Product Unit verificada: %s decimales (mínimo requerido: 4).' % digits)
         self._recipes(self._source(),notes)
         self.recipe_log = '\n'.join(notes)
         self.import_log = (self.import_log or '')+'\n\nRECETAS EN FÁBRICA\n'+self.recipe_log
@@ -774,15 +584,10 @@ class DirectMigration(models.Model):
             raise UserError(_('Todavía no hay productos vinculados. Primero pulse Importar datos.'))
         changed_materials = material_templates.filtered(lambda p: not p.esi_component_ok)
         changed_finished = finished_templates.filtered(lambda p: not p.esi_manufacture_ok)
-        changed_matrix = finished_templates.filtered(
-            lambda p: 'product_add_mode' in p._fields and p.product_add_mode != 'matrix')
         changed_materials.write({'esi_component_ok': True})
         changed_finished.write({'esi_manufacture_ok': True})
-        if changed_matrix:
-            changed_matrix.write({'product_add_mode': 'matrix'})
-        message = _('%s materias primas marcadas como Componentes; %s terminados marcados como Fabricar; '
-                    '%s terminados configurados con selección Matrix.',
-                    len(changed_materials), len(changed_finished), len(changed_matrix))
+        message = _('%s materias primas marcadas como Componentes; %s terminados marcados como Fabricar.',
+                    len(changed_materials), len(changed_finished))
         self.import_log = (self.import_log or '') + '\n' + message
         return {'type': 'ir.actions.client', 'tag': 'display_notification',
                 'params': {'title': _('Productos actualizados'), 'message': message,
