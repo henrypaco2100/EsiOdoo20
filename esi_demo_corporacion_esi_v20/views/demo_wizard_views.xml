@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esi_corporacion_demo_wizard_form" model="ir.ui.view">
+        <field name="name">esi.corporacion.demo.wizard.form</field>
+        <field name="model">esi.corporacion.demo.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Preparar Demo Corporacion ESI">
+                <header>
+                    <button name="action_load_demo" type="object" string="Crear / actualizar DEMO" class="btn-primary"/>
+                    <button special="cancel" string="Cerrar"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        Crea la matriz CORPORACION ESI y tres sucursales (CENTRAL, SCZ y CBBA),
+                        almacenes por sucursal, plan contable compartido, productos compartidos,
+                        tipos de venta/compra, categorias AVCO con valoracion automatica y saldos contables de demostracion.
+                    </div>
+                    <div class="alert alert-warning" role="alert">
+                        Los PDF fuente no distribuyen sus saldos por sucursal. Para no inventar una distribucion,
+                        todos los saldos fuente se cargan en SUCURSAL CENTRAL. SCZ y CBBA quedan operativas pero sin saldos iniciales.
+                        El Balance General fuente presenta una diferencia documental de Bs 500; se conserva mediante una cuenta
+                        explicita de conciliacion. El Estado de Resultado se carga con su contrapartida tecnica para mantener el asiento cuadrado.
+                    </div>
+                    <group>
+                        <field name="balance_date"/>
+                        <field name="create_draft_flow"/>
+                        <field name="confirmation"/>
+                    </group>
+                    <separator string="Resultado"/>
+                    <field name="result_summary" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_esi_corporacion_demo_wizard" model="ir.actions.act_window">
+        <field name="name">Preparar Demo Corporacion ESI</field>
+        <field name="res_model">esi.corporacion.demo.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_esi_corporacion_demo_root" name="Demo Corporacion ESI" sequence="95" groups="base.group_system"/>
+    <menuitem id="menu_esi_corporacion_demo_setup" name="Crear / actualizar demo" parent="menu_esi_corporacion_demo_root"
+              action="action_esi_corporacion_demo_wizard" sequence="10" groups="base.group_system"/>
+</odoo>

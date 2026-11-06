@@ -1,8 +1,23 @@
 import math
+from difflib import SequenceMatcher
 import re
 import unicodedata
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
+
+
+def material_similarity(source_name, source_code, target_name, target_code):
+    """Rank existing components; ties use existing reference and record id."""
+    def text(value):
+        value = unicodedata.normalize('NFKD', value or '').encode('ascii', 'ignore').decode().upper()
+        return ' '.join(re.findall(r'[A-Z0-9]+', value))
+    source, target = text(source_name), text(target_name)
+    ignore = {'DE', 'LA', 'EL', 'EN', 'UN', 'MM', 'CM', 'MTR', 'MTRS', 'ROLLO', 'METROS', 'METRS', 'CAJA'}
+    left, right = set(source.split())-ignore, set(target.split())-ignore
+    coverage = len(left & right)/max(len(left), 1)
+    ratio = SequenceMatcher(None, source, target).ratio()
+    code_ratio = SequenceMatcher(None, text(source_code), text(target_code)).ratio() if source_code else 0
+    return .55*coverage + .30*ratio + .15*code_ratio
 
 
 class RealRecipe(models.Model):
@@ -35,7 +50,7 @@ class RealRecipe(models.Model):
             raise UserError(_('Indique un tiempo positivo por centro.'))
         data = migration._source()
         allowed_templates = {migration._ref(r['key']).id for r in data['finished'] if migration._ref(r['key'])}
-        allowed_products = {migration._ref(r['key']).id for r in data['materials'] if migration._ref(r['key'])}
+        allowed_products = set(self.env['product.product'].search([('esi_component_ok','=',True), ('company_id','in',[False,self.company_id.id])]).ids)
         if any(t.id not in allowed_templates for t in self.template_ids):
             raise UserError(_('Seleccione únicamente productos terminados vinculados a esta migración.'))
         source = [r for r in data['components'] if r['recipe']==self.code and r['qty_per_pair']>0]
@@ -46,7 +61,7 @@ class RealRecipe(models.Model):
             product = line.product_id
             if not product or product.id not in allowed_products:
                 raise UserError(_('Seleccione un componente migrado para %s.',line.source_name))
-            if product.company_id != self.company_id or not product.esi_component_ok or not product.active:
+            if (product.company_id and product.company_id != self.company_id) or not product.esi_component_ok or not product.active:
                 raise UserError(_('Revise la sucursal, estado y marca Componentes de %s.',product.display_name))
             if not math.isfinite(line.inventory_qty_per_pair) or line.inventory_qty_per_pair <= 0:
                 raise UserError(_('Indique la cantidad por par en %s para %s.',product.uom_id.name,line.source_name))
@@ -151,6 +166,7 @@ class RealMigration(models.Model):
                                    (by_name, name_key(row['name'])), (by_name, name_key(product.name))]:
                     bucket = index.setdefault(key, {})
                     bucket[product.id] = product
+        catalog = self.env['product.product'].search([('esi_component_ok','=',True), ('company_id','in',[False,self.factory_id.id])], order='default_code,id')
         notes = []
         configs = self.env['tosscano.recipe.config']
         for recipe in data['recipes']:
@@ -170,6 +186,15 @@ class RealMigration(models.Model):
                 if not candidates:
                     candidates = by_name.get(name_key(row['name']), {})
                 product = next(iter(candidates.values())) if len(candidates)==1 else False
+                matched_by_similarity = False
+                similarity_score = 1.0
+                if not product and catalog:
+                    pool = list(candidates.values()) if candidates else list(catalog)
+                    product = sorted(pool, key=lambda item: (
+                        -material_similarity(row['name'], row['code'], item.name, item.default_code),
+                        item.default_code or '', item.id))[0]
+                    similarity_score = material_similarity(row['name'], row['code'], product.name, product.default_code)
+                    matched_by_similarity = True
                 # Existing explicit correspondence remains authoritative if automatic matching fails.
                 line = existing.get(row['row'])
                 if not product and line and line.product_id:
@@ -180,7 +205,7 @@ class RealMigration(models.Model):
                     'source_unit':row['uom'], 'source_qty':quantity,
                     'product_id':product.id if product else False,
                     'inventory_qty_per_pair':quantity,
-                    'issue':('Cantidad original confirmada; se utiliza la unidad del componente migrado.'
+                    'issue':(('Asignación por similitud autorizada: '+(row['code'] or '')+' / '+row['name']+' → '+(product.default_code or '')+' / '+product.name+' (%.1f%%). ' % (100*similarity_score) if matched_by_similarity else '')+'Cantidad original confirmada; se utiliza la unidad del componente migrado.'
                              if product else 'No hay coincidencia única en el catálogo migrado: '+(row['code'] or '')+' / '+row['name'])}
                 if line:
                     line.write(vals)

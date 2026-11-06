@@ -1,0 +1,8 @@
+Asignación automática por nombre más parecido expresamente autorizada por el usuario.
+Prioridad: código exacto, código con segmentos numéricos normalizados (010=10), nombre normalizado y finalmente similitud de palabras/nombre/referencia.
+Se busca en componentes activos de Fábrica y compartidos, incluidos los ya presentes en la base. No se crean componentes sustitutos ni se cambian códigos. Cada equivalencia se registra en Observación.
+Cantidades 3 decimales; precios/costos 2. Cantidad numérica original en unidad de inventario según instrucción previa.
+Botón 3 crea las recetas completas con todas las tallas y cinco centros. Las recetas existentes se conservan sin duplicarlas.
+El catálogo incluido no contiene productos terminados para M-BT-03, M-L-00 y M-P-02; esas tres configuraciones permiten seleccionar el producto terminado migrado correspondiente. No se asigna un producto terminado diferente por similitud.
+El CSV documenta las equivalencias calculadas con el catálogo incluido; en la base real se utiliza su catálogo actual.
+69 pruebas locales aprobadas, sintaxis Python/XML y ZIP comprobados; sin validación en servidor Odoo.
