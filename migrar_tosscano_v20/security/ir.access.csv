@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,operation,domain
 access_tosscano_migration,tosscano.migration.admin,model_tosscano_migration,base.group_system,cru,
 access_tosscano_migration_line,tosscano.migration.line.admin,model_tosscano_migration_line,base.group_system,cru,
+
+access_tosscano_recipe_config,tosscano.recipe.config,model_tosscano_recipe_config,base.group_system,cru,
+access_tosscano_recipe_component,tosscano.recipe.component,model_tosscano_recipe_component,base.group_system,cru,

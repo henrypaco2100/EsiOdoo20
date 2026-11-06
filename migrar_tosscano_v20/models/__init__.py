@@ -6,4 +6,4 @@ from . import accounting_setup
 
 from . import sale_prices
 
-from . import recipe_demo
+from . import recipe_real

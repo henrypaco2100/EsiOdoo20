@@ -311,7 +311,7 @@ class DirectMigration(models.Model):
         self._configure_category_accounting()
         notes.extend(self._apply_finished_costs(data))
         notes.extend(self._import_sale_prices(data))
-        notes.append('Recetas: use 3. Crear recetas DEMO con centros para probar las doce fichas, con materiales separados del inventario real.')
+        notes.append('Recetas: pulse 3. Crear recetas de Fábrica para vincular las fichas con los productos y componentes migrados.')
         self.write({'data_imported': True, 'loaded': True,
                     'product_count': len(data['materials']) + sum(len(r['sizes']) for r in data['finished']),
                     'import_log': '\n'.join(['DATOS IMPORTADOS', 'Categorías: familia → subfamilia.',

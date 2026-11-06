@@ -1,14 +1,16 @@
-# Migración Tosscano v20 — 20.0.6.2.0
+# Migración Tosscano v20 — 20.0.6.3.0
 
 Datos de apertura con corte al **28/10/2026**, para una **base nueva**.
 
-## Recetas de demostración con centros
+## Recetas con el catálogo migrado
 
-El botón **3. Crear recetas DEMO con centros** crea las doce fichas completas como recetas de demostración en Fábrica, con todas las tallas 34–46 y cinco centros asignados. Utiliza productos y materiales separados del inventario real y conserva las unidades y cantidades por par de cada ficha. Los tiempos de los centros son provisionales para pruebas.
+El botón **3. Crear recetas de Fábrica** prepara las doce fichas con sus correspondencias. Usa únicamente productos terminados y componentes ya vinculados a esta migración. No crea productos separados. Se archivan las recetas auxiliares sin OF vinculadas; sus materiales se conservan para no romper documentos existentes.
 
-Véase **RECETAS_DEMO_CON_CENTROS.md** antes de usar la carga. Las incidencias del inventario real no se resuelven inventando conversiones; estas recetas no consumen automáticamente sus saldos. Las observaciones de versiones anteriores acerca de recetas pendientes se refieren a la vinculación con ese inventario real.
+Las coincidencias por código y unidad se rellenan automáticamente. Las cantidades que requieren una equivalencia quedan en cero y deben completarse en la unidad del inventario. No se crea una receta incompleta. Los modelos de ficha ausentes del catálogo necesitan seleccionar su producto terminado existente.
 
-## Precios de venta — 20.0.6.2.0
+Abra la ficha, confirme los productos terminados y cantidades, revise el tiempo por centro, marque Correspondencias y aplicación revisadas y pulse Crear receta con tallas y centros. Se seleccionan todas las variantes de cada plantilla y se asignan cinco centros en Fábrica. Véase RECETAS_CON_CATALOGO_MIGRADO.md.
+
+## Precios de venta — 20.0.6.3.0
 
 Incluye precio de venta y listas Minorista/Mayorista en BOB, compartidas entre sucursales. **Importar datos** las carga automáticamente. En una base existente, usar **4. Cargar precios de venta y tarifas**, sin repetir saldos.
 
@@ -28,7 +30,7 @@ Crear el registro y seleccionar TOSSCANO GRUP, Fábrica, CBBA y SCZ, con un alma
 
 1. **Importar datos**: categorías, unidades, productos, plan contable, costos y configuración AVCO.
 2. **Importar saldos**: cantidades de las nuevas hojas de inventario.
-3. **Crear recetas DEMO con centros**: crea las doce recetas de prueba completas, separadas del inventario real, con todas las tallas y centros. Puede repetirse sin duplicarlas.
+3. **Crear recetas de Fábrica**: prepare las correspondencias y cree las recetas con productos y materiales migrados, tallas y centros.
 
 Las recetas siempre pertenecen a la compañía seleccionada en Fábrica, aunque los productos terminados sean globales. No se crean empresas ni almacenes. Actualizar el módulo no ejecuta importaciones automáticamente. No reutilizar un registro del corte anterior para cargar estos saldos sobre una base operativa.
 
