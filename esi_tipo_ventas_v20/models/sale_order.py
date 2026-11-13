@@ -38,6 +38,7 @@ class SaleOrder(models.Model):
                 and order.invoice_ids.filtered(
                     lambda inv: inv.state == 'posted'
                     and inv.payment_state not in ('paid', 'reversed')
+                    and inv.company_id == order.company_id
                     and inv.move_type == 'out_invoice'
                 )
             )
@@ -59,7 +60,18 @@ class SaleOrder(models.Model):
         return invoices.action_register_payment()
 
     def _prepare_invoice(self):
-        values = super()._prepare_invoice()
+        self.ensure_one()
+        order = self.with_company(self.company_id)
+        partner = order.partner_id.commercial_partner_id
+        account = partner.property_account_receivable_id or order.company_id.partner_id.property_account_receivable_id
+        if not account or account.account_type != 'asset_receivable':
+            raise UserError(_(
+                'En %(company)s, configure una cuenta por cobrar válida para %(partner)s. '
+                'Cuenta actual: %(account)s.',
+                company=order.company_id.display_name, partner=partner.display_name,
+                account=account.display_name or _('Sin cuenta'),
+            ))
+        values = super(SaleOrder, order)._prepare_invoice()
         if self.esi_sale_type_id.journal_id:
             values['journal_id'] = self.esi_sale_type_id.journal_id.id
         return values
@@ -79,7 +91,7 @@ class SaleOrder(models.Model):
             result = self._esi_validate_ready_pickings('outgoing')
             if result:
                 return result
-        if config.create_invoice and self.invoice_status == 'to invoice':
+        if (config.create_invoice or config.validate_invoice) and self.invoice_status == 'to invoice':
             self._create_invoices()
         if config.validate_invoice:
             invoices = self.invoice_ids.filtered(
@@ -88,7 +100,17 @@ class SaleOrder(models.Model):
                 and inv.company_id == self.company_id
             )
             invoices.check_access('write')
-            invoices.action_post()
+            if invoices:
+                invoices.action_post()
+        if (config.create_invoice or config.validate_invoice) and not self.invoice_ids.filtered(
+            lambda inv: inv.state != 'cancel' and inv.company_id == self.company_id
+        ):
+            message = _('Factura pendiente: no hay cantidades facturables. Revise la política de facturación y valide la recepción o entrega si corresponde. Luego pulse Aplicar opciones del tipo.')
+            self.message_post(body=message)
+            return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': {
+                'title': _('Factura pendiente'), 'message': message, 'type': 'warning', 'sticky': True,
+                'next': {'type': 'ir.actions.client', 'tag': 'reload'},
+            }}
         return False
 
     def action_confirm(self):

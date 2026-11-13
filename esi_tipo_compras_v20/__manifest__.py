@@ -6,11 +6,11 @@
           'views/purchase_order_views.xml',
           'security/company.xml',
           'security/branches.xml'],
- 'depends': ['purchase', 'esi_sucursales_v20'],
+ 'depends': ['purchase_stock', 'esi_sucursales_v20'],
  'installable': True,
  'license': 'LGPL-3',
  'maintainer': 'ESI',
  'name': 'Tipo de Compras v20',
  'summary': 'Tipos por sucursal sin interferir en logística; facturación y validación con '
             'permisos nativos',
- 'version': '20.0.3.2.0'}
+ 'version': '20.0.3.3.0'}
