@@ -13,4 +13,4 @@
  'name': 'Tipo de Compras v20',
  'summary': 'Tipos por sucursal sin interferir en logística; facturación y validación con '
             'permisos nativos',
- 'version': '20.0.3.3.0'}
+ 'version': '20.0.3.3.1'}
