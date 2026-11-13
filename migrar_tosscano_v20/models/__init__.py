@@ -7,3 +7,5 @@ from . import accounting_setup
 from . import sale_prices
 
 from . import recipe_real
+
+from . import variant_presentation

@@ -1,0 +1,6 @@
+Tallas ordenadas numéricamente mediante la secuencia nativa del valor de atributo. Corrige 40/41/42/34... a 34/35/36/.../46.
+Se aplica en cada importación de calzado, también al completar tallas. Variant Selection = Matrix con dependencia explícita de sale_product_matrix.
+Para los productos ya migrados: pulsar Ordenar tallas y activar Matrix. No requiere repetir saldos ni importaciones. No elimina ni recrea variantes y no modifica costos ni existencias.
+Ordenar un atributo compartido también ordena sus valores en otros productos que utilizan ese mismo atributo Talla.
+Mantiene los cambios anteriores de recetas y materiales.
+Validación: 71 pruebas locales, sintaxis Python/XML y ZIP. No se ejecutó instalación en el servidor del usuario.

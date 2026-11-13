@@ -232,7 +232,7 @@ class DirectMigration(models.Model):
                 'name': row['name'].strip(), 'type': 'consu', 'is_storable': True, 'company_id': False,
                 'uom_id': self._uom('PAR').id, 'categ_id': self._category('CALZADOS ' + row['family'], row['subfamily'], 'Producto terminado').id,
                 'sale_ok': True, 'purchase_ok': False, 'esi_manufacture_ok': True, 'esi_component_ok': False,
-                'attribute_line_ids': lines,
+                'attribute_line_ids': lines, 'tracking': 'lot',
             })
             self._bind(row['key'], template)
         else:
@@ -488,7 +488,15 @@ class DirectMigration(models.Model):
                     notes.append('Saldo pendiente: falta costo válido de apertura '+product.display_name+' / '+branch)
                     continue
             if qty:
-                quant=quants.create({'product_id':product.id,'location_id':warehouse.lot_stock_id.id,'inventory_quantity':qty})
+                values = {'product_id':product.id,'location_id':warehouse.lot_stock_id.id,'inventory_quantity':qty}
+                if product.tracking == 'lot':
+                    lots = self.env['stock.lot'].with_company(company)
+                    name = 'APERTURA-20261028-%s-%s' % (warehouse.code, product.default_code or product.id)
+                    domain = [('name','=',name),('product_id','=',product.id),('company_id','=',company.id)]
+                    lot = lots.search(domain, limit=1) or lots.create({
+                        'name':name,'product_id':product.id,'company_id':company.id})
+                    values['lot_id'] = lot.id
+                quant=quants.create(values)
                 result=quant.with_context(inventory_name='Apertura Tosscano — saldo al 28/10/2026').action_apply_inventory()
                 if isinstance(result,dict):
                     raise UserError(_('Odoo requiere resolver un conflicto de inventario: %s',product.display_name))

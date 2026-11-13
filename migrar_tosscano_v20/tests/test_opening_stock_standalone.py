@@ -93,3 +93,19 @@ class StockImportTests(TestCase):
         m._source.return_value['stock'].append(row)
         run(m)
         self.assertEqual(q.create.call_args.args[0]['inventory_quantity'],50)
+
+
+    def test_tracked_opening_reuses_company_variant_lot(self):
+        m,q,quant,moves,refs=self.setup_import(cost=75)
+        product=refs['pt:shoe:40']
+        product.tracking='lot'
+        product.default_code='ARMADA-T40'
+        m.warehouse_factory_id.code='FAB'
+        lots=MagicMock()
+        lots.with_company.return_value=lots
+        lots.search.return_value=SimpleNamespace(id=90)
+        m.env['stock.lot']=lots
+        run(m)
+        q.create.assert_called_once_with({'product_id':100,'location_id':11,'inventory_quantity':30.,'lot_id':90})
+        lots.search.assert_called_once_with([('name','=','APERTURA-20261028-FAB-ARMADA-T40'),('product_id','=',100),('company_id','=',1)],limit=1)
+        lots.create.assert_not_called()
