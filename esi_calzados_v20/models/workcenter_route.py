@@ -163,7 +163,7 @@ class Workorder(models.Model):
     esi_size_quantities_display = fields.Char(
         related='production_id.esi_size_quantities_display', readonly=True)
 
-    esi_center_transferred_qty = fields.Float(string='Avanzado', digits=(16, 2), readonly=True, copy=False)
+    esi_center_transferred_qty = fields.Float(string='Cantidad producida', digits=(16, 2), readonly=True, copy=False)
     esi_center_received_qty = fields.Float(string='Recibido', compute='_compute_esi_center_quantities', store=True, digits=(16, 2))
     esi_center_available_qty = fields.Float(string='Pendiente en el centro', compute='_compute_esi_center_quantities', store=True, digits=(16, 2))
 

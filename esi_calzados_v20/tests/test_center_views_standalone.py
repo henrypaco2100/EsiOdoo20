@@ -35,3 +35,19 @@ class CenterViewsTests(unittest.TestCase):
         for field in root.xpath("//record[@id='center_transfer_form']//field[@name='available_qty' or @name='quantity']"):
             self.assertEqual(field.get('digits'),'[16, 2]')
         self.assertNotIn('decimal.precision',(P/'views/workcenter_route.xml').read_text())
+
+    def test_history_is_optional_and_completed_records_not_deleted_from_domain(self):
+        root=etree.parse(str(P/'views/workcenter_route.xml'))
+        action=root.xpath("//record[@id='action_center_route']")[0]
+        self.assertEqual(ast.literal_eval(action.find("field[@name='domain']").text.replace('&gt;', '>')),
+                         [('esi_center_step','>',0)])
+        context=ast.literal_eval(action.find("field[@name='context']").text)
+        self.assertTrue(context['search_default_center_active'])
+        self.assertEqual(context['graph_measure'],'esi_center_available_qty')
+        self.assertTrue(root.xpath("//filter[@name='center_history']"))
+
+    def test_produced_measure_is_cumulative_and_readonly_on_center_form(self):
+        root=etree.parse(str(P/'views/workcenter_route.xml'))
+        for name in ['center_route_graph','center_route_pivot']:
+            self.assertEqual(len(root.xpath("//record[@id='%s']//field[@name='esi_center_transferred_qty'][@type='measure']"%name)),1)
+        self.assertTrue(root.xpath("//record[@id='center_route_workorder_form_quantities']//field[@name='esi_center_transferred_qty'][@readonly='1']"))

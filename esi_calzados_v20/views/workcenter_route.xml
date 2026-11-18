@@ -77,7 +77,7 @@
     <field name="model">mrp.workorder</field>
     <field name="arch" type="xml">
       <kanban default_group_by="workcenter_id" create="0" records_draggable="false" groups_draggable="false" group_create="false" group_edit="false" group_delete="false">
-        <field name="state"/>
+        <field name="state"/><field name="production_state"/>
         <templates>
           <t t-name="card">
             <div class="d-flex justify-content-between"><strong><field name="production_id"/></strong><field name="esi_center_status" widget="badge"/></div>
@@ -87,7 +87,7 @@
             <div class="text-muted">Paso <field name="esi_center_step"/> · <field name="workcenter_id"/></div>
             <footer class="mt-3">
               <button name="button_start" type="object" string="Iniciar centro" class="btn btn-secondary" invisible="state != 'ready'"/>
-              <button name="action_esi_advance_center" type="object" string="Registrar avance" class="btn btn-primary" invisible="esi_center_available_qty &lt;= 0"/>
+              <button name="action_esi_advance_center" type="object" string="Registrar avance" class="btn btn-primary" invisible="esi_center_available_qty &lt;= 0 or state in ('done', 'cancel') or production_state not in ('confirmed', 'progress', 'to_close')"/>
             </footer>
           </t>
         </templates>
@@ -104,21 +104,32 @@
         <field name="esi_size_quantities_display" string="Tallas / cantidades"/>
         <field name="workcenter_id"/>
         <field name="esi_center_step"/>
-        <field name="esi_center_received_qty" digits="[16, 2]"/><field name="esi_center_available_qty" digits="[16, 2]"/>
+        <field name="esi_center_transferred_qty" string="Cantidad producida en el centro" sum="Total producido" optional="hide"/><field name="esi_center_received_qty" digits="[16, 2]"/><field name="esi_center_available_qty" digits="[16, 2]"/>
         <field name="uom_id"/>
-        <field name="esi_center_status" widget="badge"/>
-        <button name="action_esi_advance_center" type="object" string="Registrar avance" invisible="esi_center_available_qty &lt;= 0"/>
+        <field name="esi_center_status" widget="badge"/><field name="state" column_invisible="True"/><field name="production_state" column_invisible="True"/>
+        <button name="action_esi_advance_center" type="object" string="Registrar avance" invisible="esi_center_available_qty &lt;= 0 or state in ('done', 'cancel') or production_state not in ('confirmed', 'progress', 'to_close')"/>
       </list>
     </field>
   </record>
-  <record id="center_route_graph" model="ir.ui.view"><field name="name">mrp.workorder.center.route.graph</field><field name="model">mrp.workorder</field><field name="arch" type="xml"><graph string="Cantidades actuales por centro" type="bar"><field name="workcenter_id"/><field name="uom_id"/><field name="esi_center_available_qty" type="measure"/><field name="esi_center_received_qty" type="measure" invisible="1"/></graph></field></record><record id="center_route_pivot" model="ir.ui.view"><field name="name">mrp.workorder.center.route.pivot</field><field name="model">mrp.workorder</field><field name="arch" type="xml"><pivot string="Cantidades actuales por centro"><field name="workcenter_id" type="row"/><field name="uom_id" type="row"/><field name="esi_center_available_qty" type="measure"/><field name="esi_center_received_qty" type="measure"/></pivot></field></record><record id="action_center_route" model="ir.actions.act_window">
+  <record id="center_route_graph" model="ir.ui.view"><field name="name">mrp.workorder.center.route.graph</field><field name="model">mrp.workorder</field><field name="arch" type="xml"><graph string="Cantidades por centro" type="bar"><field name="workcenter_id"/><field name="uom_id"/><field name="esi_center_transferred_qty" string="Cantidad producida" type="measure"/><field name="esi_center_available_qty" type="measure"/><field name="esi_center_received_qty" type="measure" invisible="1"/></graph></field></record><record id="center_route_pivot" model="ir.ui.view"><field name="name">mrp.workorder.center.route.pivot</field><field name="model">mrp.workorder</field><field name="arch" type="xml"><pivot string="Cantidades por centro"><field name="workcenter_id" type="row"/><field name="uom_id" type="row"/><field name="esi_center_transferred_qty" string="Cantidad producida" type="measure"/><field name="esi_center_available_qty" type="measure"/><field name="esi_center_received_qty" type="measure"/></pivot></field></record><record id="center_route_search" model="ir.ui.view">
+ <field name="name">mrp.workorder.center.route.search</field><field name="model">mrp.workorder</field>
+ <field name="arch" type="xml"><search>
+  <field name="production_id"/><field name="workcenter_id"/><field name="product_id"/>
+  <filter name="center_active" string="En curso" domain="[('production_state', 'in', ['confirmed', 'progress', 'to_close']), ('state', 'not in', ['done', 'cancel'])]"/>
+  <filter name="center_done" string="Finalizadas" domain="[('state', '=', 'done')]"/>
+  <filter name="center_history" string="Histórico de producción" domain="[('state', '!=', 'cancel'), ('production_state', '!=', 'cancel')]"/>
+  <filter name="center_finish_date" string="Fecha de finalización" date="date_finished"/>
+  <separator/><filter name="work_center" string="Centro de trabajo" context="{'group_by': 'workcenter_id'}"/>
+  <filter name="center_company" string="Sucursal" context="{'group_by': 'company_id'}"/>
+ </search></field></record>
+<record id="action_center_route" model="ir.actions.act_window">
     <field name="name">Fabricación por centros</field>
     <field name="res_model">mrp.workorder</field>
     <field name="view_mode">kanban,list,graph,pivot,form</field>
     <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'kanban', 'view_id': ref('center_route_kanban')}), (0, 0, {'view_mode': 'list', 'view_id': ref('center_route_list')}), (0, 0, {'view_mode': 'graph', 'view_id': ref('center_route_graph')}), (0, 0, {'view_mode': 'pivot', 'view_id': ref('center_route_pivot')}), (0, 0, {'view_mode': 'form', 'view_id': ref('mrp.mrp_production_workorder_form_view_inherit')})]"/>
-    <field name="domain">[('esi_center_step', '&gt;', 0), ('production_state', 'in', ['confirmed', 'progress', 'to_close']), ('state', 'not in', ['done', 'cancel'])]</field>
-    <field name="context">{'search_default_work_center': True, 'graph_measure': 'esi_center_available_qty', 'graph_mode': 'bar', 'pivot_measures': ['esi_center_available_qty'], 'pivot_row_groupby': ['workcenter_id', 'uom_id']}</field>
-    <field name="search_view_id" ref="mrp.view_mrp_production_workorder_form_view_filter"/>
+    <field name="domain">[('esi_center_step', '&gt;', 0)]</field>
+    <field name="context">{'search_default_work_center': True, 'search_default_center_active': True, 'graph_measure': 'esi_center_available_qty', 'graph_mode': 'bar', 'pivot_measures': ['esi_center_available_qty'], 'pivot_row_groupby': ['workcenter_id', 'uom_id']}</field>
+    <field name="search_view_id" ref="center_route_search"/>
   </record>
   <menuitem id="menu_center_route" name="Fabricación por centros" parent="mrp.menu_mrp_manufacturing" action="action_center_route" sequence="25" groups="mrp.group_mrp_user"/>
   <record id="center_transfer_form" model="ir.ui.view">
@@ -129,4 +140,14 @@
       <footer><button name="action_transfer" type="object" string="Registrar avance" class="btn-primary"/><button special="cancel" string="Cancelar"/></footer>
     </form></field>
   </record>
+  <record id="center_route_workorder_form_quantities" model="ir.ui.view">
+ <field name="name">mrp.workorder.center.route.quantities</field><field name="model">mrp.workorder</field>
+ <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+ <field name="arch" type="xml">
+  <xpath expr="//field[@name='qty_produced']" position="attributes"><attribute name="invisible">esi_center_step &gt; 0</attribute></xpath>
+  <xpath expr="//field[@name='qty_produced']" position="after">
+   <field name="esi_center_step" invisible="1"/>
+   <field name="esi_center_transferred_qty" string="Cantidad producida en el centro" readonly="1" invisible="not esi_center_step"/>
+  </xpath>
+ </field></record>
 </odoo>
