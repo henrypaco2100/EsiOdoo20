@@ -125,6 +125,8 @@ class Production(models.Model):
         for production in self.filtered('esi_center_route'):
             if production.workorder_ids.filtered(lambda w: w.esi_center_step and w.state != 'done'):
                 raise UserError(_('Complete todos los centros del recorrido antes de finalizar la fabricación.'))
+            if production.esi_size_batch and production.esi_native_total_mode:
+                production.qty_producing = production.product_qty
             production._esi_check_full_center_batch()
         return super().button_mark_done()
 

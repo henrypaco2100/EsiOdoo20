@@ -33,3 +33,5 @@ from . import production_lots
 from . import center_report
 
 from . import center_dashboard
+
+from . import multisize_completion

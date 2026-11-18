@@ -94,3 +94,23 @@ class TestMultiOutput(TransactionCase):
             self.assertTrue(produced_lines)
             self.assertEqual(set(produced_lines.lot_id.mapped('name')), {lot_name})
             self.assertTrue(all(line.lot_id.product_id == move.product_id for line in produced_lines))
+
+    def test_full_batch_sixty_preserves_ten_forty_ten(self):
+        group = self._group()
+        for line, qty in zip(group.line_ids, (10, 40, 10)):
+            line.quantity = qty
+        group.action_create_productions()
+        mo = group.production_ids
+        self.env['stock.quant']._update_available_quantity(self.material, mo.location_src_id, 120)
+        mo.action_assign()
+        mo.qty_producing = 40
+        mo._set_qty_producing(False)
+        self.assertEqual(mo.qty_producing, 60)
+        self.assertEqual(mo.qty_produced, 0)
+        mo.button_mark_done()
+        self.assertEqual(mo.state, 'done')
+        for product, expected in zip(group.line_ids.product_id, (10, 40, 10)):
+            moves = mo.move_finished_ids.filtered(lambda m: m.product_id == product and m.state == 'done')
+            self.assertAlmostEqual(sum(moves.mapped('quantity')), expected)
+        self.assertAlmostEqual(sum(mo.move_raw_ids.filtered(lambda m: m.state == 'done').mapped('quantity')), 120)
+        self.assertAlmostEqual(mo.qty_produced, 60)

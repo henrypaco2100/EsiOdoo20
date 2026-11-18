@@ -78,7 +78,7 @@ class Production(models.Model):
     def _get_produced_qty(self):
         result = super()._get_produced_qty()
         for mo in self.filtered(lambda r: r.esi_size_batch and r.esi_native_total_mode):
-            moves = mo.move_finished_ids.filtered(lambda m: m.state != 'cancel' and m.picked
+            moves = mo.move_finished_ids.filtered(lambda m: m.state == 'done'
                 and m.product_id.product_tmpl_id == mo.product_id.product_tmpl_id)
             mo.qty_produced = sum(m.uom_id._compute_quantity(m.quantity, mo.uom_id, round=False) for m in moves)
         return result
