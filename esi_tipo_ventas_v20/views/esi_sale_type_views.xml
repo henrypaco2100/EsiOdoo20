@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <odoo>
     <record id="view_esi_sale_type_list" model="ir.ui.view">
         <field name="name">esi.sale.type.list</field>
@@ -36,7 +36,7 @@
                         <field name="warehouse_id"/>
                         <field name="journal_id"/>
                         <field name="validation_picking"/>
-                        <field name="create_invoice"/>
+                        <field name="invoice_basis" widget="radio"/><field name="create_invoice"/>
                         <field name="validate_invoice"/>
                         <field name="allow_payment"/>
                     </group>
@@ -51,12 +51,5 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem
-        id="menu_esi_sale_type"
-        name="Tipo de Ventas"
-        parent="sale.menu_sale_config"
-        action="action_esi_sale_type"
-        sequence="35"
-        groups="sales_team.group_sale_manager"
-    />
+    <menuitem id="menu_esi_sale_type" name="Tipo de Ventas" parent="sale.menu_sale_config" action="action_esi_sale_type" sequence="35" groups="sales_team.group_sale_manager"/>
 </odoo>

@@ -43,6 +43,12 @@ class EsiPurchaseType(models.Model):
         default=False,
         help='Solo valida operaciones ya marcadas como realizadas. No rellena cantidades ni omite asistentes de lotes o entregas parciales.',
     )
+    invoice_basis = fields.Selection(
+        [('ordered', 'Sobre cantidades pedidas'), ('received', 'Sobre cantidades recibidas')],
+        required=True, default='ordered', string='Política de control del tipo',
+        help='Cantidades pedidas permite crear la factura al confirmar, aunque todavía no se haya recibido. '
+             'No cambia existencias ni cantidades recibidas. Este ajuste del tipo tiene prioridad sobre la política del producto.',
+    )
     create_invoice = fields.Boolean(string='Crear factura al confirmar', default=False)
     validate_invoice = fields.Boolean(string='Publicar facturas borrador', default=False)
     allow_payment = fields.Boolean(string='Permitir Registrar pago desde el pedido', default=True)

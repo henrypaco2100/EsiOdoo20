@@ -1,14 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <odoo>
     <record id="view_purchase_order_esi_purchase_type" model="ir.ui.view">
         <field name="name">purchase.order.esi.purchase.type.v20</field>
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//header/button[@name='button_confirm'][@id='bid_confirm']" position="attributes"><attribute name="string">Confirmar</attribute></xpath>
-            <xpath expr="//header/button[@name='button_confirm'][@id='draft_confirm']" position="attributes"><attribute name="string">Confirmar</attribute></xpath>
+            <xpath expr="//header/button[@name='button_confirm'][@id='bid_confirm']" position="attributes"><attribute name="string">Confirmar</attribute><attribute name="invisible">state != 'sent'</attribute></xpath>
+            <xpath expr="//header/button[@name='button_confirm'][@id='draft_confirm']" position="attributes"><attribute name="string">Confirmar</attribute><attribute name="invisible">state != 'draft'</attribute></xpath>
             <field name="partner_id" position="after">
-                <field name="esi_purchase_type_id" options="{'no_create': True}" readonly="state in ('purchase','done','cancel')"/>
+                <field name="esi_purchase_type_id" required="state in ('draft','sent','to approve')" options="{'no_create': True}" readonly="state == 'cancel' or (state in ('purchase', 'done', 'to approve') and esi_purchase_type_id)"/>
             </field>
-        <xpath expr="//header" position="inside"><field name="esi_can_register_payment" invisible="1"/><button name="action_esi_register_payment" type="object" string="Registrar pago" invisible="not esi_can_register_payment"/><button name="action_esi_apply_type_flow" type="object" string="Aplicar opciones del tipo" invisible="not esi_purchase_type_id or state not in ('purchase', 'done')"/></xpath></field>
+        <xpath expr="//header" position="inside"><field name="esi_can_register_payment" invisible="1"/><button name="action_esi_register_payment" type="object" string="Registrar pago" invisible="not esi_can_register_payment"/><button name="action_esi_apply_type_flow" type="object" string="Aplicar opciones del tipo" invisible="not esi_purchase_type_id or state not in ('purchase', 'done')"/></xpath><xpath expr="//header/button[@name='action_acknowledge']" position="attributes"><attribute name="string">Acusar recibo</attribute><attribute name="invisible">acknowledged or state != 'purchase'</attribute></xpath><xpath expr="//header" position="inside"><button name="action_esi_create_invoice" type="object" string="Crear factura" invisible="state != 'purchase' or invoice_status == 'invoiced'" class="btn-primary" groups="account.group_account_invoice"/></xpath></field>
     </record>
 </odoo>

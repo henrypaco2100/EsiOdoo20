@@ -5,7 +5,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
-                <field name="esi_sale_type_id" options="{'no_create': True}" readonly="state in ('sale','cancel')"/>
+                <field name="esi_sale_type_id" required="state in ('draft','sent','to approve')" options="{'no_create': True}" readonly="state == 'cancel' or (state in ('sale',) and esi_sale_type_id)"/>
             </field>
         <xpath expr="//header" position="inside"><field name="esi_can_register_payment" invisible="1"/><button name="action_esi_register_payment" type="object" string="Registrar pago" invisible="not esi_can_register_payment"/><button name="action_esi_apply_type_flow" type="object" string="Aplicar opciones del tipo" invisible="not esi_sale_type_id or state not in ('sale',)"/></xpath></field>
     </record>

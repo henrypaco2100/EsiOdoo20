@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_compare
 
 
 class PurchaseOrder(models.Model):
@@ -19,11 +20,24 @@ class PurchaseOrder(models.Model):
 
     esi_can_register_payment = fields.Boolean(compute='_compute_esi_can_register_payment')
 
-    @api.constrains('company_id', 'esi_purchase_type_id')
+    def _esi_require_type(self):
+        for order in self:
+            config = order.esi_purchase_type_id
+            if not config:
+                raise UserError(_('Seleccione el Tipo de Compra antes de confirmar.'))
+            config.check_access('read')
+            if config.company_id != order.company_id:
+                raise UserError(_('El tipo seleccionado pertenece a otra sucursal.'))
+            if not config.active:
+                raise UserError(_('El tipo seleccionado está archivado. Seleccione uno activo.'))
+
+    @api.constrains('state', 'company_id', 'esi_purchase_type_id')
     def _check_type_branch(self):
         for order in self:
             if order.esi_purchase_type_id and order.esi_purchase_type_id.company_id != order.company_id:
                 raise ValidationError(_('El tipo pertenece a otra sucursal.'))
+            if order.state in ('purchase', 'done', 'to approve'):
+                order._esi_require_type()
 
     @api.onchange('company_id')
     def _onchange_type_company(self):
@@ -61,6 +75,7 @@ class PurchaseOrder(models.Model):
 
     def _prepare_invoice(self):
         self.ensure_one()
+        self._esi_require_type()
         order = self.with_company(self.company_id)
         partner = order.partner_id.commercial_partner_id
         account = partner.property_account_payable_id or order.company_id.partner_id.property_account_payable_id
@@ -72,48 +87,77 @@ class PurchaseOrder(models.Model):
                 account=account.display_name or _('Sin cuenta'),
             ))
         values = super(PurchaseOrder, order)._prepare_invoice()
+        if self.esi_purchase_type_id.validate_invoice:
+            values.setdefault('invoice_date', fields.Date.context_today(order))
         if self.esi_purchase_type_id.journal_id:
             values['journal_id'] = self.esi_purchase_type_id.journal_id.id
         return values
 
+    def _esi_type_invoice_action(self, force_create=False):
+        self.ensure_one()
+        self.check_access('write')
+        self._esi_require_type()
+        if self.state != 'purchase':
+            raise UserError(_('La compra debe estar confirmada y aprobada antes de facturar.'))
+        config = self.esi_purchase_type_id
+        if not (force_create or config.create_invoice or config.validate_invoice):
+            return False
+        # Serialize invoice creation and refresh quantities after acquiring the lock.
+        self.env.cr.execute('SELECT id FROM purchase_order WHERE id = %s FOR UPDATE', [self.id])
+        self.order_line.invalidate_recordset(['qty_invoiced', 'qty_to_invoice'])
+        self.order_line._compute_qty_invoiced()
+        self.invalidate_recordset(['invoice_ids', 'invoice_count', 'invoice_status'])
+        precision = self.env['decimal.precision'].precision_get('Product Unit')
+        pending = self.order_line.filtered(lambda line: not line.display_type
+            and float_compare(line.qty_to_invoice, 0.0, precision_digits=precision) > 0)
+        if pending:
+            self.with_company(self.company_id).action_create_invoice()
+            self.invalidate_recordset(['invoice_ids', 'invoice_count', 'invoice_status'])
+        invoices = self.invoice_ids.filtered(lambda invoice: invoice.company_id == self.company_id
+            and invoice.move_type == 'in_invoice' and invoice.state != 'cancel')
+        if config.validate_invoice:
+            drafts = invoices.filtered(lambda invoice: invoice.state == 'draft')
+            if drafts:
+                drafts.check_access('write')
+                drafts.action_post()
+        if invoices:
+            return self.action_view_invoice(invoices)
+        message = _('No hay cantidades pendientes de facturar. Si desea facturar antes de recibir, '
+                    'seleccione Sobre cantidades pedidas en el tipo de compra. Si el tipo factura sobre cantidades '
+                    'recibidas, registre primero la recepción real.')
+        if force_create:
+            raise UserError(message)
+        return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': {
+            'title': _('Factura pendiente'), 'message': message, 'type': 'warning', 'sticky': True,
+            'next': {'type': 'ir.actions.client', 'tag': 'reload'},
+        }}
+
+    def action_esi_create_invoice(self):
+        return self._esi_type_invoice_action(force_create=True)
+
     def action_esi_apply_type_flow(self):
         self.ensure_one()
         self.check_access('write')
-        if self.state not in ('purchase', 'done'):
-            raise UserError(_('Primero confirme el pedido.'))
+        self._esi_require_type()
+        if self.state != 'purchase':
+            raise UserError(_('Primero confirme y apruebe la compra.'))
         config = self.esi_purchase_type_id
-        if not config:
-            return False
-        config.check_access('read')
-        if config.company_id != self.company_id:
-            raise UserError(_('El tipo pertenece a otra sucursal.'))
+        # With ordered billing, invoicing is independent from physical receiving.
+        if config.invoice_basis == 'ordered':
+            invoice_action = self._esi_type_invoice_action()
+            if config.validation_picking:
+                receiving_action = self._esi_validate_ready_pickings('incoming')
+                if receiving_action:
+                    return receiving_action
+            return invoice_action
         if config.validation_picking:
-            result = self._esi_validate_ready_pickings('incoming')
-            if result:
-                return result
-        if (config.create_invoice or config.validate_invoice) and self.invoice_status == 'to invoice':
-            self.action_create_invoice()
-        if config.validate_invoice:
-            invoices = self.invoice_ids.filtered(
-                lambda inv: inv.state == 'draft'
-                and inv.move_type == 'in_invoice'
-                and inv.company_id == self.company_id
-            )
-            invoices.check_access('write')
-            if invoices:
-                invoices.action_post()
-        if (config.create_invoice or config.validate_invoice) and not self.invoice_ids.filtered(
-            lambda inv: inv.state != 'cancel' and inv.company_id == self.company_id
-        ):
-            message = _('Factura pendiente: no hay cantidades facturables. Revise la política de facturación y valide la recepción o entrega si corresponde. Luego pulse Aplicar opciones del tipo.')
-            self.message_post(body=message)
-            return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': {
-                'title': _('Factura pendiente'), 'message': message, 'type': 'warning', 'sticky': True,
-                'next': {'type': 'ir.actions.client', 'tag': 'reload'},
-            }}
-        return False
+            receiving_action = self._esi_validate_ready_pickings('incoming')
+            if receiving_action:
+                return receiving_action
+        return self._esi_type_invoice_action()
 
     def button_confirm(self):
+        self._esi_require_type()
         if len(self) > 1 and any(
             o.esi_purchase_type_id.validation_picking
             or o.esi_purchase_type_id.create_invoice
@@ -135,6 +179,7 @@ class PurchaseOrder(models.Model):
 
     def button_approve(self, force=False):
         pending = self.filtered(lambda order: order.state == 'to approve')
+        pending._esi_require_type()
         result = super().button_approve(force=force)
         if self.env.context.get('esi_skip_approval_invoice_flow'):
             return result

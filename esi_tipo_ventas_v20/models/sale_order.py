@@ -19,11 +19,24 @@ class SaleOrder(models.Model):
 
     esi_can_register_payment = fields.Boolean(compute='_compute_esi_can_register_payment')
 
-    @api.constrains('company_id', 'esi_sale_type_id')
+    def _esi_require_type(self):
+        for order in self:
+            config = order.esi_sale_type_id
+            if not config:
+                raise UserError(_('Seleccione el Tipo de Venta antes de confirmar.'))
+            config.check_access('read')
+            if config.company_id != order.company_id:
+                raise UserError(_('El tipo seleccionado pertenece a otra sucursal.'))
+            if not config.active:
+                raise UserError(_('El tipo seleccionado está archivado. Seleccione uno activo.'))
+
+    @api.constrains('state', 'company_id', 'esi_sale_type_id')
     def _check_type_branch(self):
         for order in self:
             if order.esi_sale_type_id and order.esi_sale_type_id.company_id != order.company_id:
                 raise ValidationError(_('El tipo pertenece a otra sucursal.'))
+            if order.state in ('sale',):
+                order._esi_require_type()
 
     @api.onchange('company_id')
     def _onchange_type_company(self):
@@ -61,6 +74,7 @@ class SaleOrder(models.Model):
 
     def _prepare_invoice(self):
         self.ensure_one()
+        self._esi_require_type()
         order = self.with_company(self.company_id)
         partner = order.partner_id.commercial_partner_id
         account = partner.property_account_receivable_id or order.company_id.partner_id.property_account_receivable_id
@@ -82,15 +96,18 @@ class SaleOrder(models.Model):
         if self.state not in ('sale',):
             raise UserError(_('Primero confirme el pedido.'))
         config = self.esi_sale_type_id
-        if not config:
-            return False
+        self._esi_require_type()
         config.check_access('read')
         if config.company_id != self.company_id:
             raise UserError(_('El tipo pertenece a otra sucursal.'))
+        receiving_action = False
         if config.validation_picking:
-            result = self._esi_validate_ready_pickings('outgoing')
-            if result:
-                return result
+            receiving_action = self._esi_validate_ready_pickings('outgoing')
+            if receiving_action and config.invoice_basis == 'delivery':
+                return receiving_action
+        self.order_line.invalidate_recordset(['invoice_policy', 'qty_to_invoice', 'qty_invoiced'])
+        self.order_line._compute_qty_to_invoice()
+        self.invalidate_recordset(['invoice_ids', 'invoice_status'])
         if (config.create_invoice or config.validate_invoice) and self.invoice_status == 'to invoice':
             self._create_invoices()
         if config.validate_invoice:
@@ -111,9 +128,10 @@ class SaleOrder(models.Model):
                 'title': _('Factura pendiente'), 'message': message, 'type': 'warning', 'sticky': True,
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             }}
-        return False
+        return receiving_action or False
 
     def action_confirm(self):
+        self._esi_require_type()
         if len(self) > 1 and any(
             o.esi_sale_type_id.validation_picking
             or o.esi_sale_type_id.create_invoice
