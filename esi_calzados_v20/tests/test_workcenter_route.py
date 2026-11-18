@@ -100,3 +100,27 @@ class TestWorkcenterRoute(TransactionCase):
         mo.button_plan()
         self.assertTrue(mo.is_planned)
         self.assertTrue(all(mo.workorder_ids.mapped('leave_id')))
+
+    def test_partial_sixty_forty_then_twenty_between_centers(self):
+        mo = self._order()
+        mo.product_qty = 60
+        mo.action_confirm()
+        first, second, third = mo.workorder_ids.sorted('esi_center_step')[:3]
+        mo.qty_producing = 40
+        first._esi_transfer_center_qty(40)
+        second._esi_transfer_center_qty(40)
+        self.assertEqual(first.esi_center_available_qty, 20)
+        self.assertEqual(second.esi_center_available_qty, 0)
+        self.assertEqual(third.esi_center_available_qty, 40)
+        mo.qty_producing = 20
+        first._esi_transfer_center_qty(20)
+        self.assertEqual(first.state, 'done')
+        self.assertEqual(second.esi_center_available_qty, 20)
+        self.assertEqual(third.esi_center_available_qty, 40)
+        with self.assertRaises(UserError), self.cr.savepoint():
+            second._esi_transfer_center_qty(21)
+        second._esi_transfer_center_qty(20)
+        self.assertEqual(second.state, 'done')
+        self.assertEqual(third.esi_center_available_qty, 60)
+        self.assertEqual(mo.product_qty, 60)
+        self.assertFalse(mo.move_finished_ids.filtered(lambda m: m.state == 'done'))

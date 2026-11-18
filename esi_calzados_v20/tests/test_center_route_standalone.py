@@ -45,6 +45,14 @@ class RouteTests(unittest.TestCase):
                                 production_id=self.production)
                              for i, state, center in [(1, 'ready', 'Corte'), (2, 'blocked', 'Aparado'), (3, 'blocked', 'Solado')])
         self.production.workorder_ids = self.stages
+        for stage in self.stages:
+            stage.esi_center_transferred_qty = 0
+            stage._esi_center_amounts = lambda stage=stage: self.amounts(stage)
+
+    def amounts(self, stage):
+        records = Records([stage])
+        records.ensure_one = lambda: None
+        return method('Workorder', '_esi_center_amounts')(records)
 
     def compute(self):
         records = Records([self.production])
@@ -87,10 +95,29 @@ class RouteTests(unittest.TestCase):
         self.stages[0].state = 'done'
         method('Workorder', '_esi_check_previous_centers')(Records([self.stages[1]]))
 
-    def test_partial_quantity_cannot_finish_stage(self):
+    def test_partial_native_quantity_does_not_block_center(self):
         self.production.qty_producing = 30
-        with self.assertRaises(RouteError):
-            method('Workorder', '_esi_check_previous_centers')(Records([self.stages[0]]))
+        method('Workorder', '_esi_check_previous_centers')(Records([self.stages[0]]))
+
+    def test_sixty_pairs_forty_advance_twice_then_twenty_follow(self):
+        self.production.product_qty = 60
+        self.production.qty_producing = 40
+        first, second, third = self.stages
+        first.esi_center_transferred_qty = 40
+        method('Workorder', '_esi_check_previous_centers')(Records([second]))
+        second.esi_center_transferred_qty = 40
+        self.assertEqual([self.amounts(s)[1] for s in self.stages], [20, 0, 40])
+        self.production.qty_producing = 20
+        method('Workorder', '_esi_check_previous_centers')(Records([first]))
+        first.esi_center_transferred_qty = 60
+        method('Workorder', '_esi_check_previous_centers')(Records([first]))
+        first.state = 'done'
+        method('Workorder', '_esi_check_previous_centers')(Records([first]))
+        self.assertEqual([self.amounts(s)[1] for s in self.stages], [0, 20, 40])
+        method('Workorder', '_esi_check_previous_centers')(Records([second]))
+        second.esi_center_transferred_qty = 60
+        second.state = 'done'
+        self.assertEqual([self.amounts(s)[1] for s in self.stages], [0, 0, 60])
 
     def test_partial_handoff_keeps_both_centers_visible(self):
         first, second, third = self.stages
@@ -110,6 +137,34 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(amounts(third), (35, 35))
         first.state = 'done'
         self.assertEqual(amounts(second), (100, 65))
+
+    def test_status_for_simultaneous_partial_batches(self):
+        self.production.product_qty = 60
+        first, second, third = self.stages
+        first.state = 'progress'
+        first.esi_center_transferred_qty = 40
+        second.esi_center_transferred_qty = 40
+        for stage in self.stages:
+            stage.esi_center_received_qty, stage.esi_center_available_qty = self.amounts(stage)
+        method('Workorder', '_compute_esi_center_status')(self.stages)
+        self.assertEqual([s.esi_center_status for s in self.stages],
+                         ['progress', 'waiting_more', 'progress'])
+        first.esi_center_transferred_qty = 60
+        first.state = 'done'
+        for stage in self.stages:
+            stage.esi_center_received_qty, stage.esi_center_available_qty = self.amounts(stage)
+        method('Workorder', '_compute_esi_center_status')(self.stages)
+        self.assertEqual([s.esi_center_status for s in self.stages],
+                         ['done', 'progress', 'progress'])
+
+    def test_status_without_received_pairs_and_cancelled(self):
+        for stage in self.stages:
+            stage.esi_center_received_qty, stage.esi_center_available_qty = self.amounts(stage)
+        method('Workorder', '_compute_esi_center_status')(self.stages)
+        self.assertEqual(self.stages[2].esi_center_status, 'waiting')
+        self.production.state = 'cancel'
+        method('Workorder', '_compute_esi_center_status')(self.stages)
+        self.assertEqual([s.esi_center_status for s in self.stages], ['cancel'] * 3)
 
     def test_standard_workorders_are_unchanged(self):
         self.stages[0].esi_center_step = 0

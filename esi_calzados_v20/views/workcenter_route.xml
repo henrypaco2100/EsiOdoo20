@@ -42,7 +42,7 @@
               <field name="workcenter_id"/>
               <field name="esi_center_received_qty" digits="[16, 2]"/>
               <field name="esi_center_available_qty" digits="[16, 2]"/>
-              <field name="state"/>
+              <field name="esi_center_status" widget="badge"/>
               <button name="action_esi_advance_center" type="object" string="Registrar avance" invisible="esi_center_available_qty &lt;= 0 or parent.state not in ('confirmed', 'progress', 'to_close')"/>
             </list>
           </field>
@@ -77,9 +77,10 @@
     <field name="model">mrp.workorder</field>
     <field name="arch" type="xml">
       <kanban default_group_by="workcenter_id" create="0" records_draggable="false" groups_draggable="false" group_create="false" group_edit="false" group_delete="false">
+        <field name="state"/>
         <templates>
           <t t-name="card">
-            <div class="d-flex justify-content-between"><strong><field name="production_id"/></strong><field name="state" widget="badge"/></div>
+            <div class="d-flex justify-content-between"><strong><field name="production_id"/></strong><field name="esi_center_status" widget="badge"/></div>
             <div class="my-2"><strong><field name="esi_main_product_display"/></strong></div>
             <div class="mb-1" invisible="not esi_size_quantities_display"><span class="text-muted">Tallas: </span><field name="esi_size_quantities_display"/></div>
             <div>Recibido: <field name="esi_center_received_qty" digits="[16, 2]"/> · Pendiente: <strong><field name="esi_center_available_qty" digits="[16, 2]"/></strong> <field name="uom_id"/></div>
@@ -105,7 +106,7 @@
         <field name="esi_center_step"/>
         <field name="esi_center_received_qty" digits="[16, 2]"/><field name="esi_center_available_qty" digits="[16, 2]"/>
         <field name="uom_id"/>
-        <field name="state" widget="badge"/>
+        <field name="esi_center_status" widget="badge"/>
         <button name="action_esi_advance_center" type="object" string="Registrar avance" invisible="esi_center_available_qty &lt;= 0"/>
       </list>
     </field>

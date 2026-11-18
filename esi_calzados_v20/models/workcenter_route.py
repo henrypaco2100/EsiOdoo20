@@ -167,6 +167,31 @@ class Workorder(models.Model):
     esi_center_received_qty = fields.Float(string='Recibido', compute='_compute_esi_center_quantities', store=True, digits=(16, 2))
     esi_center_available_qty = fields.Float(string='Pendiente en el centro', compute='_compute_esi_center_quantities', store=True, digits=(16, 2))
 
+    esi_center_status = fields.Selection([
+        ('waiting', 'En espera'), ('progress', 'En proceso'),
+        ('waiting_more', 'Esperando más pares'), ('done', 'Finalizada'),
+        ('cancel', 'Cancelada'),
+    ], string='Estado del centro', compute='_compute_esi_center_status')
+
+    @api.depends('state', 'esi_center_received_qty', 'esi_center_available_qty',
+                 'esi_center_transferred_qty', 'production_id.state')
+    def _compute_esi_center_status(self):
+        # Native dependencies wait for the previous work order's entire batch.
+        # The center route instead allows several partial batches concurrently.
+        for stage in self:
+            if stage.state == 'cancel' or stage.production_id.state == 'cancel':
+                stage.esi_center_status = 'cancel'
+            elif stage.state == 'done':
+                stage.esi_center_status = 'done'
+            elif stage.production_id.state == 'draft':
+                stage.esi_center_status = 'waiting'
+            elif stage.production_id.uom_id.compare(stage.esi_center_available_qty, 0) > 0:
+                stage.esi_center_status = 'progress'
+            elif stage.production_id.uom_id.compare(stage.esi_center_received_qty, 0) > 0:
+                stage.esi_center_status = 'waiting_more'
+            else:
+                stage.esi_center_status = 'waiting'
+
     def action_esi_center_dashboard(self):
         return self.env['ir.actions.actions']._for_xml_id('esi_calzados_v20.center_dashboard_action')
 
@@ -245,9 +270,14 @@ class Workorder(models.Model):
                 raise UserError(_('Confirme la fabricación antes de trabajar en sus centros.'))
             previous = stage.production_id.workorder_ids.filtered(
                 lambda w: w.esi_center_step and w.esi_center_step < stage.esi_center_step)
-            if any(w.state != 'done' for w in previous):
-                raise UserError(_('Termine el centro anterior antes de continuar con este.'))
-            stage.production_id._esi_check_full_center_batch()
+            # Center handoffs track their own cumulative quantities. The native
+            # qty_producing may describe a partial batch and must not block them.
+            if stage.production_id.uom_id.compare(
+                    stage.esi_center_transferred_qty, stage.production_id.product_qty) == 0:
+                if any(w.state != 'done' for w in previous):
+                    raise UserError(_('Termine el centro anterior antes de cerrar este.'))
+            elif stage._esi_center_amounts()[1] <= 0:
+                raise UserError(_('No hay cantidad pendiente disponible en este centro.'))
 
     def button_start(self, raise_on_invalid_state=False):
         self._esi_check_previous_centers()

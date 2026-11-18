@@ -135,6 +135,33 @@ class PurchaseOrder(models.Model):
     def action_esi_create_invoice(self):
         return self._esi_type_invoice_action(force_create=True)
 
+    def _esi_validate_ready_pickings(self, code):
+        if code != 'incoming':
+            return super()._esi_validate_ready_pickings(code)
+        self.ensure_one()
+        self.check_access('write')
+        for picking in self.picking_ids.filtered(
+                lambda p: p.picking_type_id.code == 'incoming' and p.state not in ('done', 'cancel')):
+            picking.check_access('write')
+            if picking.state == 'draft':
+                picking.action_confirm()
+            picking.action_assign()
+            moves = picking.move_ids.filtered(
+                lambda m: m.state not in ('done', 'cancel') and m.product_uom_qty > 0)
+            for move in moves:
+                # An immediate purchase receives the ordered quantity by default.
+                # Preserve quantities already entered, including partial receipts.
+                if move.uom_id.is_zero(move.quantity):
+                    move.quantity = move.product_uom_qty
+                move.picked = True
+            # Native validation enforces lots, serials, units, access and backorders.
+            result = picking.button_validate()
+            if picking.state != 'done':
+                if isinstance(result, dict):
+                    return result
+                raise UserError(_('No se pudo completar la recepción %s. Revise sus cantidades y lotes.') % picking.display_name)
+        return False
+
     def action_esi_apply_type_flow(self):
         self.ensure_one()
         self.check_access('write')
@@ -173,7 +200,7 @@ class PurchaseOrder(models.Model):
         result = super(PurchaseOrder, self.with_context(esi_skip_approval_invoice_flow=True)).button_confirm()
         for order in self:
             action = order.action_esi_apply_type_flow() if order.state in ('purchase', 'done') else False
-            if action:
+            if action and not (isinstance(action, dict) and action.get('res_model') == 'account.move'):
                 return action
         return result
 
@@ -185,6 +212,6 @@ class PurchaseOrder(models.Model):
             return result
         for order in pending.filtered(lambda order: order.state == 'purchase'):
             action = order.action_esi_apply_type_flow()
-            if action:
+            if action and not (isinstance(action, dict) and action.get('res_model') == 'account.move'):
                 return action
         return result

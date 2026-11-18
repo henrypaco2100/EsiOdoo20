@@ -39,9 +39,9 @@ class EsiPurchaseType(models.Model):
         domain="[('company_id', '=', company_id), ('type', '=', 'purchase')]",
     )
     validation_picking = fields.Boolean(
-        string='Validar recepción preparada',
+        string='Validar recepción al confirmar',
         default=False,
-        help='Solo valida operaciones ya marcadas como realizadas. No rellena cantidades ni omite asistentes de lotes o entregas parciales.',
+        help='Prepara las cantidades pedidas y valida la recepción al confirmar. Conserva cantidades parciales ya registradas y exige lotes o series cuando corresponda.',
     )
     invoice_basis = fields.Selection(
         [('ordered', 'Sobre cantidades pedidas'), ('received', 'Sobre cantidades recibidas')],
