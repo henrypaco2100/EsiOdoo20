@@ -71,7 +71,9 @@ class PurchaseOrder(models.Model):
         if not invoices:
             raise UserError(_('No hay facturas publicadas pendientes de pago.'))
         invoices.check_access('read')
-        return invoices.action_register_payment()
+        action = invoices.action_register_payment()
+        action['context'] = dict(action.get('context') or {}, dont_redirect_to_payments=True)
+        return action
 
     def _prepare_invoice(self):
         self.ensure_one()

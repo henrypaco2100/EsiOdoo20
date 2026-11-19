@@ -11,7 +11,7 @@
  'category': 'Manufacturing',
  'data': ['security/ir.access.csv',
           'data/sequence.xml',
-          'views/mrp_production_views.xml',
+          'views/mrp_production_views.xml', 'views/production_accounting.xml',
           'views/production_group_views.xml',
           'views/destajo_views.xml',
           'security/company.xml',
@@ -30,7 +30,7 @@
           'views/purchase_material_request.xml',
           'views/material_specification.xml',
           'report/tosscano_documents.xml'],
- 'depends': ['mrp',
+ 'depends': ['mrp', 'mrp_account',
              'sale_stock',
              'purchase_stock',
              'analytic',
@@ -44,4 +44,4 @@
  'name': 'Calzados MRP v20',
  'summary': 'Grupos de fabricación, responsable, analítica y destajos sin '
             'alterar valoración de Odoo',
- 'version': '20.0.11.4.5'}
+ 'version': '20.0.11.4.6'}

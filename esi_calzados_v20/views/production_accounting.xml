@@ -1,0 +1,15 @@
+<odoo>
+ <record id="production_accounting_button" model="ir.ui.view">
+  <field name="name">mrp.production.esi.accounting.button</field>
+  <field name="model">mrp.production</field>
+  <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+  <field name="arch" type="xml">
+   <xpath expr="//div[@name='button_box']" position="inside">
+    <button name="action_esi_production_account_moves" type="object" class="oe_stat_button" icon="fa-book"
+            groups="account.group_account_readonly,account.group_account_invoice" invisible="esi_account_move_count == 0">
+     <field name="esi_account_move_count" widget="statinfo" string="Asientos contables"/>
+    </button>
+   </xpath>
+  </field>
+ </record>
+</odoo>
